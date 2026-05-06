@@ -257,6 +257,14 @@
         "activo": true
       },
       {
+        "ticker": "S12J6",
+        "nombre": "LECAP Junio 12",
+        "pago_final": 102.95,
+        "precio": 100,
+        "fecha_vencimiento": "2026-06-12",
+        "activo": true
+      },
+      {
         "ticker": "T30J6",
         "nombre": "BONCAP Junio 30",
         "pago_final": 144.896,
