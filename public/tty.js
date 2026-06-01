@@ -3421,8 +3421,8 @@ const PRODES = [
   },
   {
     fintech: 'Ripio',
-    moneda: 'USD',
-    monto: 5_000,
+    moneda: 'ARS',
+    monto: 5_000_000,
     note: 'Prode Ripio · Mundial 2026',
     logo: '/logos/exchanges/ripio.svg',
   },
