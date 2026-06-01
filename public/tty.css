@@ -1009,6 +1009,75 @@ table.t td.cell-logo { padding-left: 0; }
   .tty-countdown-value { font-size: 22px; }
 }
 
+/* Comparaprode banner — cancha de fútbol en line art + overlay text */
+.cprode-banner {
+  position: relative;
+  border: 1px solid var(--rule-hi);
+  background: var(--bg-1);
+  margin: 18px 0 0;
+  height: 220px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.cprode-banner svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--rule-hi);
+  opacity: 0.55;
+  z-index: 0;
+}
+.cprode-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, var(--bg-1) 85%);
+  z-index: 1;
+  pointer-events: none;
+}
+.cprode-banner-overlay {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 32px 40px;
+  gap: 4px;
+}
+.cprode-banner-kicker {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--fg-faint);
+}
+.cprode-banner-title {
+  font-family: var(--font-mono);
+  font-size: 48px;
+  color: var(--hot);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 6px 0 4px;
+}
+.cprode-banner-sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-faint);
+  letter-spacing: 0.04em;
+  max-width: 60ch;
+  line-height: 1.5;
+}
+@media (max-width: 700px) {
+  .cprode-banner { height: 160px; }
+  .cprode-banner-overlay { padding: 18px 22px; }
+  .cprode-banner-title { font-size: 30px; }
+  .cprode-banner-kicker { font-size: 9px; letter-spacing: 0.12em; }
+  .cprode-banner-sub { font-size: 10px; }
+}
+
 /* Calculator modal (clickable rows in LECAPs/CER/Bonos/ONs) */
 .tty-modal-overlay {
   position: fixed;

@@ -3434,9 +3434,48 @@ function prodeLogoHTML(p, sm = false) {
   return `<span class="${cls}" data-initials="${init}"><img src="${esc(p.logo)}" alt="${esc(p.fintech)}" onerror="this.remove(); this.parentNode.textContent=this.parentNode.dataset.initials||'·'"></span>`;
 }
 
+// Banner visual: cancha de fútbol en line art como background + overlay texto.
+// Reusa la paleta del site (rule-hi para el trazo, hot para el title).
+// El SVG hace de "foto del mundial" sin romper la estética monoespaciada.
+function renderProdeBanner() {
+  const svg = `
+    <svg viewBox="0 0 800 220" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect x="10" y="10" width="780" height="200" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <line x1="400" y1="10" x2="400" y2="210" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="400" cy="110" r="42" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="400" cy="110" r="2.5" fill="currentColor"/>
+      <rect x="10" y="55" width="90" height="110" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <rect x="10" y="80" width="32" height="60" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="74" cy="110" r="2.5" fill="currentColor"/>
+      <path d="M 100,90 a 26,26 0 0 1 0,40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <rect x="700" y="55" width="90" height="110" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <rect x="758" y="80" width="32" height="60" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="726" cy="110" r="2.5" fill="currentColor"/>
+      <path d="M 700,90 a 26,26 0 0 0 0,40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M 10,20 a 10,10 0 0 1 10,-10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M 10,200 a 10,10 0 0 0 10,10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M 790,20 a 10,10 0 0 0 -10,-10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M 790,200 a 10,10 0 0 1 -10,10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <line x1="2" y1="105" x2="10" y2="105" stroke="currentColor" stroke-width="2.5"/>
+      <line x1="2" y1="115" x2="10" y2="115" stroke="currentColor" stroke-width="2.5"/>
+      <line x1="790" y1="105" x2="798" y2="105" stroke="currentColor" stroke-width="2.5"/>
+      <line x1="790" y1="115" x2="798" y2="115" stroke="currentColor" stroke-width="2.5"/>
+    </svg>`;
+  return `<div class="cprode-banner">
+    ${svg}
+    <div class="cprode-banner-overlay">
+      <div class="cprode-banner-kicker">PRODE · MUNDIAL 2026 · FIFA WORLD CUP</div>
+      <div class="cprode-banner-title">Comparaprode</div>
+      <div class="cprode-banner-sub">${PRODES.length} fintechs argentinas en juego · premios en pesos y dólares · normalizados a USD MEP</div>
+    </div>
+  </div>`;
+}
+
 async function screenComparaprode(main) {
   main.innerHTML = pHd('comparaprode · premios prode mundial 2026', 'Comparaprode',
     'Comparador de premios PRODE del Mundial 2026 ofrecidos por fintechs argentinas. Premios en pesos normalizados a USD usando dólar MEP (AL30/AL30D) en tiempo real.')
+    + renderProdeBanner()
+    + renderMundialCountdown()
     + `<div id="cprode-content"><div class="loading-row"> cargando MEP…</div></div>`;
 
   let mep = null;
