@@ -3403,7 +3403,7 @@ const PRODES = [
     moneda: 'USD',
     monto: 50_000,
     note: 'Prode Mercado Libre · Mundial 2026',
-    logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOCAxOCI+PHJlY3Qgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiBmaWxsPSIjRkZFNjAwIi8+PHRleHQgeD0iOSIgeT0iMTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJ1aS1zYW5zLXNlcmlmLHN5c3RlbS11aSwtYXBwbGUtc3lzdGVtLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNy41IiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMkQzMjc3IiBsZXR0ZXItc3BhY2luZz0iLTAuMyI+TUw8L3RleHQ+PC9zdmc+',
+    logo: '/logos/exchanges/mercadolibre.svg',
   },
   {
     fintech: 'Lemon',
