@@ -254,7 +254,7 @@
         "pago_final": 132.044,
         "precio": 126.099,
         "fecha_vencimiento": "2026-05-29",
-        "activo": true
+        "activo": false
       },
       {
         "ticker": "S12J6",
@@ -294,6 +294,14 @@
         "pago_final": 127.064,
         "precio": 113.3,
         "fecha_vencimiento": "2026-08-31",
+        "activo": true
+      },
+      {
+        "ticker": "S15S6",
+        "nombre": "LECAP Sept 15",
+        "pago_final": 107.21,
+        "precio": null,
+        "fecha_vencimiento": "2026-09-15",
         "activo": true
       },
       {

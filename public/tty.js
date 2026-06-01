@@ -47,8 +47,9 @@ const NAV = [
   { k: 'cedears',     label: 'cedears',      key: 'c', tier: 'sec' },
   { k: 'hipotecarios',label: 'hipotecarios', key: 'h', tier: 'sec' },
   { k: 'bcra',        label: 'bcra',         key: 'r', tier: 'sec' },
-  { k: 'mundial',     label: 'mundial',      key: 'w', tier: 'sec' },
-  { k: 'cuotas',      label: 'cuotas',       key: 'q', tier: 'sec' },
+  { k: 'mundial',      label: 'mundial',      key: 'w', tier: 'sec' },
+  { k: 'comparaprode', label: 'comparaprode', key: 'x', tier: 'sec' },
+  { k: 'cuotas',       label: 'cuotas',       key: 'q', tier: 'sec' },
 ];
 
 // ─── Helpers ───────────────────────────────────────────────────
@@ -3385,6 +3386,171 @@ async function screenMundial(main) {
   $('#mun-grid').innerHTML = `<div class="cols two"><div>${cols[0].join('')}</div><div>${cols[1].join('')}</div></div>${knockout}`;
 }
 
+// ─── Screen: Comparaprode ─────────────────────────────────────
+// Comparador de premios PRODE Mundial 2026 ofrecidos por fintechs.
+// Premios en ARS se normalizan a USD con dólar MEP (AL30/AL30D) de /api/cotizaciones.
+// Ranking se ordena por valor USD descendente.
+const PRODES = [
+  {
+    fintech: 'Cocos',
+    moneda: 'ARS',
+    monto: 101_000_000,
+    note: 'Prode Cocos · Mundial 2026',
+    logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOCAxOCI+PHJlY3Qgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiBmaWxsPSIjMDA2MmUxIi8+PGcgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTcuNDksMTEuNjJjLTEuMzYuMDEtMi42MS0uNjQtMy4xOC0xLjgyLS4yLS40My0uMzEtLjktLjMxLTEuMzdzLjEtLjk0LjMxLTEuMzdjLjQxLS45MSwxLjEzLTEuNjQsMi4wMy0yLjA3bC42Ni0uMzIuNjQsMS4zMy0uNjYuMzJjLS41OC4yNy0xLjA1Ljc1LTEuMzMsMS4zMy0uMjIuNDctLjIzLDEuMDItLjAxLDEuNS40Ny45NywxLjg1LDEuMjgsMy4wNy42OWwuNjYtLjMyLjY0LDEuMzMtLjY2LjMyYy0uNTguMjgtMS4yMS40NC0xLjg2LjQ0Ii8+PHBhdGggZD0iTTExLjA4LDEzLjM0bC0uNjctMS4zMS42NS0uMzRjMS4yLS42MiwxLjc4LTEuOTEsMS4yOC0yLjg3cy0xLjg4LTEuMjUtMy4wOC0uNjNsLS42NS4zNC0uNjctMS4zMS42NS0uMzRjMS45My0xLDQuMi0uNDIsNS4wNywxLjI2Ljg3LDEuNjksMCwzLjg3LTEuOTIsNC44N2wtLjY1LjM0aDBaIi8+PC9nPjwvc3ZnPg==',
+  },
+  {
+    fintech: 'Mercado Libre',
+    moneda: 'USD',
+    monto: 50_000,
+    note: 'Prode Mercado Libre · Mundial 2026',
+    logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOCAxOCI+PHJlY3Qgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiBmaWxsPSIjRkZFNjAwIi8+PHRleHQgeD0iOSIgeT0iMTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJ1aS1zYW5zLXNlcmlmLHN5c3RlbS11aSwtYXBwbGUtc3lzdGVtLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNy41IiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMkQzMjc3IiBsZXR0ZXItc3BhY2luZz0iLTAuMyI+TUw8L3RleHQ+PC9zdmc+',
+  },
+  {
+    fintech: 'Lemon',
+    moneda: 'USD',
+    monto: 4_000,
+    note: 'Prode Lemon · Mundial 2026',
+    logo: '/logos/exchanges/lemon.svg',
+  },
+  {
+    fintech: 'Kast',
+    moneda: 'USD',
+    monto: 5_000,
+    note: 'Prode Kast · Mundial 2026',
+    logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOCAxOCI+PHJlY3Qgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiBmaWxsPSIjMGEwYTBhIi8+PHRleHQgeD0iOSIgeT0iMTMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJ1aS1zYW5zLXNlcmlmLHN5c3RlbS11aSwtYXBwbGUtc3lzdGVtLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9IiNmZmYiPks8L3RleHQ+PC9zdmc+',
+  },
+  {
+    fintech: 'Ripio',
+    moneda: 'USD',
+    monto: 5_000,
+    note: 'Prode Ripio · Mundial 2026',
+    logo: '/logos/exchanges/ripio.svg',
+  },
+];
+
+function prodeLogoHTML(p, sm = false) {
+  const cls = 'logo' + (sm ? ' sm' : '');
+  const init = esc(initials(p.fintech));
+  return `<span class="${cls}" data-initials="${init}"><img src="${esc(p.logo)}" alt="${esc(p.fintech)}" onerror="this.remove(); this.parentNode.textContent=this.parentNode.dataset.initials||'·'"></span>`;
+}
+
+async function screenComparaprode(main) {
+  main.innerHTML = pHd('comparaprode · premios prode mundial 2026', 'Comparaprode',
+    'Comparador de premios PRODE del Mundial 2026 ofrecidos por fintechs argentinas. Premios en pesos normalizados a USD usando dólar MEP (AL30/AL30D) en tiempo real.')
+    + `<div id="cprode-content"><div class="loading-row"> cargando MEP…</div></div>`;
+
+  let mep = null;
+  try {
+    const cot = await fetchCached('/api/cotizaciones', 60_000);
+    mep = cot && cot.mep && cot.mep.price;
+  } catch (e) {
+    // Sigue — abajo manejamos mep nulo
+  }
+
+  // Si no hay MEP, no podemos rankear los ARS contra USD — mostrar warning pero rankear al menos los USD.
+  const rows = PRODES.map(p => {
+    const usdValue = p.moneda === 'USD' ? p.monto : (mep ? p.monto / mep : null);
+    const arsValue = p.moneda === 'ARS' ? p.monto : (mep ? p.monto * mep : null);
+    return { ...p, usdValue, arsValue };
+  }).sort((a, b) => (b.usdValue || 0) - (a.usdValue || 0));
+
+  const valid = rows.filter(r => r.usdValue != null);
+  const best = valid[0] || rows[0];
+  const totalUsd = valid.reduce((s, r) => s + r.usdValue, 0);
+  const mepStr = mep ? '$' + fmt(mep, 2) : '—';
+
+  // Hero: tres tarjetas — premio mayor (USD), equivalente en ARS, total de premios en juego
+  const heroHtml = `
+    <section class="s">
+      <h2><span>premio mayor</span><span class="line"></span></h2>
+      <div class="dol-best-row">
+        <div class="dol-best-card">
+          <div class="lbl">mejor premio · usd mep</div>
+          <div class="with-logo">${prodeLogoHTML(best)}<div class="txt"><b>${esc(best.fintech)}</b><small>${esc(best.note)}</small></div></div>
+          <div class="val hot">${best.usdValue != null ? 'USD ' + fmt(best.usdValue, 0) : '—'}</div>
+        </div>
+        <div class="dol-best-card">
+          <div class="lbl">equivalente en pesos</div>
+          <div class="with-logo"><div class="txt"><b>al mep · ${mepStr}</b><small>AL30 / AL30D</small></div></div>
+          <div class="val hot">${best.arsValue != null ? '$' + fmt(best.arsValue, 0) : '—'}</div>
+        </div>
+        <div class="dol-best-card">
+          <div class="lbl">total premios en juego</div>
+          <div class="with-logo"><div class="txt"><b>${valid.length} fintechs</b><small>suma de todos los premios</small></div></div>
+          <div class="val hot">USD ${fmt(totalUsd, 0)}</div>
+        </div>
+      </div>
+    </section>`;
+
+  // Bar chart visual ranking
+  const barsHtml = `
+    <section class="s">
+      <h2><span>ranking · premios en usd mep</span><span class="line"></span><span class="count">${rows.length}</span></h2>
+      <div id="cprode-bars"></div>
+    </section>`;
+
+  // Tabla full
+  const tableHtml = `
+    <section class="s">
+      <h2><span>detalle</span><span class="line"></span></h2>
+      <table class="t">
+        <thead><tr>
+          <th style="text-align:left">#</th>
+          <th style="text-align:left">fintech</th>
+          <th style="text-align:left">premio anunciado</th>
+          <th>en usd</th>
+          <th>en ars · al mep</th>
+        </tr></thead>
+        <tbody>${rows.map((r, i) => `<tr>
+          <td class="dim">${String(i + 1).padStart(2, '0')}</td>
+          <td>${prodeLogoHTML(r, true)} <span class="${i === 0 ? 'hot' : ''}">${esc(r.fintech)}</span></td>
+          <td>${r.moneda === 'USD' ? '<span class="dim">USD</span> ' + fmt(r.monto, 0) : '<span class="dim">$</span> ' + fmt(r.monto, 0)}</td>
+          <td class="num ${i === 0 ? 'hot' : ''}">${r.usdValue != null ? fmt(r.usdValue, 0) : '—'}</td>
+          <td class="num dim">${r.arsValue != null ? fmt(r.arsValue, 0) : '—'}</td>
+        </tr>`).join('')}</tbody>
+      </table>
+      <div class="hint" style="margin-top:10px">
+        ${mep
+          ? `conversión usando dólar MEP (AL30/AL30D): <span class="hot">${mepStr}</span> · actualizado en vivo desde data912.`
+          : `<span class="down">no se pudo cargar el dólar MEP</span> — los premios en pesos no se pueden rankear contra los USD.`}
+        <br>los premios pueden cambiar según términos y condiciones de cada fintech. fuentes: comunicados oficiales de cada plataforma.
+      </div>
+    </section>`;
+
+  $('#cprode-content').innerHTML = heroHtml + barsHtml + tableHtml;
+
+  // Render bars usando renderBars con val (USD) y subLabel (premio original)
+  if (valid.length) {
+    const barItems = valid.map(r => ({
+      name: r.fintech,
+      val: r.usdValue,
+      tag: r.moneda === 'USD' ? 'USD ' + fmt(r.monto, 0) + ' anunciado' : '$' + fmt(r.monto, 0) + ' ARS anunciado',
+      logo: r.logo,
+    }));
+    renderProdeBars($('#cprode-bars'), barItems);
+  } else {
+    $('#cprode-bars').innerHTML = '<div class="empty-state">esperando dólar MEP para rankear</div>';
+  }
+}
+
+// Variante de renderBars que usa el logo PRODE (data URI o /logos/exchanges/*.svg)
+// en vez del lookup standard de logoHTML. Sin esto, "Mercado Libre" y "Kast"
+// caerían a iniciales aunque tengamos un asset perfecto en p.logo.
+function renderProdeBars(container, items) {
+  const max = Math.max(...items.map(i => i.val || 0));
+  container.innerHTML = `<div class="bars">${items.map((r, i) => {
+    const width = max > 0 ? (r.val / max * 100).toFixed(1) + '%' : '0%';
+    const init = esc(initials(r.name));
+    const logoHtml = `<span class="logo" data-initials="${init}"><img src="${esc(r.logo)}" alt="${esc(r.name)}" onerror="this.remove(); this.parentNode.textContent=this.parentNode.dataset.initials||'·'"></span>`;
+    return `<div class="row">
+      <div class="with-logo">${logoHtml}<div class="txt"><b>${esc(r.name)}</b><small>${esc(r.tag)}</small></div></div>
+      <div class="meter"><div class="fill" style="--w:${width};width:${width}"></div></div>
+      <div class="val">USD ${fmt(r.val, 0)}<small>usd mep</small></div>
+      <div class="rk">${String(i + 1).padStart(2, '0')}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
 const SCREENS = {
   monitor: screenMonitor,
   cedears: screenCedears,
@@ -3398,11 +3564,12 @@ const SCREENS = {
   pix: screenPix,
   bcra: screenBcra,
   mundial: screenMundial,
+  comparaprode: screenComparaprode,
 };
 
 // ─── Keyboard ─────────────────────────────────────────────────
 let _gMode = false, _gTimer = null;
-const G_KEY = { m: 'monitor', c: 'cedears', s: 'remesas', q: 'cuotas', a: 'ars', b: 'bonos', o: 'ons', h: 'hipotecarios', d: 'dolar', p: 'pix', r: 'bcra', w: 'mundial' };
+const G_KEY = { m: 'monitor', c: 'cedears', s: 'remesas', q: 'cuotas', a: 'ars', b: 'bonos', o: 'ons', h: 'hipotecarios', d: 'dolar', p: 'pix', r: 'bcra', w: 'mundial', x: 'comparaprode' };
 const G_EXT = { e: '/earnings' };
 
 function onKey(e) {
