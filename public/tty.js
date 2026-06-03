@@ -3426,6 +3426,14 @@ const PRODES = [
     note: 'Prode Ripio · Mundial 2026',
     logo: '/logos/exchanges/ripio.svg',
   },
+  {
+    fintech: 'Freenance',
+    moneda: 'ARS',
+    monto: 1_600_000,
+    note: 'Prode Freenance · Mundial 2026',
+    // Placeholder hasta tener el SVG oficial — iniciales "FN" sobre violeta
+    logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOCAxOCI+PHJlY3Qgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiBmaWxsPSIjNTcyOWNjIi8+PHRleHQgeD0iOSIgeT0iMTIuNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InVpLXNhbnMtc2VyaWYsc3lzdGVtLXVpLC1hcHBsZS1zeXN0ZW0sc2Fucy1zZXJpZiIgZm9udC1zaXplPSI3LjUiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9IiNmZmYiIGxldHRlci1zcGFjaW5nPSItMC4yIj5GTjwvdGV4dD48L3N2Zz4=',
+  },
 ];
 
 function prodeLogoHTML(p, sm = false) {
