@@ -76,6 +76,45 @@ tr:last-child td{border-bottom:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 .overlay-msg{font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)}
 @media(max-width:860px){.viz-row{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}}
+
+/* === CAUCIONES === */
+.section{margin-bottom:20px}
+.section-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.input-grid{display:grid;gap:10px;margin-bottom:14px}
+.input-grid.cols2{grid-template-columns:repeat(2,1fr)}
+.input-grid.cols3{grid-template-columns:repeat(3,1fr)}
+.input-grid.cols4{grid-template-columns:repeat(4,1fr)}
+.input-grid.cols5{grid-template-columns:repeat(5,1fr)}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.04em;text-transform:uppercase}
+.field input,.field select{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:6px 9px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;outline:none;width:100%}
+.field input:focus,.field select:focus{border-color:var(--border2)}
+.field .hint{font-size:8px;color:var(--text3)}
+.card.highlight{border-color:rgba(29,158,117,.4);background:rgba(29,158,117,.05)}
+.card.highlight-amber{border-color:rgba(240,192,64,.3);background:rgba(240,192,64,.04)}
+.card.highlight-red{border-color:rgba(224,80,80,.3);background:rgba(224,80,80,.04)}
+.card .cv.pos{color:var(--green)}.card .cv.neg{color:var(--red)}.card .cv.neu{color:var(--accent)}
+.cards.cols2{grid-template-columns:repeat(2,1fr)}
+.cards.cols3{grid-template-columns:repeat(3,1fr)}
+.btn{background:var(--accent);color:#0d0f14;border:none;border-radius:4px;padding:6px 16px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn:hover{background:#ffd060}
+.btn.secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border2)}
+.badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:8px;font-family:'DM Mono',monospace;font-weight:500}
+.badge.green{background:rgba(29,158,117,.15);color:var(--green);border:1px solid rgba(29,158,117,.3)}
+.badge.red{background:rgba(224,80,80,.15);color:var(--red);border:1px solid rgba(224,80,80,.3)}
+.badge.amber{background:rgba(240,192,64,.15);color:var(--accent);border:1px solid rgba(240,192,64,.3)}
+.info-box{background:rgba(55,138,221,.06);border:1px solid rgba(55,138,221,.2);border-radius:6px;padding:10px 14px;font-size:10px;color:var(--text2);margin-bottom:12px;font-family:'DM Mono',monospace;line-height:1.6}
+.info-box b{color:#378ADD}
+.costos-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:14px}
+.costos-title{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.divider{height:1px;background:var(--border);margin:16px 0}
+.slider-wrap{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.slider-wrap label{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;white-space:nowrap;min-width:120px}
+.slider-wrap input[type=range]{flex:1;accent-color:var(--accent)}
+.slider-wrap .val{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);min-width:50px;text-align:right}
+tr.best td{background:rgba(29,158,117,.06)}
+tr.best td.tk{color:var(--green)}
+
 </style>
 </head>
 <body>
@@ -88,9 +127,9 @@ tr:last-child td{border-bottom:none}
 <div class="header">
   <span class="logo">Allaria · Renta Fija</span>
   <div class="header-controls">
-    <div class="field"><label>CER T-10:</label><input id="cerUrl" value="/api/cer" placeholder="/api/cer (T-10, para TIR)"/></div>
-    <div class="field"><label>CER T-0:</label><input id="cerUltimoUrl" value="/api/cer-ultimo" placeholder="/api/cer-ultimo (display)"/></div>
-    <div class="field"><label>data912:</label><input id="d912Url" value="/api/data912" placeholder="/api/data912 o https://data912.com"/></div>
+    <div class="field"><label>CER T-10:</label><input id="cerUrl" value="https://rendimientos-ar-8q4a.vercel.app/api/cer" placeholder="/api/cer (T-10, para TIR)"/></div>
+    <div class="field"><label>CER T-0:</label><input id="cerUltimoUrl" value="https://rendimientos-ar-8q4a.vercel.app/api/cer-ultimo" placeholder="/api/cer-ultimo (display)"/></div>
+    <div class="field"><label>data912:</label><input id="d912Url" value="https://rendimientos-ar-8q4a.vercel.app" placeholder="https://rendimientos-ar-8q4a.vercel.app"/></div>
     <button class="btn primary" onclick="loadAll()">▶ Actualizar</button>
   </div>
   <span class="timestamp" id="ts">—</span>
@@ -108,6 +147,9 @@ tr:last-child td{border-bottom:none}
   <div class="tab tasa" onclick="switchTab('tasa',this)">TASA FIJA</div>
   <div class="tab usd" onclick="switchTab('usd',this)">USD</div>
   <div class="tab ons" onclick="switchTab('ons',this)">ONs CORP</div>
+  <div class="tab renovaciones" onclick="switchTab('renovaciones',this)">Renovaciones</div>
+  <div class="tab arbitraje" onclick="switchTab('arbitraje',this)">Arbitraje USD</div>
+  <div class="tab spread" onclick="switchTab('spread',this)">Spread Apalancado</div>
 </div>
 
 <div class="content">
@@ -140,6 +182,292 @@ tr:last-child td{border-bottom:none}
       <div class="table-wrap"><table id="tbl-ons"><thead></thead><tbody></tbody></table></div>
     </div>
   </div>
+
+<!-- ============================= TAB 1: RENOVACIONES ============================= -->
+<div class="panel active" id="panel-renovaciones">
+
+  <div class="section">
+    <div class="section-title">Parámetros de la caución</div>
+    <div class="input-grid cols4">
+      <div class="field">
+        <label>Capital ($)</label>
+        <input type="number" id="r-capital" value="10000000" step="100000"/>
+        <span class="hint">Monto a colocar/tomar</span>
+      </div>
+      <div class="field">
+        <label>Tasa diaria (TNA %)</label>
+        <input type="number" id="r-tasa-diaria" value="28" step="0.1"/>
+        <span class="hint">TNA caución 1 día</span>
+      </div>
+      <div class="field">
+        <label>Tasa semanal (TNA %)</label>
+        <input type="number" id="r-tasa-semanal" value="27" step="0.1"/>
+        <span class="hint">TNA caución 7 días</span>
+      </div>
+      <div class="field">
+        <label>Horizonte (días)</label>
+        <input type="number" id="r-horizonte" value="30" step="1" min="7" max="365"/>
+      </div>
+    </div>
+    <button class="btn" onclick="calcRenovaciones()">Calcular</button>
+  </div>
+
+  <div class="cards cols4" id="cards-renovaciones" style="display:none"></div>
+
+  <div id="resultado-renovaciones" style="display:none">
+    <div class="section-title">Comparativa diario vs semanal — día a día</div>
+    <div class="table-wrap">
+      <table id="tbl-renovaciones">
+        <thead>
+          <tr>
+            <th style="text-align:left">Período</th>
+            <th>Capital Diario ($)</th>
+            <th>Interés Diario ($)</th>
+            <th>Capital Semanal ($)</th>
+            <th>Interés Semanal ($)</th>
+            <th>Diferencia ($)</th>
+            <th>Dif. %</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-renovaciones"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+
+
+<!-- ============================= TAB 2: ARBITRAJE USD ============================= -->
+<div class="panel" id="panel-arbitraje">
+
+  <div class="info-box">
+    <b>Estrategia:</b> Tomás caución en USD a tasa baja → comprás título en USD (soberano u ON) → cobrás TIR del título → pagás caución → ganás el spread neto de costos.<br>
+    El <b>breakeven</b> es la tasa de caución que iguala el rendimiento del título — si la caución supera ese nivel, el arbitraje deja de ser rentable.
+  </div>
+
+  <!-- COSTOS EDITABLES -->
+  <div class="costos-box">
+    <div class="costos-title">Costos operativos (editables)</div>
+    <div class="input-grid cols5">
+      <div class="field">
+        <label>Comisión broker (% c/90d)</label>
+        <input type="number" id="c-broker" value="0.6" step="0.01"/>
+        <span class="hint">Prorrateado por días</span>
+      </div>
+      <div class="field">
+        <label>BYMA administ. garantías %</label>
+        <input type="number" id="c-byma" value="0.045" step="0.001"/>
+        <span class="hint">% anual</span>
+      </div>
+      <div class="field">
+        <label>IVA sobre comisión broker %</label>
+        <input type="number" id="c-iva-broker" value="21" step="1"/>
+      </div>
+      <div class="field">
+        <label>IVA sobre derechos mercado %</label>
+        <input type="number" id="c-iva-dm" value="21" step="1"/>
+        <span class="hint">Títulos públicos: exentos = 0</span>
+      </div>
+      <div class="field">
+        <label>Plazo caución (días)</label>
+        <input type="number" id="c-plazo" value="1" step="1" min="1" max="365"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Parámetros del arbitraje</div>
+    <div class="input-grid cols4">
+      <div class="field">
+        <label>Capital (USD)</label>
+        <input type="number" id="a-capital" value="100000" step="1000"/>
+      </div>
+      <div class="field">
+        <label>Tasa caución USD (TNA %)</label>
+        <input type="number" id="a-tasa-caucion" value="1.5" step="0.1"/>
+        <span class="hint">Referencia actual: ~1.5%</span>
+      </div>
+      <div class="field">
+        <label>Horizonte análisis (días)</label>
+        <input type="number" id="a-horizonte" value="365" step="1"/>
+      </div>
+      <div class="field">
+        <label>Tipo de instrumento</label>
+        <select id="a-tipo">
+          <option value="soberano">Soberano USD (AL/GD)</option>
+          <option value="on">ON Corporativa</option>
+          <option value="manual">Ingresar TIR manual</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Instrumentos USD — seleccioná o ingresá TIR manual</div>
+  <div class="input-grid cols3" id="manual-tir-row" style="display:none">
+    <div class="field">
+      <label>Ticker manual</label>
+      <input type="text" id="a-ticker-manual" placeholder="ej: GD30" value=""/>
+    </div>
+    <div class="field">
+      <label>TIR instrumento (% anual)</label>
+      <input type="number" id="a-tir-manual" value="13.5" step="0.1"/>
+    </div>
+    <div class="field">
+      <label>Duration Mod. (años)</label>
+      <input type="number" id="a-dur-manual" value="3.5" step="0.1"/>
+    </div>
+  </div>
+
+  <div class="table-wrap" id="tabla-instrumentos-usd">
+    <table id="tbl-instrumentos">
+      <thead>
+        <tr>
+          <th style="text-align:left">Ticker</th>
+          <th style="text-align:left">Nombre</th>
+          <th>TIR USD</th>
+          <th>Duration</th>
+          <th>Costo caución</th>
+          <th>CFT total</th>
+          <th>Spread neto</th>
+          <th>Breakeven caución</th>
+          <th>Resultado</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-instrumentos"></tbody>
+    </table>
+  </div>
+
+  <button class="btn" onclick="calcArbitraje()">Calcular arbitraje</button>
+
+  <div class="divider"></div>
+
+  <div id="detalle-arbitraje" style="display:none">
+    <div class="section-title">Detalle del instrumento seleccionado</div>
+    <div class="cards cols4" id="cards-arbitraje"></div>
+
+    <div class="section-title" style="margin-top:14px">Sensibilidad: spread neto vs tasa de caución</div>
+    <div class="slider-wrap">
+      <label>Tasa caución USD (%)</label>
+      <input type="range" id="slider-caucion" min="0.5" max="15" step="0.1" value="1.5" oninput="updateSensibilidad(this.value)"/>
+      <span class="val" id="slider-val">1.5%</span>
+    </div>
+    <div class="cards cols3" id="cards-sensibilidad"></div>
+  </div>
+
+</div>
+
+
+
+<!-- ============================= TAB 3: SPREAD APALANCADO ============================= -->
+<div class="panel" id="panel-spread">
+
+  <div class="info-box">
+    <b>Análisis de apalancamiento:</b> Tomás caución (en pesos o USD) → comprás título de renta fija → el objetivo es que la TIR del título supere el CFT de la caución. Esta tabla muestra el spread neto para cada instrumento y cómo cambia según la tasa de caución.
+  </div>
+
+  <!-- COSTOS -->
+  <div class="costos-box">
+    <div class="costos-title">Costos operativos (editables — se aplican a todos los cálculos)</div>
+    <div class="input-grid cols5">
+      <div class="field">
+        <label>Comisión broker (% c/90d)</label>
+        <input type="number" id="s-broker" value="0.6" step="0.01"/>
+      </div>
+      <div class="field">
+        <label>BYMA administ. garantías %</label>
+        <input type="number" id="s-byma" value="0.045" step="0.001"/>
+      </div>
+      <div class="field">
+        <label>IVA comisión broker %</label>
+        <input type="number" id="s-iva-broker" value="21" step="1"/>
+      </div>
+      <div class="field">
+        <label>IVA derechos mercado %</label>
+        <input type="number" id="s-iva-dm" value="0" step="1"/>
+        <span class="hint">0 = tít. públicos exentos</span>
+      </div>
+      <div class="field">
+        <label>Plazo caución (días)</label>
+        <input type="number" id="s-plazo" value="1" step="1" min="1"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-grid cols3">
+    <div class="field">
+      <label>Capital a apalancar</label>
+      <select id="s-moneda">
+        <option value="ars">Pesos (ARS)</option>
+        <option value="usd">Dólares (USD)</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Tasa caución ARS (TNA %)</label>
+      <input type="number" id="s-tasa-ars" value="28" step="0.5"/>
+    </div>
+    <div class="field">
+      <label>Tasa caución USD (TNA %)</label>
+      <input type="number" id="s-tasa-usd" value="1.5" step="0.1"/>
+    </div>
+  </div>
+
+  <div class="section-title">Escenarios de tasa de caución</div>
+  <div class="slider-wrap">
+    <label>Tasa caución ARS (%)</label>
+    <input type="range" id="s-slider-ars" min="10" max="60" step="0.5" value="28" oninput="s_ars=this.value;document.getElementById('s-tasa-ars').value=this.value;document.getElementById('s-slider-ars-val').textContent=this.value+'%';calcSpread()"/>
+    <span class="val" id="s-slider-ars-val">28%</span>
+  </div>
+  <div class="slider-wrap">
+    <label>Tasa caución USD (%)</label>
+    <input type="range" id="s-slider-usd" min="0.5" max="10" step="0.1" value="1.5" oninput="s_usd=this.value;document.getElementById('s-tasa-usd').value=this.value;document.getElementById('s-slider-usd-val').textContent=this.value+'%';calcSpread()"/>
+    <span class="val" id="s-slider-usd-val">1.5%</span>
+  </div>
+
+  <button class="btn" onclick="calcSpread()" style="margin-bottom:14px">Calcular</button>
+
+  <!-- TABLA PESOS -->
+  <div class="section-title" id="titulo-tabla-ars">Instrumentos en PESOS — spread vs caución ARS</div>
+  <div class="table-wrap">
+    <table id="tbl-spread-ars">
+      <thead>
+        <tr>
+          <th style="text-align:left">Ticker</th>
+          <th style="text-align:left">Tipo</th>
+          <th>TIR / TNA</th>
+          <th>CFT caución</th>
+          <th>Spread neto</th>
+          <th>Breakeven caución</th>
+          <th>Duration</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-spread-ars"></tbody>
+    </table>
+  </div>
+
+  <!-- TABLA USD -->
+  <div class="section-title" style="margin-top:16px" id="titulo-tabla-usd">Instrumentos en USD — spread vs caución USD</div>
+  <div class="table-wrap">
+    <table id="tbl-spread-usd">
+      <thead>
+        <tr>
+          <th style="text-align:left">Ticker</th>
+          <th style="text-align:left">Tipo</th>
+          <th>TIR USD</th>
+          <th>CFT caución USD</th>
+          <th>Spread neto</th>
+          <th>Breakeven caución</th>
+          <th>Duration</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-spread-usd"></tbody>
+    </table>
+  </div>
+
+</div><!-- end panel-spread -->
+
 </div>
 
 <script>
@@ -230,65 +558,86 @@ function buildFlowsCER(ticker, cerT10){
 }
 
 // Calcula cupón corrido real para bonos CER con cupón (TX26, TX28, DICP, PARP, TX31)
-// Encuentra el último cupón pagado antes de hoy y el próximo, interpola fracción.
+// Usa inicio de período = proxFecha - 6 meses (evita recorrer flujos históricos desde 2004)
 function calcAccruedCER(ticker, cerT10){
   const b=CFG.bonos_cer[ticker];
-  if(!b||b.flujos.every(f=>!(f.tasa_interes>0))) return 0; // ZC: sin cupón corrido
+  if(!b) return 0;
+  const tienesCupon=b.flujos.some(f=>f.tasa_interes>0);
+  if(!tienesCupon) return 0;
 
-  const cerEm=b.cer_emision;
-  const ratio=cerT10/cerEm;
+  const ratio=cerT10/b.cer_emision;
 
-  // Encontrar el último flujo de interés pagado antes de hoy
-  const flujosConCupon=b.flujos.filter(f=>f.tasa_interes>0);
-  const pasados=flujosConCupon.filter(f=>new Date(f.fecha)<=TODAY);
-  const futuros=flujosConCupon.filter(f=>new Date(f.fecha)>TODAY);
+  // Solo flujos futuros con cupón
+  const futuros=b.flujos.filter(f=>new Date(f.fecha)>TODAY&&f.tasa_interes>0);
   if(!futuros.length) return 0;
 
   const proxFecha=new Date(futuros[0].fecha);
-  const ultFecha=pasados.length ? new Date(pasados[pasados.length-1].fecha) : null;
+  const tasaCupon=futuros[0].tasa_interes;
 
-  // Período del cupón = diferencia entre último y próximo pago
-  // Si no hay pago anterior, estimar semestre atrás
-  const inicioPeríodo = ultFecha || new Date(proxFecha.getTime() - 182.5*24*3600*1000);
+  // Inicio del período = próximo pago - 6 meses exactos
+  const inicioPeríodo=new Date(proxFecha);
+  inicioPeríodo.setMonth(inicioPeríodo.getMonth()-6);
+
   const periodoDias=(proxFecha-inicioPeríodo)/(24*3600*1000);
-  const diasTranscurridos=(TODAY-inicioPeríodo)/(24*3600*1000);
-  const fraccion=Math.max(0,Math.min(diasTranscurridos/periodoDias,1));
+  const diasTranscurridos=Math.max(0,(TODAY-inicioPeríodo)/(24*3600*1000));
+  const fraccion=Math.min(diasTranscurridos/periodoDias,1);
 
-  // Calcular VN residual al inicio del período
+  // VN residual actual (amortizaciones ya pagadas hasta hoy)
   let vnR=1.0;
   for(const f of b.flujos){
-    if(new Date(f.fecha)>inicioPeríodo) break;
+    if(new Date(f.fecha)>TODAY) break;
     vnR-=(f.amortizacion||0);
   }
-  const tasaCupon=futuros[0].tasa_interes||0;
+  vnR=Math.max(0,vnR);
+
   return vnR * tasaCupon * fraccion * ratio * 100;
 }
 
-// Lecap/Boncap: precio de referencia + pago final
+// Lecap/Boncap: construye flujos desde pago_final del config
+// Tanto Lecap (ZC) como Boncap se tratan como ZC efectivo:
+// el pago_final ya incluye capital + todos los cupones acumulados.
+// Para Boncap con cupones intermedios futuros, generamos los pagos semestrales
+// usando la tasa implícita = (pago_final/100)^(1/n_semestres) - 1
 function buildFlowsLecap(letra){
   const t=yrs(letra.fecha_vencimiento);
-  if(t<=0)return null;
-  // ZC: solo flujo final
-  if(!letra.nombre.includes('BONCAP')&&!letra.ticker.startsWith('T')){
-    return [{t,cf:letra.pago_final}];
+  if(t<=0) return null;
+
+  const isBoncap=letra.ticker.startsWith('T');
+
+  // Si es Lecap O si el Boncap vence en menos de 1 semestre → flujo único final
+  if(!isBoncap || t < 0.45){
+    return [{t, cf: letra.pago_final}];
   }
-  // Boncap: cupón semestral + amortización
-  const flows=[];
+
+  // Boncap con plazo > 1 semestre: generar fechas de pago semestrales
   const vto=new Date(letra.fecha_vencimiento);
-  let d=new Date(vto);
   const dates=[];
-  while(d>TODAY){dates.unshift(new Date(d));d=new Date(d);d.setMonth(d.getMonth()-6)}
-  // El pago_final ya incluye último cupón + capital. Para los intermedios usamos proporción.
-  // Aproximamos cada cupón semestral como (pago_final - 100) / N_periodos
-  const nP=dates.length;
-  const cuponPorPeriodo=nP>1?(letra.pago_final-100)/(nP):0;
+  let d=new Date(vto);
+  while(d > TODAY){
+    dates.unshift(new Date(d));
+    d=new Date(d);
+    d.setMonth(d.getMonth()-6);
+  }
+
+  const n=dates.length;
+  if(n<=1) return [{t, cf: letra.pago_final}];
+
+  // Tasa semestral implícita: resolver (1+s)^n * 100 = pago_final
+  // Aproximación: s = (pago_final/100)^(1/n) - 1
+  const s=Math.pow(letra.pago_final/100, 1/n)-1;
+
+  const flows=[];
+  let capitalResidual=100;
   for(let i=0;i<dates.length;i++){
     const t2=(dates[i]-TODAY)/(365.25*24*3600*1000);
-    let cf=cuponPorPeriodo;
-    if(i===dates.length-1)cf+=100;
-    flows.push({t:t2,cf});
+    const cupon=capitalResidual*s;
+    if(i===dates.length-1){
+      flows.push({t:t2, cf: cupon+capitalResidual});
+    } else {
+      flows.push({t:t2, cf: cupon});
+    }
   }
-  return flows.length?flows:null;
+  return flows.length ? flows : null;
 }
 
 // ONs USD: flujos directos (montos por cada 1 USD VN, escalamos a 100)
@@ -471,8 +820,9 @@ function renderCER(){
       r.tnaSimple = NaN;
     }
 
-    // VN ajustado usa CER T-0 (más reciente, solo display)
-    r.vnAj=(cerT0/b.cer_emision)*100;
+    // VN ajustado = precio limpio escalado al CER T-0 de hoy
+    // Fórmula: pLimpio * (cerT0 / cerT10) — convierte del CER T-10 al T-0 actual
+    r.vnAj=pLimpio*(cerT0/cerT10);
     r.vto=b.vencimiento;r.src=src;r.nombre=tk;
     rows.push(r);
     if(!isNaN(r.dur)&&!isNaN(r.spreadReal)) spread.push({x:+r.dur.toFixed(2),y:+r.spreadReal.toFixed(2),lbl:tk});
@@ -523,9 +873,12 @@ function renderTASA(){
     const r=calcInstrumento(letra.ticker,flows,pLimpio,0,'tasa');if(!r)continue;
     const isLec=!letra.ticker.startsWith('T');
     if(isLec){
-      const tna=(Math.pow(letra.pago_final/pLimpio,1/t)-1)*100;
-      const tem=(Math.pow(letra.pago_final/pLimpio,1/(t*12))-1)*100;
-      r.tna=tna;r.tem=tem;
+      // Suprimir TNA/TEM si vence en menos de 15 días (se dispara al anualizar)
+      if(t > 15/365){
+        const tna=(Math.pow(letra.pago_final/pLimpio,1/t)-1)*100;
+        const tem=(Math.pow(letra.pago_final/pLimpio,1/(t*12))-1)*100;
+        r.tna=tna;r.tem=tem;
+      }
     }
     r.vto=letra.fecha_vencimiento;r.src=src;r.nombre=letra.nombre;r.isLec=isLec;
     rows.push(r);
@@ -682,7 +1035,327 @@ function switchTab(name,el){
   document.getElementById('panel-'+name).classList.add('active');
 }
 
-window.addEventListener('DOMContentLoaded',()=>loadAll());
+
+// ===================== UTILS =====================
+const f2=(v,d=2)=>isNaN(v)||v==null?'—':v.toFixed(d);
+const fP=(v,d=2)=>isNaN(v)||v==null?'—':v.toFixed(d)+'%';
+const fM=(v)=>isNaN(v)||v==null?'—':'$'+Math.round(v).toLocaleString('es-AR');
+const fMU=(v)=>isNaN(v)||v==null?'—':'U$S'+v.toFixed(2);
+
+// Costo anual de la caución como % (TNA efectiva incluyendo comisiones)
+function calcCFT(tasaTNA, plazo, brokerPct90d, bymaPct, ivaBrokerPct, ivaDMPct){
+  // Costo broker: brokerPct90d prorrateado por plazo
+  const costoBase = (brokerPct90d / 100) * (plazo / 90);
+  const costoBaseConIVA = costoBase * (1 + ivaBrokerPct/100);
+  // BYMA administración garantías: anual
+  const costoBYMA = (bymaPct / 100) * (plazo / 365);
+  const costoBYMAConIVA = costoBYMA * (1 + ivaDMPct/100);
+  const costoTotalFraccion = costoBaseConIVA + costoBYMAConIVA;
+  // Convertir a TNA anual
+  const costoTNAAnual = costoTotalFraccion * (365 / plazo) * 100;
+  return { costoTNAAnual, costoBase: costoBaseConIVA*100, costoBYMA: costoBYMAConIVA*100, total: costoTotalFraccion*100 };
+}
+
+// ===================== TAB 1: RENOVACIONES =====================
+function calcRenovaciones(){
+  const capital = parseFloat(document.getElementById('r-capital').value)||10000000;
+  const tnaDiaria = parseFloat(document.getElementById('r-tasa-diaria').value)||28;
+  const tnaSemanal = parseFloat(document.getElementById('r-tasa-semanal').value)||27;
+  const horizonte = parseInt(document.getElementById('r-horizonte').value)||30;
+
+  // Tasa diaria efectiva
+  const tdDiaria = tnaDiaria / 100 / 365;
+  const tdSemanal = tnaSemanal / 100 / 365;
+
+  // Simular día a día
+  let capDiario = capital;
+  let capSemanal = capital;
+  const rows = [];
+
+  for(let dia = 1; dia <= horizonte; dia++){
+    // Renovación diaria: capitaliza cada día
+    const intDiario = capDiario * tdDiaria;
+    capDiario += intDiario;
+
+    // Renovación semanal: capitaliza cada 7 días
+    let intSemanal = 0;
+    if(dia % 7 === 0){
+      intSemanal = capSemanal * tdSemanal * 7;
+      capSemanal += intSemanal;
+    }
+
+    if(dia % 7 === 0 || dia === horizonte){
+      rows.push({
+        periodo: `Día ${dia}`,
+        capD: capDiario,
+        intD: capDiario - capital - rows.reduce((s,r)=>s+(r.intD_raw||0),0),
+        capS: capSemanal,
+        intS: capSemanal - capital,
+        dif: capDiario - capSemanal,
+        difPct: ((capDiario - capSemanal)/capital)*100,
+      });
+      rows[rows.length-1].intD_raw = capDiario - capital - (rows.length>1?rows.slice(0,-1).reduce((s,r)=>s+(r.intD_raw||0),0):0);
+    }
+  }
+
+  // TEA efectiva
+  const teaDiaria = (Math.pow(1 + tdDiaria, 365) - 1) * 100;
+  const teaSemanal = (Math.pow(1 + tdSemanal * 7, 365/7) - 1) * 100;
+  const gananciaDiaria = capDiario - capital;
+  const gananciaSemanal = capSemanal - capital;
+  const conviene = capDiario > capSemanal ? 'DIARIA' : 'SEMANAL';
+  const difTotal = Math.abs(capDiario - capSemanal);
+
+  // Cards
+  document.getElementById('cards-renovaciones').style.display='grid';
+  document.getElementById('cards-renovaciones').className='cards cols4';
+  document.getElementById('cards-renovaciones').innerHTML=`
+    <div class="card"><div class="cl">TEA Renovación Diaria</div><div class="cv pos">${fP(teaDiaria)}</div><div class="cs">TNA ${fP(tnaDiaria)} capitaliz. diaria</div></div>
+    <div class="card"><div class="cl">TEA Renovación Semanal</div><div class="cv" style="color:var(--blue)">${fP(teaSemanal)}</div><div class="cs">TNA ${fP(tnaSemanal)} capitaliz. semanal</div></div>
+    <div class="card ${conviene==='DIARIA'?'highlight':'highlight-amber'}"><div class="cl">Conviene renovar</div><div class="cv ${conviene==='DIARIA'?'pos':'neu'}">${conviene}</div><div class="cs">Diferencia ${fM(difTotal)} en ${horizonte} días</div></div>
+    <div class="card"><div class="cl">Ganancia diaria / semanal</div><div class="cv pos">${fM(gananciaDiaria)}</div><div class="cs">vs ${fM(gananciaSemanal)} semanal</div></div>
+  `;
+
+  // Tabla
+  document.getElementById('resultado-renovaciones').style.display='block';
+  document.getElementById('tbody-renovaciones').innerHTML = rows.map(r=>`
+    <tr>
+      <td class="tk">${r.periodo}</td>
+      <td style="color:var(--green)">${fM(r.capD)}</td>
+      <td style="color:var(--text2)">${fM(r.capD - capital)}</td>
+      <td style="color:var(--blue)">${fM(r.capS)}</td>
+      <td style="color:var(--text2)">${fM(r.capS - capital)}</td>
+      <td style="color:${r.dif>=0?'var(--green)':'var(--red)'}">${fM(r.dif)}</td>
+      <td style="color:${r.dif>=0?'var(--green)':'var(--red)'}">${fP(r.difPct,3)}</td>
+    </tr>
+  `).join('');
+}
+
+// ===================== INSTRUMENTOS DE REFERENCIA =====================
+// TIRs de referencia (se actualizan con data912 si está disponible)
+const TIRS_USD = {
+  GD29:{tir:12.3,dur:0.9,nombre:'Global 2029',tipo:'Soberano NY'},
+  AL29:{tir:12.8,dur:0.9,nombre:'Bono 2029',tipo:'Soberano ARG'},
+  GD30:{tir:13.8,dur:1.6,nombre:'Global 2030',tipo:'Soberano NY'},
+  AL30:{tir:14.1,dur:1.6,nombre:'Bono 2030',tipo:'Soberano ARG'},
+  GD35:{tir:13.0,dur:4.1,nombre:'Global 2035',tipo:'Soberano NY'},
+  AL35:{tir:13.5,dur:4.1,nombre:'Bono 2035',tipo:'Soberano ARG'},
+  GD38:{tir:12.6,dur:5.2,nombre:'Global 2038',tipo:'Soberano NY'},
+  AE38:{tir:12.8,dur:5.2,nombre:'Bono 2038',tipo:'Soberano ARG'},
+  GD41:{tir:12.9,dur:6.1,nombre:'Global 2041',tipo:'Soberano NY'},
+  AL41:{tir:13.2,dur:6.1,nombre:'Bono 2041',tipo:'Soberano ARG'},
+  MGCO:{tir:8.5,dur:5.4,nombre:'Pampa Energía',tipo:'ON Corp'},
+  MGCR:{tir:8.8,dur:6.2,nombre:'Pampa Energía',tipo:'ON Corp'},
+  GN49:{tir:9.2,dur:4.8,nombre:'Genneia',tipo:'ON Corp'},
+  TSC4:{tir:8.3,dur:5.1,nombre:'TGS',tipo:'ON Corp'},
+  YM34:{tir:9.5,dur:4.2,nombre:'YPF',tipo:'ON Corp'},
+  YMCX:{tir:10.1,dur:3.1,nombre:'YPF',tipo:'ON Corp'},
+  PN36:{tir:8.9,dur:3.8,nombre:'Pan American',tipo:'ON Corp'},
+  VSCT:{tir:9.0,dur:4.9,nombre:'Vista Energy',tipo:'ON Corp'},
+};
+
+const TIRS_ARS = {
+  TZX26:{tir:1.5,tirTotal:24.0,dur:0.07,nombre:'Boncer ZC Jun-26',tipo:'CER ZC'},
+  TZXO6:{tir:2.5,tirTotal:25.2,dur:0.41,nombre:'Boncer ZC Oct-26',tipo:'CER ZC'},
+  TZXD6:{tir:-0.6,tirTotal:21.5,dur:0.53,nombre:'Boncer ZC Dic-26',tipo:'CER ZC'},
+  TZX27:{tir:4.0,tirTotal:27.1,dur:1.04,nombre:'Boncer ZC Jun-27',tipo:'CER ZC'},
+  TZX28:{tir:7.0,tirTotal:30.7,dur:1.93,nombre:'Boncer ZC Jun-28',tipo:'CER ZC'},
+  TX28:{tir:5.2,tirTotal:27.3,dur:1.36,nombre:'Boncer 2.25% Nov-28',tipo:'CER CPN'},
+  DICP:{tir:7.5,tirTotal:30.4,dur:3.09,nombre:'Discount CER',tipo:'CER CPN'},
+  PARP:{tir:8.5,tirTotal:31.2,dur:6.54,nombre:'Par CER',tipo:'CER CPN'},
+  S31L6:{tir:24.0,tirTotal:null,dur:0.11,nombre:'Lecap Jul-26',tipo:'Lecap'},
+  S31G6:{tir:23.2,tirTotal:null,dur:0.18,nombre:'Lecap Ago-26',tipo:'Lecap'},
+  S30S6:{tir:23.9,tirTotal:null,dur:0.25,nombre:'Lecap Sep-26',tipo:'Lecap'},
+  S30N6:{tir:22.9,tirTotal:null,dur:0.39,nombre:'Lecap Nov-26',tipo:'Lecap'},
+  T15E7:{tir:27.4,tirTotal:null,dur:0.48,nombre:'Boncap Ene-27',tipo:'Boncap'},
+  T30A7:{tir:27.7,tirTotal:null,dur:0.65,nombre:'Boncap Abr-27',tipo:'Boncap'},
+  T30J7:{tir:24.7,tirTotal:null,dur:0.86,nombre:'Boncap Jun-27',tipo:'Boncap'},
+};
+
+// ===================== TAB 2: ARBITRAJE USD =====================
+function getCostos(prefix){
+  const broker = parseFloat(document.getElementById(`${prefix}-broker`).value)||0.6;
+  const byma   = parseFloat(document.getElementById(`${prefix}-byma`).value)||0.045;
+  const ivaBr  = parseFloat(document.getElementById(`${prefix}-iva-broker`).value)||21;
+  const ivaDM  = parseFloat(document.getElementById(`${prefix}-iva-dm`).value)||21;
+  const plazo  = parseInt(document.getElementById(`${prefix}-plazo`).value)||1;
+  return calcCFT(0, plazo, broker, byma, ivaBr, ivaDM);
+}
+
+function calcCostoAnualConTasa(tasaTNA, prefix){
+  const broker = parseFloat(document.getElementById(`${prefix}-broker`).value)||0.6;
+  const byma   = parseFloat(document.getElementById(`${prefix}-byma`).value)||0.045;
+  const ivaBr  = parseFloat(document.getElementById(`${prefix}-iva-broker`).value)||21;
+  const ivaDM  = parseFloat(document.getElementById(`${prefix}-iva-dm`).value)||21;
+  const plazo  = parseInt(document.getElementById(`${prefix}-plazo`).value)||1;
+  const costos = calcCFT(tasaTNA, plazo, broker, byma, ivaBr, ivaDM);
+  return tasaTNA + costos.costoTNAAnual; // CFT = tasa + costos
+}
+
+function calcArbitraje(){
+  const tasaCaucion = parseFloat(document.getElementById('a-tasa-caucion').value)||1.5;
+  const horizonte   = parseInt(document.getElementById('a-horizonte').value)||365;
+  const capital     = parseFloat(document.getElementById('a-capital').value)||100000;
+  const tipo        = document.getElementById('a-tipo').value;
+
+  // Obtener costos
+  const broker = parseFloat(document.getElementById('c-broker').value)||0.6;
+  const byma   = parseFloat(document.getElementById('c-byma').value)||0.045;
+  const ivaBr  = parseFloat(document.getElementById('c-iva-broker').value)||21;
+  const ivaDM  = parseFloat(document.getElementById('c-iva-dm').value)||21;
+  const plazo  = parseInt(document.getElementById('c-plazo').value)||1;
+
+  const costos = calcCFT(0, plazo, broker, byma, ivaBr, ivaDM);
+  const cftCaucion = tasaCaucion + costos.costoTNAAnual;
+
+  // Filtrar instrumentos
+  const instrs = Object.entries(TIRS_USD).filter(([tk,b])=>{
+    if(tipo==='soberano') return b.tipo.includes('Soberano');
+    if(tipo==='on') return b.tipo.includes('ON');
+    return true;
+  });
+
+  const tbody = document.getElementById('tbody-instrumentos');
+  tbody.innerHTML = instrs.map(([tk,b])=>{
+    const spreadBruto = b.tir - tasaCaucion;
+    const spreadNeto  = b.tir - cftCaucion;
+    const breakeven   = b.tir - costos.costoTNAAnual;
+    const conviene    = spreadNeto > 0;
+    const ganancia    = capital * (spreadNeto/100) * (horizonte/365);
+    return `<tr class="${conviene?'best':''}">
+      <td class="tk">${tk}</td>
+      <td style="font-size:9px">${b.nombre} <span style="color:var(--text3)">(${b.tipo})</span></td>
+      <td style="color:var(--amber)">${fP(b.tir)}</td>
+      <td>${f2(b.dur)}</td>
+      <td style="color:var(--text2)">${fP(cftCaucion-spreadBruto+spreadBruto)}</td>
+      <td style="color:var(--red)">${fP(cftCaucion)}</td>
+      <td style="color:${conviene?'var(--green)':'var(--red)';}">${fP(spreadNeto)}</td>
+      <td style="color:var(--accent)">${fP(breakeven)}</td>
+      <td><span class="badge ${conviene?'green':'red'}">${conviene?'▲ CONVIENE':'▼ NO CONVIENE'}</span></td>
+    </tr>`;
+  }).join('');
+
+  // Detalle del mejor instrumento
+  const mejores = instrs.filter(([tk,b])=>b.tir - cftCaucion > 0).sort((a,b)=>b[1].tir-a[1].tir);
+  if(mejores.length){
+    const [tkM,bM] = mejores[0];
+    const spreadNetoM = bM.tir - cftCaucion;
+    const gananciaM = capital * (spreadNetoM/100) * (horizonte/365);
+    document.getElementById('detalle-arbitraje').style.display='block';
+    document.getElementById('cards-arbitraje').innerHTML=`
+      <div class="card highlight"><div class="cl">Mejor instrumento</div><div class="cv pos">${tkM}</div><div class="cs">${bM.nombre}</div></div>
+      <div class="card"><div class="cl">TIR instrumento</div><div class="cv" style="color:var(--amber)">${fP(bM.tir)}</div><div class="cs">vs CFT caución ${fP(cftCaucion)}</div></div>
+      <div class="card highlight"><div class="cl">Spread neto</div><div class="cv pos">${fP(spreadNetoM)}</div><div class="cs">anual sobre capital</div></div>
+      <div class="card"><div class="cl">Ganancia estimada</div><div class="cv pos">U$S${Math.round(gananciaM).toLocaleString('es-AR')}</div><div class="cs">en ${horizonte} días</div></div>
+    `;
+    document.getElementById('slider-caucion').value = tasaCaucion;
+    document.getElementById('slider-val').textContent = tasaCaucion + '%';
+    updateSensibilidad(tasaCaucion, tkM, bM, capital, horizonte, costos);
+  } else {
+    document.getElementById('detalle-arbitraje').style.display='none';
+  }
+}
+
+let _lastArb = null;
+function updateSensibilidad(val, tkM, bM, capital, horizonte, costos){
+  const v = parseFloat(val);
+  document.getElementById('slider-val').textContent = v.toFixed(1)+'%';
+  // Si no se pasan args, usar los últimos
+  if(!bM && _lastArb){ ({tkM,bM,capital,horizonte,costos}=_lastArb); }
+  if(!bM) return;
+  _lastArb={tkM,bM,capital,horizonte,costos};
+
+  const broker = parseFloat(document.getElementById('c-broker').value)||0.6;
+  const byma   = parseFloat(document.getElementById('c-byma').value)||0.045;
+  const ivaBr  = parseFloat(document.getElementById('c-iva-broker').value)||21;
+  const ivaDM  = parseFloat(document.getElementById('c-iva-dm').value)||21;
+  const plazo  = parseInt(document.getElementById('c-plazo').value)||1;
+  const c = calcCFT(0, plazo, broker, byma, ivaBr, ivaDM);
+
+  const cft = v + c.costoTNAAnual;
+  const spread = bM.tir - cft;
+  const ganancia = capital * (spread/100) * (horizonte/365);
+  const conviene = spread > 0;
+
+  document.getElementById('cards-sensibilidad').innerHTML=`
+    <div class="card ${conviene?'highlight':'highlight-red'}"><div class="cl">Con tasa caución ${v.toFixed(1)}%</div><div class="cv ${conviene?'pos':'neg'}">${fP(spread)}</div><div class="cs">spread neto anual</div></div>
+    <div class="card"><div class="cl">CFT total caución</div><div class="cv" style="color:var(--red)">${fP(cft)}</div><div class="cs">tasa + costos operativos</div></div>
+    <div class="card ${conviene?'highlight':'highlight-red'}"><div class="cl">Ganancia / pérdida</div><div class="cv ${conviene?'pos':'neg'}">U$S${Math.round(Math.abs(ganancia)).toLocaleString('es-AR')}</div><div class="cs">${conviene?'ganancia':'pérdida'} estimada</div></div>
+  `;
+}
+
+// ===================== TAB 3: SPREAD APALANCADO =====================
+function calcSpread(){
+  const tasaARS = parseFloat(document.getElementById('s-tasa-ars').value)||28;
+  const tasaUSD = parseFloat(document.getElementById('s-tasa-usd').value)||1.5;
+  const broker  = parseFloat(document.getElementById('s-broker').value)||0.6;
+  const byma    = parseFloat(document.getElementById('s-byma').value)||0.045;
+  const ivaBr   = parseFloat(document.getElementById('s-iva-broker').value)||21;
+  const ivaDM   = parseFloat(document.getElementById('s-iva-dm').value)||0;
+  const plazo   = parseInt(document.getElementById('s-plazo').value)||1;
+
+  const costos  = calcCFT(0, plazo, broker, byma, ivaBr, ivaDM);
+  const cftARS  = tasaARS + costos.costoTNAAnual;
+  const cftUSD  = tasaUSD + costos.costoTNAAnual;
+
+  // Tabla ARS
+  document.getElementById('titulo-tabla-ars').textContent =
+    `Instrumentos en PESOS — spread vs caución ARS (CFT: ${fP(cftARS)})`;
+  document.getElementById('tbody-spread-ars').innerHTML = Object.entries(TIRS_ARS)
+    .sort((a,b)=>{
+      const tirA = a[1].tirTotal||a[1].tir;
+      const tirB = b[1].tirTotal||b[1].tir;
+      return tirB - tirA;
+    })
+    .map(([tk,b])=>{
+      const tirEfectiva = b.tirTotal || b.tir;
+      const spread = tirEfectiva - cftARS;
+      const breakeven = tirEfectiva - costos.costoTNAAnual;
+      const conviene = spread > 0;
+      return `<tr class="${conviene?'best':''}">
+        <td class="tk">${tk}</td>
+        <td style="font-size:9px">${b.tipo}</td>
+        <td style="color:${b.tirTotal?'var(--violet)':'var(--tasa)'}">${fP(tirEfectiva)}${b.tirTotal?'<span style="font-size:8px;color:var(--text3)"> (total)</span>':''}</td>
+        <td style="color:var(--red)">${fP(cftARS)}</td>
+        <td style="color:${conviene?'var(--green)':'var(--red)'};font-weight:500">${fP(spread)}</td>
+        <td style="color:var(--accent)">${fP(breakeven)}</td>
+        <td>${f2(b.dur)}</td>
+        <td><span class="badge ${conviene?'green':'red'}">${conviene?'▲ SPREAD +':'▼ NEGATIVO'}</span></td>
+      </tr>`;
+    }).join('');
+
+  // Tabla USD
+  document.getElementById('titulo-tabla-usd').textContent =
+    `Instrumentos en USD — spread vs caución USD (CFT: ${fP(cftUSD)})`;
+  document.getElementById('tbody-spread-usd').innerHTML = Object.entries(TIRS_USD)
+    .sort((a,b)=>b[1].tir-a[1].tir)
+    .map(([tk,b])=>{
+      const spread = b.tir - cftUSD;
+      const breakeven = b.tir - costos.costoTNAAnual;
+      const conviene = spread > 0;
+      return `<tr class="${conviene?'best':''}">
+        <td class="tk">${tk}</td>
+        <td style="font-size:9px">${b.tipo}</td>
+        <td style="color:var(--amber)">${fP(b.tir)}</td>
+        <td style="color:var(--red)">${fP(cftUSD)}</td>
+        <td style="color:${conviene?'var(--green)':'var(--red)'};font-weight:500">${fP(spread)}</td>
+        <td style="color:var(--accent)">${fP(breakeven)}</td>
+        <td>${f2(b.dur)}</td>
+        <td><span class="badge ${conviene?'green':'red'}">${conviene?'▲ SPREAD +':'▼ NEGATIVO'}</span></td>
+      </tr>`;
+    }).join('');
+}
+
+// Toggle manual TIR
+document.getElementById('a-tipo').addEventListener('change', function(){
+  document.getElementById('manual-tir-row').style.display = this.value==='manual'?'grid':'none';
+});
+
+// Init
+
+
+
+window.addEventListener('DOMContentLoaded',()=>{loadAll();calcRenovaciones();calcArbitraje();calcSpread();document.getElementById('ts').textContent=new Date().toLocaleTimeString('es-AR');});
 </script>
 </body>
 </html>
