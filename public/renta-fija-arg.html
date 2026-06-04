@@ -3,118 +3,115 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Renta Fija Soberana — Allaria S.A.</title>
+<title>Renta Fija — Allaria S.A.</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
+:root{
   --bg:#0d0f14;--bg2:#13161d;--bg3:#1a1e27;
   --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
   --text:#e8eaf0;--text2:#8a90a0;--text3:#5a6070;
-  --cer:#1D9E75;--tasa:#378ADD;--usd:#BA7517;--dual:#D4537E;--ons:#9B59B6;
+  --cer:#1D9E75;--tasa:#378ADD;--usd:#BA7517;--ons:#9B59B6;
   --tir-total:#7B6FE8;--precio-sucio:#D85A30;
-  --accent:#F0C040;--card-bg:#161922;
+  --green:#1D9E75;--red:#E05050;--accent:#F0C040;--card-bg:#161922;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh;overflow-x:hidden}
-.header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--bg2);gap:8px;flex-wrap:wrap}
+/* HEADER */
+.header{display:flex;align-items:center;gap:8px;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--bg2);flex-wrap:wrap}
 .logo{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.1em;color:var(--accent);white-space:nowrap;text-transform:uppercase}
-.header-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hc{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .field{display:flex;align-items:center;gap:5px}
 .field label{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;white-space:nowrap}
-.field input{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:4px 8px;color:var(--text);font-family:'DM Mono',monospace;font-size:10px;outline:none;width:120px}
-.field input:focus{border-color:var(--border2)}
+.field input,.field select{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:4px 8px;color:var(--text);font-family:'DM Mono',monospace;font-size:10px;outline:none}
+.field input{width:130px}
+.field input:focus,.field select:focus{border-color:var(--border2)}
 .field input::placeholder{color:var(--text3)}
-.btn{background:var(--bg3);border:1px solid var(--border2);border-radius:4px;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;padding:5px 12px;white-space:nowrap;transition:background .15s}
-.btn:hover{background:#262b38}
-.btn.primary{background:var(--accent);color:#0d0f14;border-color:transparent}
-.btn.primary:hover{background:#ffd060}
-.timestamp{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);white-space:nowrap}
-.status-row{display:flex;align-items:center;gap:10px;padding:6px 18px;background:var(--bg2);border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);flex-wrap:wrap}
-.status-pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;border:1px solid var(--border2)}
+.ts{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);margin-left:auto;white-space:nowrap}
+/* STATUS */
+.status-row{display:flex;align-items:center;gap:10px;padding:5px 18px;background:var(--bg2);border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;border:1px solid var(--border2)}
 .dot{width:5px;height:5px;border-radius:50%;display:inline-block}
 .dot.live{background:var(--cer);animation:pulse 2s infinite}
 .dot.ref{background:var(--usd)}
 .dot.ok{background:var(--cer)}
-.dot.err{background:#E05050}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.tabs-bar{display:flex;gap:2px;padding:10px 18px 0;border-bottom:1px solid var(--border)}
-.tab{padding:7px 16px;border-radius:6px 6px 0 0;cursor:pointer;font-size:11px;font-weight:500;font-family:'DM Mono',monospace;letter-spacing:.04em;border:1px solid transparent;border-bottom:none;transition:all .15s;color:var(--text3)}
+/* TABS */
+.tabs-bar{display:flex;gap:2px;padding:10px 18px 0;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.tab{padding:7px 14px;border-radius:6px 6px 0 0;cursor:pointer;font-size:10px;font-weight:500;font-family:'DM Mono',monospace;letter-spacing:.04em;border:1px solid transparent;border-bottom:none;transition:all .15s;color:var(--text3)}
 .tab:hover{color:var(--text2);background:var(--bg2)}
 .tab.active{background:var(--bg2);border-color:var(--border);border-bottom-color:var(--bg2);color:var(--text)}
-.tab.cer.active{color:var(--cer)}.tab.tasa.active{color:var(--tasa)}.tab.usd.active{color:var(--usd)}.tab.ons.active{color:var(--ons)}
+.tab.cer.active{color:var(--cer)}.tab.tasa.active{color:var(--tasa)}.tab.usd.active{color:var(--usd)}.tab.ons.active{color:var(--ons)}.tab.cau.active{color:var(--accent)}
+/* CONTENT */
 .content{padding:14px 18px}
 .panel{display:none}.panel.active{display:block}
-.rem-banner{display:flex;align-items:center;gap:8px;background:rgba(29,158,117,.07);border:1px solid rgba(29,158,117,.2);border-radius:6px;padding:7px 12px;margin-bottom:12px;font-family:'DM Mono',monospace;font-size:10px;color:var(--cer);flex-wrap:wrap;gap:6px}
+/* BANNER */
+.rem-banner{display:flex;align-items:center;gap:8px;background:rgba(29,158,117,.07);border:1px solid rgba(29,158,117,.2);border-radius:6px;padding:7px 12px;margin-bottom:12px;font-family:'DM Mono',monospace;font-size:10px;color:var(--cer);flex-wrap:wrap}
 .rem-banner .lbl{color:var(--text3)}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+/* CARDS */
+.cards{display:grid;gap:8px;margin-bottom:12px}
+.cards.c4{grid-template-columns:repeat(4,1fr)}
+.cards.c3{grid-template-columns:repeat(3,1fr)}
+.cards.c2{grid-template-columns:repeat(2,1fr)}
 .card{background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.card.pos-card{border-color:rgba(29,158,117,.4);background:rgba(29,158,117,.05)}
+.card.neg-card{border-color:rgba(224,80,80,.3);background:rgba(224,80,80,.04)}
+.card.acc-card{border-color:rgba(240,192,64,.3);background:rgba(240,192,64,.04)}
 .card .cl{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
 .card .cv{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;line-height:1}
-.card .cs{font-size:9px;color:var(--text3);margin-top:2px}
+.card .cs{font-size:9px;color:var(--text3);margin-top:3px}
+/* VIZ ROW */
 .viz-row{display:grid;grid-template-columns:360px 1fr;gap:10px;margin-bottom:12px}
 .chart-box{background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:10px}
 .chart-box canvas{max-height:240px}
 .chart-title{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
-.table-wrap{overflow:auto;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;max-height:310px}
+/* TABLE */
+.table-wrap{overflow:auto;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;max-height:320px}
 table{width:100%;border-collapse:collapse;font-family:'DM Mono',monospace;font-size:10.5px}
 th{position:sticky;top:0;background:#171b24;color:var(--text3);font-size:9px;letter-spacing:.05em;text-transform:uppercase;padding:7px 9px;text-align:right;cursor:pointer;white-space:nowrap;border-bottom:1px solid var(--border);user-select:none}
 th:first-child,th:nth-child(2){text-align:left}
 th:hover{color:var(--text2)}
 th.sorted{color:var(--accent)}
-td{padding:5px 9px;text-align:right;border-bottom:1px solid rgba(255,255,255,.025);color:var(--text2);white-space:nowrap}
+td{padding:5px 9px;text-align:right;border-bottom:1px solid rgba(255,255,255,.025);color:var(--text2);white-space:nowrap;font-size:10px}
 td:first-child,td:nth-child(2){text-align:left}
 td.tk{color:var(--text);font-weight:500}
 tr:hover td{background:rgba(255,255,255,.02)}
 tr:last-child td{border-bottom:none}
-.v-cer{color:var(--cer)}.v-tasa{color:var(--tasa)}.v-usd{color:var(--usd)}.v-ons{color:var(--ons)}.v-viol{color:var(--tir-total)}.v-rojo{color:var(--precio-sucio)}.v-acc{color:var(--accent)}
+tr.best td{background:rgba(29,158,117,.05)}
+/* CAUCION */
+.sec-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.ig{display:grid;gap:10px;margin-bottom:14px}
+.ig.g2{grid-template-columns:repeat(2,1fr)}.ig.g3{grid-template-columns:repeat(3,1fr)}.ig.g4{grid-template-columns:repeat(4,1fr)}.ig.g5{grid-template-columns:repeat(5,1fr)}
+.ifield{display:flex;flex-direction:column;gap:4px}
+.ifield label{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.04em;text-transform:uppercase}
+.ifield input,.ifield select{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:6px 9px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;outline:none;width:100%}
+.ifield input:focus,.ifield select:focus{border-color:var(--border2)}
+.ifield .hint{font-size:8px;color:var(--text3)}
+.costos-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:14px}
+.costos-title{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.info-box{background:rgba(55,138,221,.06);border:1px solid rgba(55,138,221,.2);border-radius:6px;padding:10px 14px;font-size:10px;color:var(--text2);margin-bottom:12px;font-family:'DM Mono',monospace;line-height:1.6}
+.info-box b{color:#378ADD}
+.btn{background:var(--accent);color:#0d0f14;border:none;border-radius:4px;padding:6px 16px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:12px}
+.btn:hover{background:#ffd060}
+.badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:8px;font-family:'DM Mono',monospace;font-weight:500}
+.badge.bg{background:rgba(29,158,117,.15);color:var(--green);border:1px solid rgba(29,158,117,.3)}
+.badge.br{background:rgba(224,80,80,.15);color:var(--red);border:1px solid rgba(224,80,80,.3)}
+.sw{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.sw label{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;white-space:nowrap;min-width:140px}
+.sw input[type=range]{flex:1;accent-color:var(--accent)}
+.sw .sv{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);min-width:50px;text-align:right}
+.divider{height:1px;background:var(--border);margin:16px 0}
+/* COLORS */
+.v-cer{color:var(--cer)}.v-tasa{color:var(--tasa)}.v-usd{color:var(--usd)}.v-ons{color:var(--ons)}.v-viol{color:var(--tir-total)}.v-rojo{color:var(--precio-sucio)}.v-acc{color:var(--accent)}.v-pos{color:var(--green)}.v-neg{color:var(--red)}.v-text3{color:var(--text3)}
 .src{font-size:9px}
+/* OVERLAY */
 .overlay{position:fixed;inset:0;background:rgba(13,15,20,.88);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:10px}
 .overlay.hidden{display:none}
 .spinner{width:24px;height:24px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .overlay-msg{font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)}
-@media(max-width:860px){.viz-row{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}}
-
-/* === CAUCIONES === */
-.section{margin-bottom:20px}
-.section-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
-.input-grid{display:grid;gap:10px;margin-bottom:14px}
-.input-grid.cols2{grid-template-columns:repeat(2,1fr)}
-.input-grid.cols3{grid-template-columns:repeat(3,1fr)}
-.input-grid.cols4{grid-template-columns:repeat(4,1fr)}
-.input-grid.cols5{grid-template-columns:repeat(5,1fr)}
-.field{display:flex;flex-direction:column;gap:4px}
-.field label{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.04em;text-transform:uppercase}
-.field input,.field select{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:6px 9px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;outline:none;width:100%}
-.field input:focus,.field select:focus{border-color:var(--border2)}
-.field .hint{font-size:8px;color:var(--text3)}
-.card.highlight{border-color:rgba(29,158,117,.4);background:rgba(29,158,117,.05)}
-.card.highlight-amber{border-color:rgba(240,192,64,.3);background:rgba(240,192,64,.04)}
-.card.highlight-red{border-color:rgba(224,80,80,.3);background:rgba(224,80,80,.04)}
-.card .cv.pos{color:var(--green)}.card .cv.neg{color:var(--red)}.card .cv.neu{color:var(--accent)}
-.cards.cols2{grid-template-columns:repeat(2,1fr)}
-.cards.cols3{grid-template-columns:repeat(3,1fr)}
-.btn{background:var(--accent);color:#0d0f14;border:none;border-radius:4px;padding:6px 16px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
-.btn:hover{background:#ffd060}
-.btn.secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border2)}
-.badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:8px;font-family:'DM Mono',monospace;font-weight:500}
-.badge.green{background:rgba(29,158,117,.15);color:var(--green);border:1px solid rgba(29,158,117,.3)}
-.badge.red{background:rgba(224,80,80,.15);color:var(--red);border:1px solid rgba(224,80,80,.3)}
-.badge.amber{background:rgba(240,192,64,.15);color:var(--accent);border:1px solid rgba(240,192,64,.3)}
-.info-box{background:rgba(55,138,221,.06);border:1px solid rgba(55,138,221,.2);border-radius:6px;padding:10px 14px;font-size:10px;color:var(--text2);margin-bottom:12px;font-family:'DM Mono',monospace;line-height:1.6}
-.info-box b{color:#378ADD}
-.costos-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:14px}
-.costos-title{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
-.divider{height:1px;background:var(--border);margin:16px 0}
-.slider-wrap{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.slider-wrap label{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;white-space:nowrap;min-width:120px}
-.slider-wrap input[type=range]{flex:1;accent-color:var(--accent)}
-.slider-wrap .val{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);min-width:50px;text-align:right}
-tr.best td{background:rgba(29,158,117,.06)}
-tr.best td.tk{color:var(--green)}
-
+@media(max-width:860px){.viz-row{grid-template-columns:1fr}.cards.c4{grid-template-columns:repeat(2,1fr)}.ig.g4,.ig.g5{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
@@ -124,351 +121,169 @@ tr.best td.tk{color:var(--green)}
   <div class="overlay-msg" id="overlayMsg">Cargando...</div>
 </div>
 
+<!-- HEADER -->
 <div class="header">
   <span class="logo">Allaria · Renta Fija</span>
-  <div class="header-controls">
-    <div class="field"><label>CER T-10:</label><input id="cerUrl" value="https://rendimientos-ar-8q4a.vercel.app/api/cer" placeholder="/api/cer (T-10, para TIR)"/></div>
-    <div class="field"><label>CER T-0:</label><input id="cerUltimoUrl" value="https://rendimientos-ar-8q4a.vercel.app/api/cer-ultimo" placeholder="/api/cer-ultimo (display)"/></div>
-    <div class="field"><label>data912:</label><input id="d912Url" value="https://rendimientos-ar-8q4a.vercel.app" placeholder="https://rendimientos-ar-8q4a.vercel.app"/></div>
-    <button class="btn primary" onclick="loadAll()">▶ Actualizar</button>
+  <div class="hc">
+    <div class="field"><label>CER T-10:</label><input id="cerUrl" value="https://rendimientos-ar-8q4a.vercel.app/api/cer"/></div>
+    <div class="field"><label>CER T-0:</label><input id="cerUltimoUrl" value="https://rendimientos-ar-8q4a.vercel.app/api/cer-ultimo"/></div>
+    <div class="field"><label>data912:</label><input id="d912Url" value="https://rendimientos-ar-8q4a.vercel.app"/></div>
+    <button class="btn" style="margin-bottom:0" onclick="loadAll()">▶ Actualizar</button>
   </div>
-  <span class="timestamp" id="ts">—</span>
+  <span class="ts" id="ts">—</span>
 </div>
 
-<div class="status-row" id="statusRow">
+<!-- STATUS -->
+<div class="status-row">
   <span>Fuentes:</span>
-  <span class="status-pill" id="stCER"><span class="dot ref" id="dotCER"></span><span id="lblCER">CER: —</span></span>
-  <span class="status-pill" id="stD912"><span class="dot ref" id="dotD912"></span><span id="lblD912">data912: —</span></span>
-  <span class="status-pill" id="stREM"><span class="dot ok"></span><span>REM abr-2026 embebido</span></span>
+  <span class="pill"><span class="dot ref" id="dotCER"></span><span id="lblCER">CER: —</span></span>
+  <span class="pill"><span class="dot ref" id="dotD912"></span><span id="lblD912">data912: —</span></span>
+  <span class="pill"><span class="dot ok"></span><span>REM abr-2026</span></span>
 </div>
 
+<!-- TABS -->
 <div class="tabs-bar">
   <div class="tab cer active" onclick="switchTab('cer',this)">CER</div>
   <div class="tab tasa" onclick="switchTab('tasa',this)">TASA FIJA</div>
   <div class="tab usd" onclick="switchTab('usd',this)">USD</div>
   <div class="tab ons" onclick="switchTab('ons',this)">ONs CORP</div>
-  <div class="tab renovaciones" onclick="switchTab('renovaciones',this)">Renovaciones</div>
-  <div class="tab arbitraje" onclick="switchTab('arbitraje',this)">Arbitraje USD</div>
-  <div class="tab spread" onclick="switchTab('spread',this)">Spread Apalancado</div>
+  <div class="tab cau" onclick="switchTab('renovaciones',this)">Renovaciones</div>
+  <div class="tab cau" onclick="switchTab('arbitraje',this)">Arbitraje USD</div>
+  <div class="tab cau" onclick="switchTab('spread',this)">Spread Apalancado</div>
 </div>
 
 <div class="content">
-  <div class="panel cer active" id="panel-cer">
-    <div class="rem-banner"><span class="lbl">REM abr-2026:</span><span id="remTxt">—</span><span style="margin-left:auto" id="cerTxt">CER: —</span></div>
-    <div class="cards" id="cards-cer"></div>
-    <div class="viz-row">
-      <div class="chart-box"><div class="chart-title">Duration Mod. vs Spread / TIR total</div><canvas id="chart-cer"></canvas></div>
-      <div class="table-wrap"><table id="tbl-cer"><thead></thead><tbody></tbody></table></div>
-    </div>
-  </div>
-  <div class="panel tasa" id="panel-tasa">
-    <div class="cards" id="cards-tasa"></div>
-    <div class="viz-row">
-      <div class="chart-box"><div class="chart-title">Duration Mod. vs TNA / TIR</div><canvas id="chart-tasa"></canvas></div>
-      <div class="table-wrap"><table id="tbl-tasa"><thead></thead><tbody></tbody></table></div>
-    </div>
-  </div>
-  <div class="panel usd" id="panel-usd">
-    <div class="cards" id="cards-usd"></div>
-    <div class="viz-row">
-      <div class="chart-box"><div class="chart-title">Duration Mod. vs TIR USD</div><canvas id="chart-usd"></canvas></div>
-      <div class="table-wrap"><table id="tbl-usd"><thead></thead><tbody></tbody></table></div>
-    </div>
-  </div>
-  <div class="panel ons" id="panel-ons">
-    <div class="cards" id="cards-ons"></div>
-    <div class="viz-row">
-      <div class="chart-box"><div class="chart-title">Duration Mod. vs TIR USD</div><canvas id="chart-ons"></canvas></div>
-      <div class="table-wrap"><table id="tbl-ons"><thead></thead><tbody></tbody></table></div>
-    </div>
-  </div>
 
-<!-- ============================= TAB 1: RENOVACIONES ============================= -->
-<div class="panel active" id="panel-renovaciones">
-
-  <div class="section">
-    <div class="section-title">Parámetros de la caución</div>
-    <div class="input-grid cols4">
-      <div class="field">
-        <label>Capital ($)</label>
-        <input type="number" id="r-capital" value="10000000" step="100000"/>
-        <span class="hint">Monto a colocar/tomar</span>
-      </div>
-      <div class="field">
-        <label>Tasa diaria (TNA %)</label>
-        <input type="number" id="r-tasa-diaria" value="28" step="0.1"/>
-        <span class="hint">TNA caución 1 día</span>
-      </div>
-      <div class="field">
-        <label>Tasa semanal (TNA %)</label>
-        <input type="number" id="r-tasa-semanal" value="27" step="0.1"/>
-        <span class="hint">TNA caución 7 días</span>
-      </div>
-      <div class="field">
-        <label>Horizonte (días)</label>
-        <input type="number" id="r-horizonte" value="30" step="1" min="7" max="365"/>
-      </div>
-    </div>
-    <button class="btn" onclick="calcRenovaciones()">Calcular</button>
+<!-- PANEL CER -->
+<div class="panel cer active" id="panel-cer">
+  <div class="rem-banner"><span class="lbl">REM abr-2026:</span><span id="remTxt">—</span><span style="margin-left:auto" id="cerTxt">CER: —</span></div>
+  <div class="cards c4" id="cards-cer"></div>
+  <div class="viz-row">
+    <div class="chart-box"><div class="chart-title">Duration Mod. vs Spread / TIR total</div><canvas id="chart-cer"></canvas></div>
+    <div class="table-wrap"><table id="tbl-cer"><thead></thead><tbody></tbody></table></div>
   </div>
-
-  <div class="cards cols4" id="cards-renovaciones" style="display:none"></div>
-
-  <div id="resultado-renovaciones" style="display:none">
-    <div class="section-title">Comparativa diario vs semanal — día a día</div>
-    <div class="table-wrap">
-      <table id="tbl-renovaciones">
-        <thead>
-          <tr>
-            <th style="text-align:left">Período</th>
-            <th>Capital Diario ($)</th>
-            <th>Interés Diario ($)</th>
-            <th>Capital Semanal ($)</th>
-            <th>Interés Semanal ($)</th>
-            <th>Diferencia ($)</th>
-            <th>Dif. %</th>
-          </tr>
-        </thead>
-        <tbody id="tbody-renovaciones"></tbody>
-      </table>
-    </div>
-  </div>
-
 </div>
 
-
-
-<!-- ============================= TAB 2: ARBITRAJE USD ============================= -->
-<div class="panel" id="panel-arbitraje">
-
-  <div class="info-box">
-    <b>Estrategia:</b> Tomás caución en USD a tasa baja → comprás título en USD (soberano u ON) → cobrás TIR del título → pagás caución → ganás el spread neto de costos.<br>
-    El <b>breakeven</b> es la tasa de caución que iguala el rendimiento del título — si la caución supera ese nivel, el arbitraje deja de ser rentable.
+<!-- PANEL TASA -->
+<div class="panel tasa" id="panel-tasa">
+  <div class="cards c4" id="cards-tasa"></div>
+  <div class="viz-row">
+    <div class="chart-box"><div class="chart-title">Duration Mod. vs TNA / TIR</div><canvas id="chart-tasa"></canvas></div>
+    <div class="table-wrap"><table id="tbl-tasa"><thead></thead><tbody></tbody></table></div>
   </div>
+</div>
 
-  <!-- COSTOS EDITABLES -->
+<!-- PANEL USD -->
+<div class="panel usd" id="panel-usd">
+  <div class="cards c4" id="cards-usd"></div>
+  <div class="viz-row">
+    <div class="chart-box"><div class="chart-title">Duration Mod. vs TIR USD</div><canvas id="chart-usd"></canvas></div>
+    <div class="table-wrap"><table id="tbl-usd"><thead></thead><tbody></tbody></table></div>
+  </div>
+</div>
+
+<!-- PANEL ONs -->
+<div class="panel ons" id="panel-ons">
+  <div class="cards c4" id="cards-ons"></div>
+  <div class="viz-row">
+    <div class="chart-box"><div class="chart-title">Duration Mod. vs TIR USD</div><canvas id="chart-ons"></canvas></div>
+    <div class="table-wrap"><table id="tbl-ons"><thead></thead><tbody></tbody></table></div>
+  </div>
+</div>
+
+<!-- PANEL RENOVACIONES -->
+<div class="panel" id="panel-renovaciones">
+  <div class="sec-title">Parámetros de la caución</div>
+  <div class="ig g4">
+    <div class="ifield"><label>Capital ($)</label><input type="number" id="r-capital" value="10000000" step="100000"/><span class="hint">Monto tomado en caución</span></div>
+    <div class="ifield"><label>Tasa diaria (TNA %)</label><input type="number" id="r-tasa-diaria" value="28" step="0.1"/></div>
+    <div class="ifield"><label>Tasa semanal (TNA %)</label><input type="number" id="r-tasa-semanal" value="27" step="0.1"/></div>
+    <div class="ifield"><label>Horizonte (días)</label><input type="number" id="r-horizonte" value="30" step="1" min="7" max="365"/></div>
+  </div>
+  <button class="btn" onclick="calcRenovaciones()">Calcular</button>
+  <div class="cards c4" id="cards-ren" style="display:none"></div>
+  <div id="wrap-ren" style="display:none">
+    <div class="sec-title" style="margin-top:8px">Día a día — diario vs semanal</div>
+    <div class="table-wrap"><table id="tbl-ren"><thead><tr>
+      <th style="text-align:left">Período</th>
+      <th>Cap. Diario ($)</th><th>Ganancia Diario</th>
+      <th>Cap. Semanal ($)</th><th>Ganancia Semanal</th>
+      <th>Diferencia ($)</th><th>Dif. %</th>
+    </tr></thead><tbody id="tbody-ren"></tbody></table></div>
+  </div>
+</div>
+
+<!-- PANEL ARBITRAJE -->
+<div class="panel" id="panel-arbitraje">
+  <div class="info-box"><b>Estrategia:</b> Tomás caución en USD a tasa baja → comprás título USD → cobrás TIR → pagás caución → ganás el spread neto de costos. El <b>breakeven</b> es la tasa de caución que iguala la TIR del título.</div>
   <div class="costos-box">
     <div class="costos-title">Costos operativos (editables)</div>
-    <div class="input-grid cols5">
-      <div class="field">
-        <label>Comisión broker (% c/90d)</label>
-        <input type="number" id="c-broker" value="0.6" step="0.01"/>
-        <span class="hint">Prorrateado por días</span>
-      </div>
-      <div class="field">
-        <label>BYMA administ. garantías %</label>
-        <input type="number" id="c-byma" value="0.045" step="0.001"/>
-        <span class="hint">% anual</span>
-      </div>
-      <div class="field">
-        <label>IVA sobre comisión broker %</label>
-        <input type="number" id="c-iva-broker" value="21" step="1"/>
-      </div>
-      <div class="field">
-        <label>IVA sobre derechos mercado %</label>
-        <input type="number" id="c-iva-dm" value="21" step="1"/>
-        <span class="hint">Títulos públicos: exentos = 0</span>
-      </div>
-      <div class="field">
-        <label>Plazo caución (días)</label>
-        <input type="number" id="c-plazo" value="1" step="1" min="1" max="365"/>
-      </div>
+    <div class="ig g5">
+      <div class="ifield"><label>Comisión broker (% c/90d)</label><input type="number" id="a-broker" value="0.6" step="0.01"/><span class="hint">Se prorratea por días</span></div>
+      <div class="ifield"><label>BYMA garantías (% anual)</label><input type="number" id="a-byma" value="0.045" step="0.001"/></div>
+      <div class="ifield"><label>IVA comisión broker %</label><input type="number" id="a-iva-br" value="21" step="1"/></div>
+      <div class="ifield"><label>IVA derechos mercado %</label><input type="number" id="a-iva-dm" value="0" step="1"/><span class="hint">Tít. públicos = 0</span></div>
+      <div class="ifield"><label>Plazo caución (días)</label><input type="number" id="a-plazo" value="1" step="1" min="1"/></div>
     </div>
   </div>
-
-  <div class="section">
-    <div class="section-title">Parámetros del arbitraje</div>
-    <div class="input-grid cols4">
-      <div class="field">
-        <label>Capital (USD)</label>
-        <input type="number" id="a-capital" value="100000" step="1000"/>
-      </div>
-      <div class="field">
-        <label>Tasa caución USD (TNA %)</label>
-        <input type="number" id="a-tasa-caucion" value="1.5" step="0.1"/>
-        <span class="hint">Referencia actual: ~1.5%</span>
-      </div>
-      <div class="field">
-        <label>Horizonte análisis (días)</label>
-        <input type="number" id="a-horizonte" value="365" step="1"/>
-      </div>
-      <div class="field">
-        <label>Tipo de instrumento</label>
-        <select id="a-tipo">
-          <option value="soberano">Soberano USD (AL/GD)</option>
-          <option value="on">ON Corporativa</option>
-          <option value="manual">Ingresar TIR manual</option>
-        </select>
-      </div>
-    </div>
+  <div class="ig g3">
+    <div class="ifield"><label>Capital (USD)</label><input type="number" id="a-capital" value="100000" step="1000"/></div>
+    <div class="ifield"><label>Tasa caución USD (TNA %)</label><input type="number" id="a-tasa" value="1.5" step="0.1"/><span class="hint">Referencia actual: ~1.5%</span></div>
+    <div class="ifield"><label>Horizonte análisis (días)</label><input type="number" id="a-horizonte" value="365" step="1"/></div>
   </div>
-
-  <div class="section-title">Instrumentos USD — seleccioná o ingresá TIR manual</div>
-  <div class="input-grid cols3" id="manual-tir-row" style="display:none">
-    <div class="field">
-      <label>Ticker manual</label>
-      <input type="text" id="a-ticker-manual" placeholder="ej: GD30" value=""/>
-    </div>
-    <div class="field">
-      <label>TIR instrumento (% anual)</label>
-      <input type="number" id="a-tir-manual" value="13.5" step="0.1"/>
-    </div>
-    <div class="field">
-      <label>Duration Mod. (años)</label>
-      <input type="number" id="a-dur-manual" value="3.5" step="0.1"/>
-    </div>
-  </div>
-
-  <div class="table-wrap" id="tabla-instrumentos-usd">
-    <table id="tbl-instrumentos">
-      <thead>
-        <tr>
-          <th style="text-align:left">Ticker</th>
-          <th style="text-align:left">Nombre</th>
-          <th>TIR USD</th>
-          <th>Duration</th>
-          <th>Costo caución</th>
-          <th>CFT total</th>
-          <th>Spread neto</th>
-          <th>Breakeven caución</th>
-          <th>Resultado</th>
-        </tr>
-      </thead>
-      <tbody id="tbody-instrumentos"></tbody>
-    </table>
-  </div>
-
   <button class="btn" onclick="calcArbitraje()">Calcular arbitraje</button>
-
-  <div class="divider"></div>
-
-  <div id="detalle-arbitraje" style="display:none">
-    <div class="section-title">Detalle del instrumento seleccionado</div>
-    <div class="cards cols4" id="cards-arbitraje"></div>
-
-    <div class="section-title" style="margin-top:14px">Sensibilidad: spread neto vs tasa de caución</div>
-    <div class="slider-wrap">
-      <label>Tasa caución USD (%)</label>
-      <input type="range" id="slider-caucion" min="0.5" max="15" step="0.1" value="1.5" oninput="updateSensibilidad(this.value)"/>
-      <span class="val" id="slider-val">1.5%</span>
-    </div>
-    <div class="cards cols3" id="cards-sensibilidad"></div>
+  <div class="sec-title">Instrumentos USD — spread neto vs caución</div>
+  <div class="table-wrap">
+    <table id="tbl-arb"><thead><tr>
+      <th style="text-align:left">Ticker</th><th style="text-align:left">Nombre</th><th>Tipo</th>
+      <th>TIR USD</th><th>Dur.</th><th>CFT caución</th><th>Spread neto</th><th>Breakeven</th><th>Ganancia est.</th><th>Estado</th>
+    </tr></thead><tbody id="tbody-arb"></tbody></table>
   </div>
-
+  <div id="wrap-arb-detalle" style="display:none">
+    <div class="divider"></div>
+    <div class="sec-title">Sensibilidad: spread vs tasa caución USD</div>
+    <div class="sw"><label>Tasa caución USD (%)</label><input type="range" id="sl-arb" min="0.5" max="15" step="0.1" value="1.5" oninput="onSliderArb(this.value)"/><span class="sv" id="sv-arb">1.5%</span></div>
+    <div class="cards c3" id="cards-arb-sens"></div>
+  </div>
 </div>
 
-
-
-<!-- ============================= TAB 3: SPREAD APALANCADO ============================= -->
+<!-- PANEL SPREAD APALANCADO -->
 <div class="panel" id="panel-spread">
-
-  <div class="info-box">
-    <b>Análisis de apalancamiento:</b> Tomás caución (en pesos o USD) → comprás título de renta fija → el objetivo es que la TIR del título supere el CFT de la caución. Esta tabla muestra el spread neto para cada instrumento y cómo cambia según la tasa de caución.
-  </div>
-
-  <!-- COSTOS -->
+  <div class="info-box"><b>Spread apalancado:</b> Tomás caución en pesos o USD → comprás título de renta fija → ganás el spread entre la TIR del título y el CFT de la caución. Usá los sliders para ver cómo cambia la rentabilidad según la tasa.</div>
   <div class="costos-box">
-    <div class="costos-title">Costos operativos (editables — se aplican a todos los cálculos)</div>
-    <div class="input-grid cols5">
-      <div class="field">
-        <label>Comisión broker (% c/90d)</label>
-        <input type="number" id="s-broker" value="0.6" step="0.01"/>
-      </div>
-      <div class="field">
-        <label>BYMA administ. garantías %</label>
-        <input type="number" id="s-byma" value="0.045" step="0.001"/>
-      </div>
-      <div class="field">
-        <label>IVA comisión broker %</label>
-        <input type="number" id="s-iva-broker" value="21" step="1"/>
-      </div>
-      <div class="field">
-        <label>IVA derechos mercado %</label>
-        <input type="number" id="s-iva-dm" value="0" step="1"/>
-        <span class="hint">0 = tít. públicos exentos</span>
-      </div>
-      <div class="field">
-        <label>Plazo caución (días)</label>
-        <input type="number" id="s-plazo" value="1" step="1" min="1"/>
-      </div>
+    <div class="costos-title">Costos operativos (editables)</div>
+    <div class="ig g5">
+      <div class="ifield"><label>Comisión broker (% c/90d)</label><input type="number" id="s-broker" value="0.6" step="0.01"/></div>
+      <div class="ifield"><label>BYMA garantías (% anual)</label><input type="number" id="s-byma" value="0.045" step="0.001"/></div>
+      <div class="ifield"><label>IVA comisión broker %</label><input type="number" id="s-iva-br" value="21" step="1"/></div>
+      <div class="ifield"><label>IVA derechos mercado %</label><input type="number" id="s-iva-dm" value="0" step="1"/><span class="hint">0 = tít. públicos exentos</span></div>
+      <div class="ifield"><label>Plazo caución (días)</label><input type="number" id="s-plazo" value="1" step="1" min="1"/></div>
     </div>
   </div>
-
-  <div class="input-grid cols3">
-    <div class="field">
-      <label>Capital a apalancar</label>
-      <select id="s-moneda">
-        <option value="ars">Pesos (ARS)</option>
-        <option value="usd">Dólares (USD)</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>Tasa caución ARS (TNA %)</label>
-      <input type="number" id="s-tasa-ars" value="28" step="0.5"/>
-    </div>
-    <div class="field">
-      <label>Tasa caución USD (TNA %)</label>
-      <input type="number" id="s-tasa-usd" value="1.5" step="0.1"/>
-    </div>
+  <div class="sw"><label>Tasa caución ARS (TNA %)</label><input type="range" id="sl-ars" min="10" max="60" step="0.5" value="28" oninput="document.getElementById('s-tasa-ars').value=this.value;document.getElementById('sv-ars').textContent=this.value+'%';calcSpread()"/><span class="sv" id="sv-ars">28%</span></div>
+  <div class="sw"><label>Tasa caución USD (TNA %)</label><input type="range" id="sl-usd" min="0.5" max="10" step="0.1" value="1.5" oninput="document.getElementById('s-tasa-usd').value=this.value;document.getElementById('sv-usd').textContent=this.value+'%';calcSpread()"/><span class="sv" id="sv-usd">1.5%</span></div>
+  <div class="ig g2" style="margin-bottom:12px">
+    <div class="ifield"><label>Tasa caución ARS (TNA %)</label><input type="number" id="s-tasa-ars" value="28" step="0.5" oninput="document.getElementById('sl-ars').value=this.value;document.getElementById('sv-ars').textContent=this.value+'%';calcSpread()"/></div>
+    <div class="ifield"><label>Tasa caución USD (TNA %)</label><input type="number" id="s-tasa-usd" value="1.5" step="0.1" oninput="document.getElementById('sl-usd').value=this.value;document.getElementById('sv-usd').textContent=this.value+'%';calcSpread()"/></div>
   </div>
-
-  <div class="section-title">Escenarios de tasa de caución</div>
-  <div class="slider-wrap">
-    <label>Tasa caución ARS (%)</label>
-    <input type="range" id="s-slider-ars" min="10" max="60" step="0.5" value="28" oninput="s_ars=this.value;document.getElementById('s-tasa-ars').value=this.value;document.getElementById('s-slider-ars-val').textContent=this.value+'%';calcSpread()"/>
-    <span class="val" id="s-slider-ars-val">28%</span>
+  <button class="btn" onclick="calcSpread()">Calcular</button>
+  <div class="sec-title" id="titulo-ars">Instrumentos en PESOS — spread vs caución ARS</div>
+  <div class="table-wrap" style="margin-bottom:14px">
+    <table id="tbl-sp-ars"><thead><tr>
+      <th style="text-align:left">Ticker</th><th style="text-align:left">Tipo</th>
+      <th>TIR / TIR Total</th><th>CFT caución</th><th>Spread neto</th><th>Breakeven</th><th>Dur.</th><th>Estado</th>
+    </tr></thead><tbody id="tbody-sp-ars"></tbody></table>
   </div>
-  <div class="slider-wrap">
-    <label>Tasa caución USD (%)</label>
-    <input type="range" id="s-slider-usd" min="0.5" max="10" step="0.1" value="1.5" oninput="s_usd=this.value;document.getElementById('s-tasa-usd').value=this.value;document.getElementById('s-slider-usd-val').textContent=this.value+'%';calcSpread()"/>
-    <span class="val" id="s-slider-usd-val">1.5%</span>
-  </div>
-
-  <button class="btn" onclick="calcSpread()" style="margin-bottom:14px">Calcular</button>
-
-  <!-- TABLA PESOS -->
-  <div class="section-title" id="titulo-tabla-ars">Instrumentos en PESOS — spread vs caución ARS</div>
+  <div class="sec-title" id="titulo-usd">Instrumentos en USD — spread vs caución USD</div>
   <div class="table-wrap">
-    <table id="tbl-spread-ars">
-      <thead>
-        <tr>
-          <th style="text-align:left">Ticker</th>
-          <th style="text-align:left">Tipo</th>
-          <th>TIR / TNA</th>
-          <th>CFT caución</th>
-          <th>Spread neto</th>
-          <th>Breakeven caución</th>
-          <th>Duration</th>
-          <th>Estado</th>
-        </tr>
-      </thead>
-      <tbody id="tbody-spread-ars"></tbody>
-    </table>
+    <table id="tbl-sp-usd"><thead><tr>
+      <th style="text-align:left">Ticker</th><th style="text-align:left">Tipo</th>
+      <th>TIR USD</th><th>CFT caución USD</th><th>Spread neto</th><th>Breakeven</th><th>Dur.</th><th>Estado</th>
+    </tr></thead><tbody id="tbody-sp-usd"></tbody></table>
   </div>
-
-  <!-- TABLA USD -->
-  <div class="section-title" style="margin-top:16px" id="titulo-tabla-usd">Instrumentos en USD — spread vs caución USD</div>
-  <div class="table-wrap">
-    <table id="tbl-spread-usd">
-      <thead>
-        <tr>
-          <th style="text-align:left">Ticker</th>
-          <th style="text-align:left">Tipo</th>
-          <th>TIR USD</th>
-          <th>CFT caución USD</th>
-          <th>Spread neto</th>
-          <th>Breakeven caución</th>
-          <th>Duration</th>
-          <th>Estado</th>
-        </tr>
-      </thead>
-      <tbody id="tbody-spread-usd"></tbody>
-    </table>
-  </div>
-
-</div><!-- end panel-spread -->
-
 </div>
+
+</div><!-- end content -->
 
 <script>
 // ==================== CONFIG DATA ====================
@@ -481,21 +296,19 @@ const remAnual=(Math.pow(1+remMonthly/100,12)-1)*100;
 
 // ==================== STATE ====================
 const TODAY=new Date('2026-06-04');
-// cerIndex = CER T-10 → usado para calcular TIR real (convención mercado BYMA)
-// cerUltimo = CER T-0  → solo para mostrar VN ajustado en tabla
 let cerIndex=null,cerFecha=null,cerSrc='Fallback';
 let cerUltimo=null,cerUltimoFecha=null;
-const CER_FB=1285.42;      // fallback T-10
-const CER_ULTIMO_FB=1295.0; // fallback T-0 (aprox)
-let priceMap={};   // ticker -> price
+const CER_FB=1285.42;
+const CER_ULTIMO_FB=1295.0;
+let priceMap={};
 let d912Ok=false;
 let charts={};
 
 // ==================== UTILS ====================
-const f2=(v)=>isNaN(v)||v==null?'—':v.toFixed(2);
-const fP=(v)=>isNaN(v)||v==null?'—':v.toFixed(2)+'%';
+const f2=(v,d=2)=>isNaN(v)||v==null?'—':v.toFixed(d);
+const fP=(v,d=2)=>isNaN(v)||v==null?'—':v.toFixed(d)+'%';
+const fM=(v)=>isNaN(v)||v==null?'—':'$'+Math.round(v).toLocaleString('es-AR');
 const yrs=(d)=>(new Date(d)-TODAY)/(365.25*24*3600*1000);
-
 function npv(flows,r){return flows.reduce((s,f)=>s+f.cf/Math.pow(1+r,f.t),0)}
 function tirNR(flows,ps){
   if(!flows||!flows.length)return NaN;
@@ -518,190 +331,103 @@ function durMod(flows,tirPct){
 }
 function tirTotal(spread){return((1+remAnual/100)*(1+spread/100)-1)*100}
 
-// ==================== FLOW BUILDERS ====================
-// USD soberano: flujos directos en USD (montos por cada 100 VN)
+// ==================== FLOWS ====================
 function buildFlowsUSD(ticker){
   const b=CFG.soberanos[ticker];if(!b)return null;
   const flows=[];
-  for(const f of b.flujos){
-    const t=yrs(f.fecha);
-    if(t>0)flows.push({t,cf:f.monto});
-  }
+  for(const f of b.flujos){const t=yrs(f.fecha);if(t>0)flows.push({t,cf:f.monto});}
   return flows.length?flows:null;
 }
 
-// CER: TIR real = spread sobre inflación.
-// Precio de mercado cotiza en pesos ajustados por CER.
-// Para obtener spread real descontamos flujos futuros × ratio CER y comparamos vs precio sucio.
-// CUPÓN CORRIDO (fix): para bonos CPN calculamos el interés devengado desde el último cupón.
-function buildFlowsCER(ticker, cerT10){
+function buildFlowsCER(ticker,cerT10){
   const b=CFG.bonos_cer[ticker];if(!b)return null;
-  const cerEm=b.cer_emision;
-  const ratio=cerT10/cerEm;
-  const flows=[];
-
-  // Calcular VN residual (descontar amortizaciones ya pagadas)
-  let vnResidual=1.0;
-  const pagosPasados=b.flujos.filter(f=>new Date(f.fecha)<=TODAY);
-  for(const p of pagosPasados) vnResidual-=(p.amortizacion||0);
-
-  for(const f of b.flujos){
-    const t=yrs(f.fecha);
-    if(t<=0)continue;
-    const amort=f.amortizacion||0;
-    const interes=f.tasa_interes||0;
-    const cf=(vnResidual*interes+amort)*ratio*100;
-    flows.push({t,cf});
-    vnResidual-=amort;
-  }
-  return flows.length?flows:null;
-}
-
-// Calcula cupón corrido real para bonos CER con cupón (TX26, TX28, DICP, PARP, TX31)
-// Usa inicio de período = proxFecha - 6 meses (evita recorrer flujos históricos desde 2004)
-function calcAccruedCER(ticker, cerT10){
-  const b=CFG.bonos_cer[ticker];
-  if(!b) return 0;
-  const tienesCupon=b.flujos.some(f=>f.tasa_interes>0);
-  if(!tienesCupon) return 0;
-
   const ratio=cerT10/b.cer_emision;
-
-  // Solo flujos futuros con cupón
-  const futuros=b.flujos.filter(f=>new Date(f.fecha)>TODAY&&f.tasa_interes>0);
-  if(!futuros.length) return 0;
-
-  const proxFecha=new Date(futuros[0].fecha);
-  const tasaCupon=futuros[0].tasa_interes;
-
-  // Inicio del período = próximo pago - 6 meses exactos
-  const inicioPeríodo=new Date(proxFecha);
-  inicioPeríodo.setMonth(inicioPeríodo.getMonth()-6);
-
-  const periodoDias=(proxFecha-inicioPeríodo)/(24*3600*1000);
-  const diasTranscurridos=Math.max(0,(TODAY-inicioPeríodo)/(24*3600*1000));
-  const fraccion=Math.min(diasTranscurridos/periodoDias,1);
-
-  // VN residual actual (amortizaciones ya pagadas hasta hoy)
+  const flows=[];
   let vnR=1.0;
+  for(const f of b.flujos){if(new Date(f.fecha)<=TODAY)vnR-=(f.amortizacion||0);}
   for(const f of b.flujos){
-    if(new Date(f.fecha)>TODAY) break;
+    const t=yrs(f.fecha);if(t<=0)continue;
+    const cf=(vnR*(f.tasa_interes||0)+(f.amortizacion||0))*ratio*100;
+    flows.push({t,cf});
     vnR-=(f.amortizacion||0);
   }
-  vnR=Math.max(0,vnR);
-
-  return vnR * tasaCupon * fraccion * ratio * 100;
+  return flows.length?flows:null;
 }
 
-// Lecap/Boncap: construye flujos desde pago_final del config
-// Tanto Lecap (ZC) como Boncap se tratan como ZC efectivo:
-// el pago_final ya incluye capital + todos los cupones acumulados.
-// Para Boncap con cupones intermedios futuros, generamos los pagos semestrales
-// usando la tasa implícita = (pago_final/100)^(1/n_semestres) - 1
+function calcAccruedCER(ticker,cerT10){
+  const b=CFG.bonos_cer[ticker];if(!b)return 0;
+  if(!b.flujos.some(f=>f.tasa_interes>0))return 0;
+  const ratio=cerT10/b.cer_emision;
+  const futuros=b.flujos.filter(f=>new Date(f.fecha)>TODAY&&f.tasa_interes>0);
+  if(!futuros.length)return 0;
+  const proxFecha=new Date(futuros[0].fecha);
+  const inicio=new Date(proxFecha);inicio.setMonth(inicio.getMonth()-6);
+  const periodoDias=(proxFecha-inicio)/(24*3600*1000);
+  const diasT=Math.max(0,(TODAY-inicio)/(24*3600*1000));
+  const frac=Math.min(diasT/periodoDias,1);
+  let vnR=1.0;
+  for(const f of b.flujos){if(new Date(f.fecha)>TODAY)break;vnR-=(f.amortizacion||0);}
+  vnR=Math.max(0,vnR);
+  return vnR*futuros[0].tasa_interes*frac*ratio*100;
+}
+
 function buildFlowsLecap(letra){
-  const t=yrs(letra.fecha_vencimiento);
-  if(t<=0) return null;
-
+  const t=yrs(letra.fecha_vencimiento);if(t<=0)return null;
   const isBoncap=letra.ticker.startsWith('T');
-
-  // Si es Lecap O si el Boncap vence en menos de 1 semestre → flujo único final
-  if(!isBoncap || t < 0.45){
-    return [{t, cf: letra.pago_final}];
-  }
-
-  // Boncap con plazo > 1 semestre: generar fechas de pago semestrales
+  if(!isBoncap||t<0.45)return [{t,cf:letra.pago_final}];
   const vto=new Date(letra.fecha_vencimiento);
-  const dates=[];
-  let d=new Date(vto);
-  while(d > TODAY){
-    dates.unshift(new Date(d));
-    d=new Date(d);
-    d.setMonth(d.getMonth()-6);
-  }
-
+  const dates=[];let d=new Date(vto);
+  while(d>TODAY){dates.unshift(new Date(d));d=new Date(d);d.setMonth(d.getMonth()-6);}
   const n=dates.length;
-  if(n<=1) return [{t, cf: letra.pago_final}];
-
-  // Tasa semestral implícita: resolver (1+s)^n * 100 = pago_final
-  // Aproximación: s = (pago_final/100)^(1/n) - 1
-  const s=Math.pow(letra.pago_final/100, 1/n)-1;
-
-  const flows=[];
-  let capitalResidual=100;
+  if(n<=1)return [{t,cf:letra.pago_final}];
+  const s=Math.pow(letra.pago_final/100,1/n)-1;
+  const flows=[];let cap=100;
   for(let i=0;i<dates.length;i++){
     const t2=(dates[i]-TODAY)/(365.25*24*3600*1000);
-    const cupon=capitalResidual*s;
-    if(i===dates.length-1){
-      flows.push({t:t2, cf: cupon+capitalResidual});
-    } else {
-      flows.push({t:t2, cf: cupon});
-    }
+    const cup=cap*s;
+    flows.push({t:t2,cf:i===dates.length-1?cup+cap:cup});
   }
-  return flows.length ? flows : null;
+  return flows.length?flows:null;
 }
 
-// ONs USD: flujos directos (montos por cada 1 USD VN, escalamos a 100)
 function buildFlowsON(ticker){
   const b=CFG.ons[ticker];if(!b)return null;
   const flows=[];
-  for(const f of b.flujos){
-    const t=yrs(f.fecha);
-    if(t>0)flows.push({t,cf:f.monto*100});
-  }
+  for(const f of b.flujos){const t=yrs(f.fecha);if(t>0)flows.push({t,cf:f.monto*100});}
   return flows.length?flows:null;
 }
 
-// ==================== DATA FETCH ====================
+// ==================== FETCH ====================
 async function fetchCER(){
-  // --- CER T-10 (para cálculo de TIR — convención de mercado) ---
   const urlT10=(document.getElementById('cerUrl').value||'').trim();
-  if(!urlT10){
-    cerIndex=CER_FB;cerFecha='fallback';cerSrc='Fallback';
-    setStatus('cer',false,`CER T-10 fallback: ${CER_FB}`);
-  } else {
-    try{
-      const r=await fetch(urlT10,{signal:AbortSignal.timeout(5000)});
-      if(!r.ok)throw new Error(r.status);
-      const d=await r.json();
-      if(!d.cer||isNaN(d.cer))throw new Error('bad');
-      cerIndex=parseFloat(d.cer);cerFecha=d.fecha;cerSrc=d.fuente||'BCRA T-10';
-      setStatus('cer',true,`CER T-10 (${cerFecha}): ${cerIndex.toFixed(2)}`);
-    }catch(e){
-      cerIndex=CER_FB;cerFecha='fallback';cerSrc='Fallback';
-      setStatus('cer',false,`CER T-10 fallback: ${CER_FB}`);
-    }
-  }
-  // --- CER T-0 (solo para mostrar VN ajustado) ---
   const urlT0=(document.getElementById('cerUltimoUrl').value||'').trim();
+  if(!urlT10){cerIndex=CER_FB;cerFecha='fallback';cerSrc='Fallback';setStatus('cer',false,'CER fallback:'+CER_FB);return;}
+  try{
+    const r=await fetch(urlT10,{signal:AbortSignal.timeout(5000)});
+    if(!r.ok)throw new Error();
+    const d=await r.json();
+    if(!d.cer||isNaN(d.cer))throw new Error();
+    cerIndex=parseFloat(d.cer);cerFecha=d.fecha;cerSrc=d.fuente||'BCRA T-10';
+    setStatus('cer',true,`CER T-10 (${cerFecha}): ${cerIndex.toFixed(2)}`);
+  }catch{cerIndex=CER_FB;cerFecha='fallback';cerSrc='Fallback';setStatus('cer',false,'CER fallback:'+CER_FB);}
   if(urlT0){
     try{
       const r=await fetch(urlT0,{signal:AbortSignal.timeout(5000)});
-      if(!r.ok)throw new Error(r.status);
+      if(!r.ok)throw new Error();
       const d=await r.json();
       if(d.cer&&!isNaN(d.cer)){cerUltimo=parseFloat(d.cer);cerUltimoFecha=d.fecha;}
-    }catch(e){cerUltimo=CER_ULTIMO_FB;cerUltimoFecha='fallback';}
-  } else {
-    cerUltimo=CER_ULTIMO_FB;cerUltimoFecha='fallback';
-  }
+    }catch{cerUltimo=CER_ULTIMO_FB;}
+  } else {cerUltimo=CER_ULTIMO_FB;}
 }
 
 async function fetchD912Prices(){
   const base=(document.getElementById('d912Url').value||'').trim();
-  // Try fetching all needed endpoints
-  const endpoints=[
-    {url:`${base}/live/arg_bonds`||'https://data912.com/live/arg_bonds',key:'bonds'},
-    {url:`${base}/live/arg_notes`||'https://data912.com/live/arg_notes',key:'notes'},
-    {url:`${base}/live/arg_corp`||'https://data912.com/live/arg_corp',key:'corp'},
-  ];
-  // If proxy, use relative paths; if direct, use data912.com
-  const isProxy=!base.includes('data912.com')&&base!=='';
-  
+  const isProxy=base&&!base.includes('data912.com');
   const urls={
-    bonds: isProxy ? `${base}/live/arg_bonds` : 'https://data912.com/live/arg_bonds',
-    notes: isProxy ? `${base}/live/arg_notes` : 'https://data912.com/live/arg_notes',
-    corp:  isProxy ? `${base}/live/arg_corp`  : 'https://data912.com/live/arg_corp',
+    bonds:isProxy?`${base}/live/arg_bonds`:'https://data912.com/live/arg_bonds',
+    notes:isProxy?`${base}/live/arg_notes`:'https://data912.com/live/arg_notes',
+    corp: isProxy?`${base}/live/arg_corp` :'https://data912.com/live/arg_corp',
   };
-
   try{
     const [bondsRes,notesRes,corpRes]=await Promise.allSettled([
       fetch(urls.bonds,{signal:AbortSignal.timeout(6000),headers:{'User-Agent':'Mozilla/5.0'}}),
@@ -712,41 +438,27 @@ async function fetchD912Prices(){
     for(const res of [bondsRes,notesRes,corpRes]){
       if(res.status==='fulfilled'&&res.value.ok){
         const data=await res.value.json();
-        if(Array.isArray(data)){
-          for(const b of data){
-            const p=parseFloat(b.c||b.price||0);
-            if(p>0){priceMap[b.symbol]=p;count++}
-          }
-        }
+        if(Array.isArray(data)){for(const b of data){const p=parseFloat(b.c||b.price||0);if(p>0){priceMap[b.symbol]=p;count++;}}}
       }
     }
-    if(count>0){d912Ok=true;setStatus('d912',true,`data912: ${count} precios`)}
-    else{d912Ok=false;setStatus('d912',false,'data912: sin datos (CORS?)')}
-  }catch(e){
-    d912Ok=false;setStatus('d912',false,'data912: error');
-  }
+    if(count>0){d912Ok=true;setStatus('d912',true,`data912: ${count} precios`);}
+    else{d912Ok=false;setStatus('d912',false,'data912: sin datos (CORS?)');}
+  }catch{d912Ok=false;setStatus('d912',false,'data912: error');}
 }
 
-function getPrice(ticker,fallbackFn){
-  // Try D symbol (USD bonds) then base ticker
+function getPrice(ticker){
   const p=priceMap[ticker+'D']||priceMap[ticker]||priceMap[ticker+'C'];
   if(p)return{price:p,src:'data912'};
-  const fb=fallbackFn?fallbackFn():null;
-  return{price:fb,src:'Ref.'};
+  return{price:null,src:'Ref.'};
 }
 
 function setStatus(key,ok,txt){
-  if(key==='cer'){
-    document.getElementById('dotCER').className='dot '+(ok?'live':'ref');
-    document.getElementById('lblCER').textContent=txt;
-  }else{
-    document.getElementById('dotD912').className='dot '+(ok?'live':'ref');
-    document.getElementById('lblD912').textContent=txt;
-  }
+  if(key==='cer'){document.getElementById('dotCER').className='dot '+(ok?'live':'ref');document.getElementById('lblCER').textContent=txt;}
+  else{document.getElementById('dotD912').className='dot '+(ok?'live':'ref');document.getElementById('lblD912').textContent=txt;}
 }
 
 // ==================== CALCULATIONS ====================
-function calcInstrumento(ticker,flows,pLimpio,accrued,tipo){
+function calcInstr(ticker,flows,pLimpio,accrued){
   if(!flows||!pLimpio)return null;
   const pSucio=pLimpio+accrued;
   const tir=tirNR(flows,pSucio);
@@ -755,105 +467,79 @@ function calcInstrumento(ticker,flows,pLimpio,accrued,tipo){
   return{ticker,pLimpio,accrued,pSucio,tir,dur,carry};
 }
 
-// ==================== RENDERERS ====================
-function scatterOpts(xLbl,yLbl){return{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#8a90a0',font:{family:"'DM Mono',monospace",size:10},boxWidth:10}},tooltip:{backgroundColor:'#21263a',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:'#e8eaf0',bodyColor:'#8a90a0',titleFont:{family:"'DM Mono',monospace",size:11,weight:'500'},bodyFont:{family:"'DM Mono',monospace",size:10},callbacks:{title:i=>i[0].raw.lbl,label:i=>`Dur:${i.raw.x.toFixed(2)} | ${i.raw.y.toFixed(2)}%`}}},scales:{x:{title:{display:true,text:xLbl,color:'#5a6070',font:{family:"'DM Mono',monospace",size:9}},grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a6070',font:{family:"'DM Mono',monospace",size:9}}},y:{title:{display:true,text:yLbl,color:'#5a6070',font:{family:"'DM Mono',monospace",size:9}},grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a6070',font:{family:"'DM Mono',monospace",size:9},callback:v=>v+'%'}}}}}
-
-function mkChart(id,datasets,xLbl,yLbl){
+// ==================== CHART ====================
+function scatterOpts(xL,yL){return{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#8a90a0',font:{family:"'DM Mono',monospace",size:10},boxWidth:10}},tooltip:{backgroundColor:'#21263a',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:'#e8eaf0',bodyColor:'#8a90a0',titleFont:{family:"'DM Mono',monospace",size:11},bodyFont:{family:"'DM Mono',monospace",size:10},callbacks:{title:i=>i[0].raw.lbl,label:i=>`Dur:${i.raw.x.toFixed(2)} | ${i.raw.y.toFixed(2)}%`}}},scales:{x:{title:{display:true,text:xL,color:'#5a6070',font:{family:"'DM Mono',monospace",size:9}},grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a6070',font:{family:"'DM Mono',monospace",size:9}}},y:{title:{display:true,text:yL,color:'#5a6070',font:{family:"'DM Mono',monospace",size:9}},grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a6070',font:{family:"'DM Mono',monospace",size:9},callback:v=>v+'%'}}}}}
+function mkChart(id,datasets,xL,yL){
   if(charts[id])charts[id].destroy();
-  charts[id]=new Chart(document.getElementById(id),{type:'scatter',data:{datasets},options:scatterOpts(xLbl,yLbl)});
+  charts[id]=new Chart(document.getElementById(id),{type:'scatter',data:{datasets},options:scatterOpts(xL,yL)});
 }
-
-function mkCards(id,items){document.getElementById(id).innerHTML=items.map(([l,v,s,c])=>`<div class="card"><div class="cl">${l}</div><div class="cv" style="color:${c||'var(--text)'}">${v}</div><div class="cs">${s||''}</div></div>`).join('')}
-
+function mkCards(id,items,cls='c4'){
+  const el=document.getElementById(id);
+  el.className=`cards ${cls}`;
+  el.innerHTML=items.map(([l,v,s,c])=>`<div class="card"><div class="cl">${l}</div><div class="cv" style="color:${c||'var(--text)'}">${v}</div><div class="cs">${s||''}</div></div>`).join('');
+}
 let sortSt={};
-function mkTable(tblId,heads,rows){
-  const tbl=document.getElementById(tblId);
-  tbl.querySelector('thead').innerHTML=`<tr>${heads.map((h,i)=>`<th onclick="srt('${tblId}',${i})">${h}</th>`).join('')}</tr>`;
+function mkTable(id,heads,rows){
+  const tbl=document.getElementById(id);
+  tbl.querySelector('thead').innerHTML=`<tr>${heads.map((h,i)=>`<th onclick="srt('${id}',${i})">${h}</th>`).join('')}</tr>`;
   tbl.querySelector('tbody').innerHTML=rows.map(r=>`<tr>${r}</tr>`).join('');
 }
-window.srt=function(tblId,ci){
-  const tbl=document.getElementById(tblId);
+window.srt=function(id,ci){
+  const tbl=document.getElementById(id);
   const rows=Array.from(tbl.querySelector('tbody').querySelectorAll('tr'));
-  const asc=sortSt[tblId]===ci?-1:1;
-  sortSt[tblId]=asc===1?ci:null;
-  rows.sort((a,b)=>{const at=a.cells[ci].textContent.replace('%','').trim(),bt=b.cells[ci].textContent.replace('%','').trim();const an=parseFloat(at),bn=parseFloat(bt);if(!isNaN(an)&&!isNaN(bn))return(an-bn)*asc;return at.localeCompare(bt)*asc});
+  const asc=sortSt[id]===ci?-1:1;sortSt[id]=asc===1?ci:null;
+  rows.sort((a,b)=>{const at=a.cells[ci].textContent.replace('%','').trim(),bt=b.cells[ci].textContent.replace('%','').trim();const an=parseFloat(at),bn=parseFloat(bt);if(!isNaN(an)&&!isNaN(bn))return(an-bn)*asc;return at.localeCompare(bt)*asc;});
   rows.forEach(r=>tbl.querySelector('tbody').appendChild(r));
   tbl.querySelectorAll('th').forEach((th,i)=>th.classList.toggle('sorted',i===ci));
 }
+function srcDot(s){return s==='data912'?'<span style="color:var(--cer);font-size:9px">●</span>':'<span style="color:var(--usd);font-size:9px">○</span>';}
 
-function srcDot(s){return s==='data912'?'<span style="color:var(--cer);font-size:9px">●</span>':'<span style="color:var(--usd);font-size:9px">○</span>'}
-
-// ==================== PANEL: CER ====================
+// ==================== RENDER CER ====================
 function renderCER(){
-  const cerT10=cerIndex||CER_FB;
-  const cerT0=cerUltimo||CER_ULTIMO_FB;
+  const cerT10=cerIndex||CER_FB,cerT0=cerUltimo||CER_ULTIMO_FB;
   document.getElementById('remTxt').textContent=`${remMonthly.toFixed(1)}% mensual prom. → ${remAnual.toFixed(1)}% anual compuesto`;
-  document.getElementById('cerTxt').textContent=`CER T-10 (${cerFecha}): ${cerT10.toFixed(2)} · T-0: ${cerT0.toFixed(2)}`;
-
+  document.getElementById('cerTxt').textContent=`CER T-10(${cerFecha}):${cerT10.toFixed(2)} · T-0:${cerT0.toFixed(2)}`;
   const rows=[],spread=[],tirTot=[];
+  const REFS={TZX26:1.5,TZXO6:2.5,TZXD6:-0.6,TZX27:4.0,TZXM7:3.2,TZXD7:5.5,TZX28:7.0,TX26:3.8,TX28:7.2,DICP:11.5,CUAP:9.2,PARP:8.5,X31L6:2.0,X30S6:3.0,X30N6:4.0,TX31:8.0};
   for(const [tk,b] of Object.entries(CFG.bonos_cer)){
     const t=yrs(b.vencimiento);if(t<=0)continue;
     const flows=buildFlowsCER(tk,cerT10);if(!flows)continue;
-
-    const TIRS_REF={TZX26:1.5,TZXO6:2.5,TZXD6:-0.6,TZX27:4.0,TZXM7:3.2,TZXD7:5.5,TZX28:7.0,TX26:3.8,TX28:7.2,DICP:11.5,CUAP:9.2,PARP:8.5,X31L6:2.0,X30S6:3.0,X30N6:4.0,TX31:8.0};
-    const {price:pRaw,src}=getPrice(tk,null);
-    const pLimpio=pRaw||(flows.length?npv(flows,(TIRS_REF[tk]||5)/100):null);
+    const {price:pRaw,src}=getPrice(tk);
+    const pLimpio=pRaw||(flows.length?npv(flows,(REFS[tk]||5)/100):null);
     if(!pLimpio)continue;
-
-    // Cupón corrido real (0 para ZC, calculado para CPN)
     const accrued=calcAccruedCER(tk,cerT10);
-    const r=calcInstrumento(tk,flows,pLimpio,accrued,'cer');if(!r)continue;
-
-    r.spreadReal=r.tir;
-    r.tirTotal=tirTotal(r.tir);
-
-    // TNA del spread: tasa nominal anualizada simple del spread real
-    // = spread_real × 365 / dias_a_vto  (útil para comparar con Bonistas)
+    const r=calcInstr(tk,flows,pLimpio,accrued);if(!r)continue;
+    r.spreadReal=r.tir;r.tirTotal=tirTotal(r.tir);
     const diasVto=t*365.25;
-    r.tnaSpread = r.spreadReal; // para bonos CPN la TIR NR ya es anual efectiva
-    // Para ZC calculamos también la TNA simple
-    if(b.flujos.every(f=>!(f.tasa_interes>0))){
-      // ZC: TNA simple = (flujo/pSucio - 1) * (365/dias)
-      const flujoFinal=flows[0]?.cf||0;
-      r.tnaSimple = flujoFinal>0 ? ((flujoFinal/r.pSucio)-1)*(365/diasVto)*100 : NaN;
-    } else {
-      r.tnaSimple = NaN;
-    }
-
-    // VN ajustado = precio limpio escalado al CER T-0 de hoy
-    // Fórmula: pLimpio * (cerT0 / cerT10) — convierte del CER T-10 al T-0 actual
+    r.tnaSimple=b.flujos.every(f=>!(f.tasa_interes>0))&&flows[0]?((flows[0].cf/r.pSucio)-1)*(365/diasVto)*100:NaN;
     r.vnAj=pLimpio*(cerT0/cerT10);
-    r.vto=b.vencimiento;r.src=src;r.nombre=tk;
+    r.vto=b.vencimiento;r.src=src;
     rows.push(r);
-    if(!isNaN(r.dur)&&!isNaN(r.spreadReal)) spread.push({x:+r.dur.toFixed(2),y:+r.spreadReal.toFixed(2),lbl:tk});
-    if(!isNaN(r.dur)&&!isNaN(r.tirTotal))   tirTot.push({x:+r.dur.toFixed(2),y:+r.tirTotal.toFixed(2),lbl:tk});
+    if(!isNaN(r.dur)&&!isNaN(r.spreadReal))spread.push({x:+r.dur.toFixed(2),y:+r.spreadReal.toFixed(2),lbl:tk});
+    if(!isNaN(r.dur)&&!isNaN(r.tirTotal))tirTot.push({x:+r.dur.toFixed(2),y:+r.tirTotal.toFixed(2),lbl:tk});
   }
   if(!rows.length)return;
   const avgSp=rows.reduce((s,r)=>s+r.spreadReal,0)/rows.length;
   const avgTt=rows.reduce((s,r)=>s+r.tirTotal,0)/rows.length;
   const avgD=rows.reduce((s,r)=>s+r.dur,0)/rows.length;
-  mkCards('cards-cer',[
-    ['Instrumentos',rows.length,'bonos CER','var(--cer)'],
-    ['Spread real prom',fP(avgSp),'+CER','var(--cer)'],
-    ['TIR total prom',fP(avgTt),'nominal anual','var(--tir-total)'],
-    ['Duration prom',f2(avgD),'años mod.','var(--text)'],
-  ]);
+  mkCards('cards-cer',[['Instrumentos',rows.length,'bonos CER','var(--cer)'],['Spread real prom',fP(avgSp),'+CER','var(--cer)'],['TIR total prom',fP(avgTt),'nominal anual','var(--tir-total)'],['Duration prom',f2(avgD),'años mod.','var(--text)']]);
   mkChart('chart-cer',[
     {label:'Spread real (+CER)',data:spread,backgroundColor:'rgba(29,158,117,.8)',borderColor:'#1D9E75',pointRadius:6,pointHoverRadius:8},
     {label:'TIR total (CER)',data:tirTot,backgroundColor:'rgba(123,111,232,.8)',borderColor:'#7B6FE8',pointStyle:'rectRot',pointRadius:6,pointHoverRadius:8},
   ],'Duration Mod.','TIR / Spread (%)');
   mkTable('tbl-cer',
-    ['Ticker','Vto','P.Limpio','C.Corrido','P.Sucio','VN Aj.$','TNA simple','Spread +CER','TIR Total','MD','Carry/MD','Src'],
+    ['Ticker','Vto','P.Limpio','C.Corrido','P.Sucio','VN Aj.$','TNA simple','Spread +CER','TIR Total','TEM','MD','Carry/MD','Src'],
     rows.map(r=>[
       `<td class="tk">${r.ticker}</td>`,
-      `<td style="color:var(--text3);font-size:9px">${r.vto}</td>`,
+      `<td class="v-text3" style="font-size:9px">${r.vto}</td>`,
       `<td class="v-acc">${f2(r.pLimpio)}</td>`,
-      `<td style="color:var(--text3)">${f2(r.accrued)}</td>`,
+      `<td class="v-text3">${f2(r.accrued)}</td>`,
       `<td class="v-rojo">${f2(r.pSucio)}</td>`,
-      `<td style="color:var(--accent);font-size:9px">$${f2(r.vnAj)}</td>`,
-      `<td style="color:var(--text2)">${!isNaN(r.tnaSimple)?fP(r.tnaSimple):'—'}</td>`,
+      `<td class="v-acc" style="font-size:9px">$${f2(r.vnAj)}</td>`,
+      `<td class="v-text3">${!isNaN(r.tnaSimple)?fP(r.tnaSimple):'—'}</td>`,
       `<td class="v-cer">${fP(r.spreadReal)}</td>`,
       `<td class="v-viol">${fP(r.tirTotal)}</td>`,
+      `<td class="v-text3">${fP(((Math.pow(1+r.tir/100,1/12)-1)*100))}</td>`,
       `<td>${f2(r.dur)}</td>`,
       `<td>${f2(r.carry)}</td>`,
       `<td class="src">${srcDot(r.src)}${r.src}</td>`,
@@ -861,49 +547,40 @@ function renderCER(){
   );
 }
 
-// ==================== PANEL: TASA ====================
+// ==================== RENDER TASA ====================
 function renderTASA(){
   const rows=[],dataLec=[],dataBon=[];
   for(const letra of CFG.lecaps.letras){
     const t=yrs(letra.fecha_vencimiento);if(t<=0)continue;
     const flows=buildFlowsLecap(letra);if(!flows)continue;
-    const {price:pRaw,src}=getPrice(letra.ticker,null);
+    const {price:pRaw,src}=getPrice(letra.ticker);
     const pLimpio=pRaw||letra.precio||npv(flows,0.40);
     if(!pLimpio)continue;
-    const r=calcInstrumento(letra.ticker,flows,pLimpio,0,'tasa');if(!r)continue;
+    const r=calcInstr(letra.ticker,flows,pLimpio,0);if(!r)continue;
     const isLec=!letra.ticker.startsWith('T');
-    if(isLec){
-      // Suprimir TNA/TEM si vence en menos de 15 días (se dispara al anualizar)
-      if(t > 15/365){
-        const tna=(Math.pow(letra.pago_final/pLimpio,1/t)-1)*100;
-        const tem=(Math.pow(letra.pago_final/pLimpio,1/(t*12))-1)*100;
-        r.tna=tna;r.tem=tem;
-      }
+    if(isLec&&t>15/365){
+      r.tna=(Math.pow(letra.pago_final/pLimpio,1/t)-1)*100;
+      r.tem=(Math.pow(letra.pago_final/pLimpio,1/(t*12))-1)*100;
     }
     r.vto=letra.fecha_vencimiento;r.src=src;r.nombre=letra.nombre;r.isLec=isLec;
     rows.push(r);
-    const pt={x:parseFloat(f2(r.dur)),y:parseFloat(f2(isLec?r.tna||r.tir:r.tir)),lbl:letra.ticker};
+    const pt={x:+f2(r.dur),y:+f2(isLec?(r.tna||r.tir):r.tir),lbl:letra.ticker};
     if(isLec)dataLec.push(pt);else dataBon.push(pt);
   }
   if(!rows.length)return;
   const avgTir=rows.reduce((s,r)=>s+(r.tna||r.tir),0)/rows.length;
   const avgD=rows.reduce((s,r)=>s+r.dur,0)/rows.length;
-  mkCards('cards-tasa',[
-    ['Lecap',rows.filter(r=>r.isLec).length,'letras ZC','var(--tasa)'],
-    ['Boncap',rows.filter(r=>!r.isLec).length,'con cupón','var(--tasa)'],
-    ['TNA/TIR prom',fP(avgTir),'efectiva','var(--tasa)'],
-    ['Duration prom',f2(avgD),'años mod.','var(--text)'],
-  ]);
+  mkCards('cards-tasa',[['Lecap',rows.filter(r=>r.isLec).length,'letras ZC','var(--tasa)'],['Boncap',rows.filter(r=>!r.isLec).length,'con cupón','var(--tasa)'],['TNA/TIR prom',fP(avgTir),'efectiva','var(--tasa)'],['Duration prom',f2(avgD),'años mod.']]);
   mkChart('chart-tasa',[
     {label:'Lecap (TNA)',data:dataLec,backgroundColor:'rgba(55,138,221,.85)',borderColor:'#378ADD',pointRadius:7,pointHoverRadius:9},
     {label:'Boncap (TIR)',data:dataBon,backgroundColor:'rgba(29,158,117,.8)',borderColor:'#1D9E75',pointStyle:'rectRot',pointRadius:6,pointHoverRadius:8},
   ],'Duration Mod.','TNA / TIR (%)');
   mkTable('tbl-tasa',
-    ['Ticker','Nombre','Vto','P.Limpio','P.Sucio','TNA','TEM','TIR','Duration','Carry/MD','Src'],
+    ['Ticker','Nombre','Vto','P.Limpio','P.Sucio','TNA','TEM','TIR','MD','Carry/MD','Src'],
     rows.map(r=>[
       `<td class="tk">${r.ticker}</td>`,
       `<td style="font-size:9px">${r.nombre}</td>`,
-      `<td style="color:var(--text3);font-size:9px">${r.vto}</td>`,
+      `<td class="v-text3" style="font-size:9px">${r.vto}</td>`,
       `<td class="v-acc">${f2(r.pLimpio)}</td>`,
       `<td class="v-rojo">${f2(r.pSucio)}</td>`,
       `<td class="v-tasa">${r.tna?fP(r.tna):'—'}</td>`,
@@ -916,44 +593,40 @@ function renderTASA(){
   );
 }
 
-// ==================== PANEL: USD SOBERANOS ====================
+// ==================== RENDER USD ====================
 function renderUSD(){
   const rows=[],dataNY=[],dataARG=[];
+  const REFS={GD29:12.3,AL29:12.8,AO28:13.5,GD30:13.8,AL30:14.1,AL35:13.0,GD35:12.8,AE38:12.6,GD38:12.4,AL41:13.2,GD41:12.9,AO27:14.5,AN29:13.0,BPD7:14.0};
   for(const [tk,b] of Object.entries(CFG.soberanos)){
     const t=yrs(b.vencimiento);if(t<=0)continue;
     const flows=buildFlowsUSD(tk);if(!flows)continue;
-    const TIRS_REF_USD={GD29:12.3,AL29:12.8,AO28:13.5,GD30:13.8,AL30:14.1,AL35:13.0,GD35:12.8,AE38:12.6,GD38:12.4,AL41:13.2,GD41:12.9,AO27:14.5,AN29:13.0,BPD7:14.0};
-    const {price:pRaw,src}=getPrice(tk,null);
-    const pLimpio=pRaw||npv(flows,(TIRS_REF_USD[tk]||13)/100);
+    const {price:pRaw,src}=getPrice(tk);
+    const pLimpio=pRaw||npv(flows,(REFS[tk]||13)/100);
     if(!pLimpio)continue;
-    const r=calcInstrumento(tk,flows,pLimpio,0,'usd');if(!r)continue;
-    r.vto=b.vencimiento;r.src=src;r.ley=b.ley;r.nombre=tk;
+    const r=calcInstr(tk,flows,pLimpio,0);if(!r)continue;
+    r.vto=b.vencimiento;r.src=src;r.ley=b.ley;
     rows.push(r);
-    const pt={x:parseFloat(f2(r.dur)),y:parseFloat(f2(r.tir)),lbl:tk};
+    const pt={x:+f2(r.dur),y:+f2(r.tir),lbl:tk};
     if(b.ley==='NY')dataNY.push(pt);else dataARG.push(pt);
   }
   if(!rows.length)return;
   const avgTir=rows.reduce((s,r)=>s+r.tir,0)/rows.length;
   const avgD=rows.reduce((s,r)=>s+r.dur,0)/rows.length;
-  mkCards('cards-usd',[
-    ['Ley NY',rows.filter(r=>r.ley==='NY').length,'globales','var(--usd)'],
-    ['Ley ARG',rows.filter(r=>r.ley!=='NY').length,'locales','var(--usd)'],
-    ['TIR USD prom',fP(avgTir),'anual','var(--usd)'],
-    ['Duration prom',f2(avgD),'años mod.','var(--text)'],
-  ]);
+  mkCards('cards-usd',[['Ley NY',rows.filter(r=>r.ley==='NY').length,'globales','var(--usd)'],['Ley ARG',rows.filter(r=>r.ley!=='NY').length,'locales','var(--usd)'],['TIR USD prom',fP(avgTir),'anual','var(--usd)'],['Duration prom',f2(avgD),'años mod.']]);
   mkChart('chart-usd',[
     {label:'Ley NY',data:dataNY,backgroundColor:'rgba(186,117,23,.9)',borderColor:'#BA7517',pointRadius:7,pointHoverRadius:9},
     {label:'Ley ARG',data:dataARG,backgroundColor:'rgba(186,117,23,.35)',borderColor:'rgba(186,117,23,.7)',pointRadius:7,pointHoverRadius:9},
   ],'Duration Mod.','TIR USD (%)');
   mkTable('tbl-usd',
-    ['Ticker','Ley','Vto','P.Limpio','P.Sucio','TIR USD','Duration','Carry/MD','Src'],
+    ['Ticker','Ley','Vto','P.Limpio','P.Sucio','TIR USD','TEM','MD','Carry/MD','Src'],
     rows.map(r=>[
       `<td class="tk">${r.ticker}</td>`,
-      `<td style="font-size:9px;color:var(--text3)">${r.ley}</td>`,
-      `<td style="color:var(--text3);font-size:9px">${r.vto}</td>`,
+      `<td class="v-text3" style="font-size:9px">${r.ley}</td>`,
+      `<td class="v-text3" style="font-size:9px">${r.vto}</td>`,
       `<td class="v-acc">${f2(r.pLimpio)}</td>`,
       `<td class="v-rojo">${f2(r.pSucio)}</td>`,
       `<td class="v-usd">${fP(r.tir)}</td>`,
+      `<td class="v-text3">${fP(((Math.pow(1+r.tir/100,1/12)-1)*100))}</td>`,
       `<td>${f2(r.dur)}</td>`,
       `<td>${f2(r.carry)}</td>`,
       `<td class="src">${srcDot(r.src)}${r.src}</td>`,
@@ -961,44 +634,37 @@ function renderUSD(){
   );
 }
 
-// ==================== PANEL: ONs CORP ====================
+// ==================== RENDER ONs ====================
 function renderONS(){
   const rows=[],data=[];
   for(const [tk,b] of Object.entries(CFG.ons)){
     const t=yrs(b.vencimiento);if(t<=0)continue;
     const flows=buildFlowsON(tk);if(!flows)continue;
-    const {price:pRaw,src}=getPrice(b.ticker_d912,null);
-    const pLimpio=pRaw||npv(flows,0.07);  // fallback 7% TIR
+    const {price:pRaw,src}=getPrice(b.ticker_d912);
+    const pLimpio=pRaw||npv(flows,0.07);
     if(!pLimpio)continue;
-    const r=calcInstrumento(tk,flows,pLimpio,0,'ons');if(!r)continue;
+    const r=calcInstr(tk,flows,pLimpio,0);if(!r)continue;
     r.vto=b.vencimiento;r.src=src;r.nombre=b.nombre;
     rows.push(r);
-    if(!isNaN(r.dur)&&!isNaN(r.tir))data.push({x:parseFloat(f2(r.dur)),y:parseFloat(f2(r.tir)),lbl:tk});
+    if(!isNaN(r.dur)&&!isNaN(r.tir))data.push({x:+f2(r.dur),y:+f2(r.tir),lbl:tk});
   }
   if(!rows.length)return;
-  // Sort by TIR desc for display
   rows.sort((a,b)=>b.tir-a.tir);
   const avgTir=rows.reduce((s,r)=>s+r.tir,0)/rows.length;
   const avgD=rows.reduce((s,r)=>s+r.dur,0)/rows.length;
   const best=rows[0];
-  mkCards('cards-ons',[
-    ['ONs corp',rows.length,'USD','var(--ons)'],
-    ['TIR prom',fP(avgTir),'anual USD','var(--ons)'],
-    ['Duration prom',f2(avgD),'años mod.','var(--text)'],
-    ['Mayor carry',best?`${f2(best.carry)}`:'-',best?best.ticker:'','var(--accent)'],
-  ]);
-  mkChart('chart-ons',[
-    {label:'ONs Corp USD',data,backgroundColor:'rgba(155,89,182,.8)',borderColor:'#9B59B6',pointRadius:5,pointHoverRadius:7},
-  ],'Duration Mod.','TIR USD (%)');
+  mkCards('cards-ons',[['ONs corp',rows.length,'USD','var(--ons)'],['TIR prom',fP(avgTir),'anual USD','var(--ons)'],['Duration prom',f2(avgD),'años mod.'],['Mayor carry',best?f2(best.carry):'-',best?best.ticker:'','var(--accent)']]);
+  mkChart('chart-ons',[{label:'ONs Corp USD',data,backgroundColor:'rgba(155,89,182,.8)',borderColor:'#9B59B6',pointRadius:5,pointHoverRadius:7}],'Duration Mod.','TIR USD (%)');
   mkTable('tbl-ons',
-    ['Ticker','Empresa','Vto','P.Limpio','P.Sucio','TIR USD','Duration','Carry/MD','Src'],
+    ['Ticker','Empresa','Vto','P.Limpio','P.Sucio','TIR USD','TEM','MD','Carry/MD','Src'],
     rows.map(r=>[
       `<td class="tk">${r.ticker}</td>`,
       `<td style="font-size:9px">${r.nombre}</td>`,
-      `<td style="color:var(--text3);font-size:9px">${r.vto}</td>`,
+      `<td class="v-text3" style="font-size:9px">${r.vto}</td>`,
       `<td class="v-acc">${f2(r.pLimpio)}</td>`,
       `<td class="v-rojo">${f2(r.pSucio)}</td>`,
       `<td class="v-ons">${fP(r.tir)}</td>`,
+      `<td class="v-text3">${fP(((Math.pow(1+r.tir/100,1/12)-1)*100))}</td>`,
       `<td>${f2(r.dur)}</td>`,
       `<td>${f2(r.carry)}</td>`,
       `<td class="src">${srcDot(r.src)}${r.src}</td>`,
@@ -1006,28 +672,195 @@ function renderONS(){
   );
 }
 
-// ==================== MAIN ====================
-async function loadAll(){
-  const ov=document.getElementById('overlay');
-  const msg=document.getElementById('overlayMsg');
-  ov.classList.remove('hidden');
-  priceMap={};
-  try{
-    msg.textContent='Obteniendo CER (BCRA)…';
-    await fetchCER();
-    msg.textContent='Obteniendo precios data912…';
-    await fetchD912Prices();
-    msg.textContent='Calculando CER…';renderCER();
-    msg.textContent='Calculando tasa fija…';renderTASA();
-    msg.textContent='Calculando soberanos USD…';renderUSD();
-    msg.textContent='Calculando ONs corporativas…';renderONS();
-    const now=new Date();
-    document.getElementById('ts').textContent=
-      `Act. ${now.toLocaleTimeString('es-AR')} · ${d912Ok?'● data912':'○ Ref'} · CER T-10:${(cerIndex||CER_FB).toFixed(1)} T-0:${(cerUltimo||CER_ULTIMO_FB).toFixed(1)}`;
-  }catch(e){console.error(e)}
-  ov.classList.add('hidden');
+// ==================== CAUCIONES UTILS ====================
+function calcCFT(tasaTNA,plazo,broker90d,bymaAnual,ivaBr,ivaDM){
+  const costoBr=(broker90d/100)*(plazo/90)*(1+ivaBr/100);
+  const costoByma=(bymaAnual/100)*(plazo/365)*(1+ivaDM/100);
+  const totalFrac=costoBr+costoByma;
+  const costoTNA=totalFrac*(365/plazo)*100;
+  return{costoTNA,total:totalFrac*100};
 }
 
+// ==================== RENOVACIONES ====================
+function calcRenovaciones(){
+  const capital=parseFloat(document.getElementById('r-capital').value)||10000000;
+  const tnaDiaria=parseFloat(document.getElementById('r-tasa-diaria').value)||28;
+  const tnaSemanal=parseFloat(document.getElementById('r-tasa-semanal').value)||27;
+  const horizonte=parseInt(document.getElementById('r-horizonte').value)||30;
+  const tdD=tnaDiaria/100/365;
+  const tdS=tnaSemanal/100/365;
+  let capD=capital,capS=capital;
+  const rows=[];
+  for(let dia=1;dia<=horizonte;dia++){
+    capD+=capD*tdD;
+    if(dia%7===0)capS+=capS*tdS*7;
+    if(dia%7===0||dia===horizonte){
+      rows.push({dia,capD,capS,dif:capD-capS,difPct:((capD-capS)/capital)*100});
+    }
+  }
+  const teaD=(Math.pow(1+tdD,365)-1)*100;
+  const teaS=(Math.pow(1+tdS*7,365/7)-1)*100;
+  const conviene=capD>capS?'DIARIA':'SEMANAL';
+  document.getElementById('cards-ren').style.display='grid';
+  mkCards('cards-ren',[
+    ['TEA Renovación Diaria',fP(teaD),`TNA ${fP(tnaDiaria)} cap. diaria`,'var(--green)'],
+    ['TEA Renovación Semanal',fP(teaS),`TNA ${fP(tnaSemanal)} cap. semanal`,'var(--tasa)'],
+    ['Conviene renovar',conviene,`Dif. ${fM(Math.abs(capD-capS))} en ${horizonte}d`,conviene==='DIARIA'?'var(--green)':'var(--accent)'],
+    ['Ganancia diaria vs semanal',fM(capD-capital),`vs ${fM(capS-capital)} semanal`,'var(--green)'],
+  ],'c4');
+  document.getElementById('wrap-ren').style.display='block';
+  document.getElementById('tbody-ren').innerHTML=rows.map(r=>`<tr>
+    <td class="tk">Día ${r.dia}</td>
+    <td class="v-pos">${fM(r.capD)}</td>
+    <td class="v-text3">${fM(r.capD-capital)}</td>
+    <td style="color:var(--tasa)">${fM(r.capS)}</td>
+    <td class="v-text3">${fM(r.capS-capital)}</td>
+    <td style="color:${r.dif>=0?'var(--green)':'var(--red)'}">${fM(r.dif)}</td>
+    <td style="color:${r.dif>=0?'var(--green)':'var(--red)'}">${fP(r.difPct,3)}</td>
+  </tr>`).join('');
+}
+
+// ==================== ARBITRAJE USD ====================
+const TIRS_ARB={
+  GD29:{tir:12.3,dur:0.9,nombre:'Global 2029',tipo:'Soberano NY'},AL29:{tir:12.8,dur:0.9,nombre:'Bono 2029',tipo:'Soberano ARG'},
+  GD30:{tir:13.8,dur:1.6,nombre:'Global 2030',tipo:'Soberano NY'},AL30:{tir:14.1,dur:1.6,nombre:'Bono 2030',tipo:'Soberano ARG'},
+  GD35:{tir:13.0,dur:4.1,nombre:'Global 2035',tipo:'Soberano NY'},AL35:{tir:13.5,dur:4.1,nombre:'Bono 2035',tipo:'Soberano ARG'},
+  GD38:{tir:12.6,dur:5.2,nombre:'Global 2038',tipo:'Soberano NY'},AE38:{tir:12.8,dur:5.2,nombre:'Bono 2038',tipo:'Soberano ARG'},
+  GD41:{tir:12.9,dur:6.1,nombre:'Global 2041',tipo:'Soberano NY'},AL41:{tir:13.2,dur:6.1,nombre:'Bono 2041',tipo:'Soberano ARG'},
+  MGCO:{tir:8.5,dur:5.4,nombre:'Pampa Energía',tipo:'ON Corp'},MGCR:{tir:8.8,dur:6.2,nombre:'Pampa',tipo:'ON Corp'},
+  GN49:{tir:9.2,dur:4.8,nombre:'Genneia',tipo:'ON Corp'},TSC4:{tir:8.3,dur:5.1,nombre:'TGS',tipo:'ON Corp'},
+  YM34:{tir:9.5,dur:4.2,nombre:'YPF 2034',tipo:'ON Corp'},YMCX:{tir:10.1,dur:3.1,nombre:'YPF 2031',tipo:'ON Corp'},
+  PN36:{tir:8.9,dur:3.8,nombre:'Pan American',tipo:'ON Corp'},VSCT:{tir:9.0,dur:4.9,nombre:'Vista Energy',tipo:'ON Corp'},
+};
+
+function calcArbitraje(){
+  const tasaCauc=parseFloat(document.getElementById('a-tasa').value)||1.5;
+  const capital=parseFloat(document.getElementById('a-capital').value)||100000;
+  const horizonte=parseInt(document.getElementById('a-horizonte').value)||365;
+  const broker=parseFloat(document.getElementById('a-broker').value)||0.6;
+  const byma=parseFloat(document.getElementById('a-byma').value)||0.045;
+  const ivaBr=parseFloat(document.getElementById('a-iva-br').value)||21;
+  const ivaDM=parseFloat(document.getElementById('a-iva-dm').value)||0;
+  const plazo=parseInt(document.getElementById('a-plazo').value)||1;
+  const cft=calcCFT(tasaCauc,plazo,broker,byma,ivaBr,ivaDM);
+  const cftTotal=tasaCauc+cft.costoTNA;
+  document.getElementById('tbody-arb').innerHTML=Object.entries(TIRS_ARB).map(([tk,b])=>{
+    // Intentar usar precio real si está disponible
+    const {price:pReal}=getPrice(tk);
+    if(pReal&&!isNaN(pReal)){
+      // recalcular TIR desde precio real
+    }
+    const spread=b.tir-cftTotal;
+    const breakeven=b.tir-cft.costoTNA;
+    const conviene=spread>0;
+    const ganancia=capital*(spread/100)*(horizonte/365);
+    return `<tr class="${conviene?'best':''}">
+      <td class="tk">${tk}</td>
+      <td style="font-size:9px">${b.nombre}</td>
+      <td class="v-text3" style="font-size:9px">${b.tipo}</td>
+      <td class="v-usd">${fP(b.tir)}</td>
+      <td>${f2(b.dur)}</td>
+      <td class="v-red" style="color:var(--red)">${fP(cftTotal)}</td>
+      <td style="color:${conviene?'var(--green)':'var(--red)'};font-weight:500">${fP(spread)}</td>
+      <td class="v-acc">${fP(breakeven)}</td>
+      <td style="color:${conviene?'var(--green)':'var(--red)'}">U$S${Math.round(Math.abs(ganancia)).toLocaleString('es-AR')}</td>
+      <td><span class="badge ${conviene?'bg':'br'}">${conviene?'▲ CONVIENE':'▼ NO'}</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('wrap-arb-detalle').style.display='block';
+  document.getElementById('sl-arb').value=tasaCauc;
+  document.getElementById('sv-arb').textContent=tasaCauc+'%';
+  onSliderArb(tasaCauc);
+}
+
+function onSliderArb(val){
+  const v=parseFloat(val);
+  document.getElementById('sv-arb').textContent=v.toFixed(1)+'%';
+  const broker=parseFloat(document.getElementById('a-broker').value)||0.6;
+  const byma=parseFloat(document.getElementById('a-byma').value)||0.045;
+  const ivaBr=parseFloat(document.getElementById('a-iva-br').value)||21;
+  const ivaDM=parseFloat(document.getElementById('a-iva-dm').value)||0;
+  const plazo=parseInt(document.getElementById('a-plazo').value)||1;
+  const capital=parseFloat(document.getElementById('a-capital').value)||100000;
+  const horizonte=parseInt(document.getElementById('a-horizonte').value)||365;
+  const cft=calcCFT(v,plazo,broker,byma,ivaBr,ivaDM);
+  const cftTotal=v+cft.costoTNA;
+  const mejores=Object.entries(TIRS_ARB).filter(([,b])=>b.tir-cftTotal>0).sort((a,b)=>b[1].tir-a[1].tir);
+  if(!mejores.length){
+    document.getElementById('cards-arb-sens').innerHTML='<div class="card neg-card" style="grid-column:1/-1"><div class="cl">Con tasa '+v.toFixed(1)+'%</div><div class="cv v-neg">Sin arbitraje</div><div class="cs">CFT '+fP(cftTotal)+' supera todas las TIRs</div></div>';
+    return;
+  }
+  const [tkM,bM]=mejores[0];
+  const spreadM=bM.tir-cftTotal;
+  const ganM=capital*(spreadM/100)*(horizonte/365);
+  document.getElementById('cards-arb-sens').innerHTML=`
+    <div class="card pos-card"><div class="cl">Spread neto con ${v.toFixed(1)}% caución</div><div class="cv v-pos">${fP(spreadM)}</div><div class="cs">mejor: ${tkM} (TIR ${fP(bM.tir)})</div></div>
+    <div class="card"><div class="cl">CFT total caución</div><div class="cv" style="color:var(--red)">${fP(cftTotal)}</div><div class="cs">tasa + costos operativos</div></div>
+    <div class="card pos-card"><div class="cl">Ganancia estimada</div><div class="cv v-pos">U$S${Math.round(ganM).toLocaleString('es-AR')}</div><div class="cs">en ${horizonte} días · capital U$S${capital.toLocaleString('es-AR')}</div></div>
+  `;
+}
+
+// ==================== SPREAD APALANCADO ====================
+const TIRS_ARS_REF={
+  TZX27:{tir:4.0,tirTotal:27.1,dur:1.04,tipo:'CER ZC'},TZX28:{tir:7.0,tirTotal:30.7,dur:1.93,tipo:'CER ZC'},
+  TX28:{tir:5.2,tirTotal:27.3,dur:1.36,tipo:'CER CPN'},DICP:{tir:7.5,tirTotal:30.4,dur:3.09,tipo:'CER CPN'},
+  PARP:{tir:8.5,tirTotal:31.2,dur:6.54,tipo:'CER CPN'},TX31:{tir:7.3,tirTotal:30.1,dur:2.90,tipo:'CER CPN'},
+  S31L6:{tir:24.0,dur:0.11,tipo:'Lecap'},S31G6:{tir:23.2,dur:0.18,tipo:'Lecap'},
+  S30S6:{tir:23.9,dur:0.25,tipo:'Lecap'},S30N6:{tir:22.9,dur:0.39,tipo:'Lecap'},
+  T15E7:{tir:27.4,dur:0.48,tipo:'Boncap'},T30A7:{tir:27.7,dur:0.65,tipo:'Boncap'},
+  T30J7:{tir:24.7,dur:0.86,tipo:'Boncap'},
+};
+
+function calcSpread(){
+  const tasaARS=parseFloat(document.getElementById('s-tasa-ars').value)||28;
+  const tasaUSD=parseFloat(document.getElementById('s-tasa-usd').value)||1.5;
+  const broker=parseFloat(document.getElementById('s-broker').value)||0.6;
+  const byma=parseFloat(document.getElementById('s-byma').value)||0.045;
+  const ivaBr=parseFloat(document.getElementById('s-iva-br').value)||21;
+  const ivaDM=parseFloat(document.getElementById('s-iva-dm').value)||0;
+  const plazo=parseInt(document.getElementById('s-plazo').value)||1;
+  const cftARS=calcCFT(tasaARS,plazo,broker,byma,ivaBr,ivaDM);
+  const cftUSD=calcCFT(tasaUSD,plazo,broker,byma,ivaBr,ivaDM);
+  const cftTotalARS=tasaARS+cftARS.costoTNA;
+  const cftTotalUSD=tasaUSD+cftUSD.costoTNA;
+  document.getElementById('titulo-ars').textContent=`Instrumentos en PESOS — spread vs caución ARS (CFT: ${fP(cftTotalARS)})`;
+  document.getElementById('titulo-usd').textContent=`Instrumentos en USD — spread vs caución USD (CFT: ${fP(cftTotalUSD)})`;
+  document.getElementById('tbody-sp-ars').innerHTML=Object.entries(TIRS_ARS_REF).sort((a,b)=>{
+    const ta=a[1].tirTotal||a[1].tir,tb=b[1].tirTotal||b[1].tir;return tb-ta;
+  }).map(([tk,b])=>{
+    const tir=b.tirTotal||b.tir;
+    const spread=tir-cftTotalARS;
+    const breakeven=tir-cftARS.costoTNA;
+    const conviene=spread>0;
+    return `<tr class="${conviene?'best':''}">
+      <td class="tk">${tk}</td>
+      <td style="font-size:9px">${b.tipo}</td>
+      <td style="color:${b.tirTotal?'var(--tir-total)':'var(--tasa)'}">${fP(tir)}${b.tirTotal?'<span style="font-size:8px;color:var(--text3)"> (total)</span>':''}</td>
+      <td style="color:var(--red)">${fP(cftTotalARS)}</td>
+      <td style="color:${conviene?'var(--green)':'var(--red)'};font-weight:500">${fP(spread)}</td>
+      <td class="v-acc">${fP(breakeven)}</td>
+      <td>${f2(b.dur)}</td>
+      <td><span class="badge ${conviene?'bg':'br'}">${conviene?'▲ SPREAD +':'▼ NEGATIVO'}</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('tbody-sp-usd').innerHTML=Object.entries(TIRS_ARB).sort((a,b)=>b[1].tir-a[1].tir).map(([tk,b])=>{
+    const spread=b.tir-cftTotalUSD;
+    const breakeven=b.tir-cftUSD.costoTNA;
+    const conviene=spread>0;
+    return `<tr class="${conviene?'best':''}">
+      <td class="tk">${tk}</td>
+      <td style="font-size:9px">${b.tipo}</td>
+      <td class="v-usd">${fP(b.tir)}</td>
+      <td style="color:var(--red)">${fP(cftTotalUSD)}</td>
+      <td style="color:${conviene?'var(--green)':'var(--red)'};font-weight:500">${fP(spread)}</td>
+      <td class="v-acc">${fP(breakeven)}</td>
+      <td>${f2(b.dur)}</td>
+      <td><span class="badge ${conviene?'bg':'br'}">${conviene?'▲ SPREAD +':'▼ NEGATIVO'}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ==================== MAIN ====================
 function switchTab(name,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
@@ -1035,327 +868,26 @@ function switchTab(name,el){
   document.getElementById('panel-'+name).classList.add('active');
 }
 
-
-// ===================== UTILS =====================
-const f2=(v,d=2)=>isNaN(v)||v==null?'—':v.toFixed(d);
-const fP=(v,d=2)=>isNaN(v)||v==null?'—':v.toFixed(d)+'%';
-const fM=(v)=>isNaN(v)||v==null?'—':'$'+Math.round(v).toLocaleString('es-AR');
-const fMU=(v)=>isNaN(v)||v==null?'—':'U$S'+v.toFixed(2);
-
-// Costo anual de la caución como % (TNA efectiva incluyendo comisiones)
-function calcCFT(tasaTNA, plazo, brokerPct90d, bymaPct, ivaBrokerPct, ivaDMPct){
-  // Costo broker: brokerPct90d prorrateado por plazo
-  const costoBase = (brokerPct90d / 100) * (plazo / 90);
-  const costoBaseConIVA = costoBase * (1 + ivaBrokerPct/100);
-  // BYMA administración garantías: anual
-  const costoBYMA = (bymaPct / 100) * (plazo / 365);
-  const costoBYMAConIVA = costoBYMA * (1 + ivaDMPct/100);
-  const costoTotalFraccion = costoBaseConIVA + costoBYMAConIVA;
-  // Convertir a TNA anual
-  const costoTNAAnual = costoTotalFraccion * (365 / plazo) * 100;
-  return { costoTNAAnual, costoBase: costoBaseConIVA*100, costoBYMA: costoBYMAConIVA*100, total: costoTotalFraccion*100 };
+async function loadAll(){
+  const ov=document.getElementById('overlay');
+  const msg=document.getElementById('overlayMsg');
+  ov.classList.remove('hidden');
+  priceMap={};
+  try{
+    msg.textContent='Obteniendo CER (BCRA)…';await fetchCER();
+    msg.textContent='Obteniendo precios data912…';await fetchD912Prices();
+    msg.textContent='Calculando CER…';renderCER();
+    msg.textContent='Calculando tasa fija…';renderTASA();
+    msg.textContent='Calculando soberanos USD…';renderUSD();
+    msg.textContent='Calculando ONs corporativas…';renderONS();
+    msg.textContent='Calculando cauciones…';calcRenovaciones();calcArbitraje();calcSpread();
+    const now=new Date();
+    document.getElementById('ts').textContent=`Act. ${now.toLocaleTimeString('es-AR')} · ${d912Ok?'● data912':'○ Ref'} · CER T-10:${(cerIndex||CER_FB).toFixed(1)} T-0:${(cerUltimo||CER_ULTIMO_FB).toFixed(1)}`;
+  }catch(e){console.error(e);}
+  ov.classList.add('hidden');
 }
 
-// ===================== TAB 1: RENOVACIONES =====================
-function calcRenovaciones(){
-  const capital = parseFloat(document.getElementById('r-capital').value)||10000000;
-  const tnaDiaria = parseFloat(document.getElementById('r-tasa-diaria').value)||28;
-  const tnaSemanal = parseFloat(document.getElementById('r-tasa-semanal').value)||27;
-  const horizonte = parseInt(document.getElementById('r-horizonte').value)||30;
-
-  // Tasa diaria efectiva
-  const tdDiaria = tnaDiaria / 100 / 365;
-  const tdSemanal = tnaSemanal / 100 / 365;
-
-  // Simular día a día
-  let capDiario = capital;
-  let capSemanal = capital;
-  const rows = [];
-
-  for(let dia = 1; dia <= horizonte; dia++){
-    // Renovación diaria: capitaliza cada día
-    const intDiario = capDiario * tdDiaria;
-    capDiario += intDiario;
-
-    // Renovación semanal: capitaliza cada 7 días
-    let intSemanal = 0;
-    if(dia % 7 === 0){
-      intSemanal = capSemanal * tdSemanal * 7;
-      capSemanal += intSemanal;
-    }
-
-    if(dia % 7 === 0 || dia === horizonte){
-      rows.push({
-        periodo: `Día ${dia}`,
-        capD: capDiario,
-        intD: capDiario - capital - rows.reduce((s,r)=>s+(r.intD_raw||0),0),
-        capS: capSemanal,
-        intS: capSemanal - capital,
-        dif: capDiario - capSemanal,
-        difPct: ((capDiario - capSemanal)/capital)*100,
-      });
-      rows[rows.length-1].intD_raw = capDiario - capital - (rows.length>1?rows.slice(0,-1).reduce((s,r)=>s+(r.intD_raw||0),0):0);
-    }
-  }
-
-  // TEA efectiva
-  const teaDiaria = (Math.pow(1 + tdDiaria, 365) - 1) * 100;
-  const teaSemanal = (Math.pow(1 + tdSemanal * 7, 365/7) - 1) * 100;
-  const gananciaDiaria = capDiario - capital;
-  const gananciaSemanal = capSemanal - capital;
-  const conviene = capDiario > capSemanal ? 'DIARIA' : 'SEMANAL';
-  const difTotal = Math.abs(capDiario - capSemanal);
-
-  // Cards
-  document.getElementById('cards-renovaciones').style.display='grid';
-  document.getElementById('cards-renovaciones').className='cards cols4';
-  document.getElementById('cards-renovaciones').innerHTML=`
-    <div class="card"><div class="cl">TEA Renovación Diaria</div><div class="cv pos">${fP(teaDiaria)}</div><div class="cs">TNA ${fP(tnaDiaria)} capitaliz. diaria</div></div>
-    <div class="card"><div class="cl">TEA Renovación Semanal</div><div class="cv" style="color:var(--blue)">${fP(teaSemanal)}</div><div class="cs">TNA ${fP(tnaSemanal)} capitaliz. semanal</div></div>
-    <div class="card ${conviene==='DIARIA'?'highlight':'highlight-amber'}"><div class="cl">Conviene renovar</div><div class="cv ${conviene==='DIARIA'?'pos':'neu'}">${conviene}</div><div class="cs">Diferencia ${fM(difTotal)} en ${horizonte} días</div></div>
-    <div class="card"><div class="cl">Ganancia diaria / semanal</div><div class="cv pos">${fM(gananciaDiaria)}</div><div class="cs">vs ${fM(gananciaSemanal)} semanal</div></div>
-  `;
-
-  // Tabla
-  document.getElementById('resultado-renovaciones').style.display='block';
-  document.getElementById('tbody-renovaciones').innerHTML = rows.map(r=>`
-    <tr>
-      <td class="tk">${r.periodo}</td>
-      <td style="color:var(--green)">${fM(r.capD)}</td>
-      <td style="color:var(--text2)">${fM(r.capD - capital)}</td>
-      <td style="color:var(--blue)">${fM(r.capS)}</td>
-      <td style="color:var(--text2)">${fM(r.capS - capital)}</td>
-      <td style="color:${r.dif>=0?'var(--green)':'var(--red)'}">${fM(r.dif)}</td>
-      <td style="color:${r.dif>=0?'var(--green)':'var(--red)'}">${fP(r.difPct,3)}</td>
-    </tr>
-  `).join('');
-}
-
-// ===================== INSTRUMENTOS DE REFERENCIA =====================
-// TIRs de referencia (se actualizan con data912 si está disponible)
-const TIRS_USD = {
-  GD29:{tir:12.3,dur:0.9,nombre:'Global 2029',tipo:'Soberano NY'},
-  AL29:{tir:12.8,dur:0.9,nombre:'Bono 2029',tipo:'Soberano ARG'},
-  GD30:{tir:13.8,dur:1.6,nombre:'Global 2030',tipo:'Soberano NY'},
-  AL30:{tir:14.1,dur:1.6,nombre:'Bono 2030',tipo:'Soberano ARG'},
-  GD35:{tir:13.0,dur:4.1,nombre:'Global 2035',tipo:'Soberano NY'},
-  AL35:{tir:13.5,dur:4.1,nombre:'Bono 2035',tipo:'Soberano ARG'},
-  GD38:{tir:12.6,dur:5.2,nombre:'Global 2038',tipo:'Soberano NY'},
-  AE38:{tir:12.8,dur:5.2,nombre:'Bono 2038',tipo:'Soberano ARG'},
-  GD41:{tir:12.9,dur:6.1,nombre:'Global 2041',tipo:'Soberano NY'},
-  AL41:{tir:13.2,dur:6.1,nombre:'Bono 2041',tipo:'Soberano ARG'},
-  MGCO:{tir:8.5,dur:5.4,nombre:'Pampa Energía',tipo:'ON Corp'},
-  MGCR:{tir:8.8,dur:6.2,nombre:'Pampa Energía',tipo:'ON Corp'},
-  GN49:{tir:9.2,dur:4.8,nombre:'Genneia',tipo:'ON Corp'},
-  TSC4:{tir:8.3,dur:5.1,nombre:'TGS',tipo:'ON Corp'},
-  YM34:{tir:9.5,dur:4.2,nombre:'YPF',tipo:'ON Corp'},
-  YMCX:{tir:10.1,dur:3.1,nombre:'YPF',tipo:'ON Corp'},
-  PN36:{tir:8.9,dur:3.8,nombre:'Pan American',tipo:'ON Corp'},
-  VSCT:{tir:9.0,dur:4.9,nombre:'Vista Energy',tipo:'ON Corp'},
-};
-
-const TIRS_ARS = {
-  TZX26:{tir:1.5,tirTotal:24.0,dur:0.07,nombre:'Boncer ZC Jun-26',tipo:'CER ZC'},
-  TZXO6:{tir:2.5,tirTotal:25.2,dur:0.41,nombre:'Boncer ZC Oct-26',tipo:'CER ZC'},
-  TZXD6:{tir:-0.6,tirTotal:21.5,dur:0.53,nombre:'Boncer ZC Dic-26',tipo:'CER ZC'},
-  TZX27:{tir:4.0,tirTotal:27.1,dur:1.04,nombre:'Boncer ZC Jun-27',tipo:'CER ZC'},
-  TZX28:{tir:7.0,tirTotal:30.7,dur:1.93,nombre:'Boncer ZC Jun-28',tipo:'CER ZC'},
-  TX28:{tir:5.2,tirTotal:27.3,dur:1.36,nombre:'Boncer 2.25% Nov-28',tipo:'CER CPN'},
-  DICP:{tir:7.5,tirTotal:30.4,dur:3.09,nombre:'Discount CER',tipo:'CER CPN'},
-  PARP:{tir:8.5,tirTotal:31.2,dur:6.54,nombre:'Par CER',tipo:'CER CPN'},
-  S31L6:{tir:24.0,tirTotal:null,dur:0.11,nombre:'Lecap Jul-26',tipo:'Lecap'},
-  S31G6:{tir:23.2,tirTotal:null,dur:0.18,nombre:'Lecap Ago-26',tipo:'Lecap'},
-  S30S6:{tir:23.9,tirTotal:null,dur:0.25,nombre:'Lecap Sep-26',tipo:'Lecap'},
-  S30N6:{tir:22.9,tirTotal:null,dur:0.39,nombre:'Lecap Nov-26',tipo:'Lecap'},
-  T15E7:{tir:27.4,tirTotal:null,dur:0.48,nombre:'Boncap Ene-27',tipo:'Boncap'},
-  T30A7:{tir:27.7,tirTotal:null,dur:0.65,nombre:'Boncap Abr-27',tipo:'Boncap'},
-  T30J7:{tir:24.7,tirTotal:null,dur:0.86,nombre:'Boncap Jun-27',tipo:'Boncap'},
-};
-
-// ===================== TAB 2: ARBITRAJE USD =====================
-function getCostos(prefix){
-  const broker = parseFloat(document.getElementById(`${prefix}-broker`).value)||0.6;
-  const byma   = parseFloat(document.getElementById(`${prefix}-byma`).value)||0.045;
-  const ivaBr  = parseFloat(document.getElementById(`${prefix}-iva-broker`).value)||21;
-  const ivaDM  = parseFloat(document.getElementById(`${prefix}-iva-dm`).value)||21;
-  const plazo  = parseInt(document.getElementById(`${prefix}-plazo`).value)||1;
-  return calcCFT(0, plazo, broker, byma, ivaBr, ivaDM);
-}
-
-function calcCostoAnualConTasa(tasaTNA, prefix){
-  const broker = parseFloat(document.getElementById(`${prefix}-broker`).value)||0.6;
-  const byma   = parseFloat(document.getElementById(`${prefix}-byma`).value)||0.045;
-  const ivaBr  = parseFloat(document.getElementById(`${prefix}-iva-broker`).value)||21;
-  const ivaDM  = parseFloat(document.getElementById(`${prefix}-iva-dm`).value)||21;
-  const plazo  = parseInt(document.getElementById(`${prefix}-plazo`).value)||1;
-  const costos = calcCFT(tasaTNA, plazo, broker, byma, ivaBr, ivaDM);
-  return tasaTNA + costos.costoTNAAnual; // CFT = tasa + costos
-}
-
-function calcArbitraje(){
-  const tasaCaucion = parseFloat(document.getElementById('a-tasa-caucion').value)||1.5;
-  const horizonte   = parseInt(document.getElementById('a-horizonte').value)||365;
-  const capital     = parseFloat(document.getElementById('a-capital').value)||100000;
-  const tipo        = document.getElementById('a-tipo').value;
-
-  // Obtener costos
-  const broker = parseFloat(document.getElementById('c-broker').value)||0.6;
-  const byma   = parseFloat(document.getElementById('c-byma').value)||0.045;
-  const ivaBr  = parseFloat(document.getElementById('c-iva-broker').value)||21;
-  const ivaDM  = parseFloat(document.getElementById('c-iva-dm').value)||21;
-  const plazo  = parseInt(document.getElementById('c-plazo').value)||1;
-
-  const costos = calcCFT(0, plazo, broker, byma, ivaBr, ivaDM);
-  const cftCaucion = tasaCaucion + costos.costoTNAAnual;
-
-  // Filtrar instrumentos
-  const instrs = Object.entries(TIRS_USD).filter(([tk,b])=>{
-    if(tipo==='soberano') return b.tipo.includes('Soberano');
-    if(tipo==='on') return b.tipo.includes('ON');
-    return true;
-  });
-
-  const tbody = document.getElementById('tbody-instrumentos');
-  tbody.innerHTML = instrs.map(([tk,b])=>{
-    const spreadBruto = b.tir - tasaCaucion;
-    const spreadNeto  = b.tir - cftCaucion;
-    const breakeven   = b.tir - costos.costoTNAAnual;
-    const conviene    = spreadNeto > 0;
-    const ganancia    = capital * (spreadNeto/100) * (horizonte/365);
-    return `<tr class="${conviene?'best':''}">
-      <td class="tk">${tk}</td>
-      <td style="font-size:9px">${b.nombre} <span style="color:var(--text3)">(${b.tipo})</span></td>
-      <td style="color:var(--amber)">${fP(b.tir)}</td>
-      <td>${f2(b.dur)}</td>
-      <td style="color:var(--text2)">${fP(cftCaucion-spreadBruto+spreadBruto)}</td>
-      <td style="color:var(--red)">${fP(cftCaucion)}</td>
-      <td style="color:${conviene?'var(--green)':'var(--red)';}">${fP(spreadNeto)}</td>
-      <td style="color:var(--accent)">${fP(breakeven)}</td>
-      <td><span class="badge ${conviene?'green':'red'}">${conviene?'▲ CONVIENE':'▼ NO CONVIENE'}</span></td>
-    </tr>`;
-  }).join('');
-
-  // Detalle del mejor instrumento
-  const mejores = instrs.filter(([tk,b])=>b.tir - cftCaucion > 0).sort((a,b)=>b[1].tir-a[1].tir);
-  if(mejores.length){
-    const [tkM,bM] = mejores[0];
-    const spreadNetoM = bM.tir - cftCaucion;
-    const gananciaM = capital * (spreadNetoM/100) * (horizonte/365);
-    document.getElementById('detalle-arbitraje').style.display='block';
-    document.getElementById('cards-arbitraje').innerHTML=`
-      <div class="card highlight"><div class="cl">Mejor instrumento</div><div class="cv pos">${tkM}</div><div class="cs">${bM.nombre}</div></div>
-      <div class="card"><div class="cl">TIR instrumento</div><div class="cv" style="color:var(--amber)">${fP(bM.tir)}</div><div class="cs">vs CFT caución ${fP(cftCaucion)}</div></div>
-      <div class="card highlight"><div class="cl">Spread neto</div><div class="cv pos">${fP(spreadNetoM)}</div><div class="cs">anual sobre capital</div></div>
-      <div class="card"><div class="cl">Ganancia estimada</div><div class="cv pos">U$S${Math.round(gananciaM).toLocaleString('es-AR')}</div><div class="cs">en ${horizonte} días</div></div>
-    `;
-    document.getElementById('slider-caucion').value = tasaCaucion;
-    document.getElementById('slider-val').textContent = tasaCaucion + '%';
-    updateSensibilidad(tasaCaucion, tkM, bM, capital, horizonte, costos);
-  } else {
-    document.getElementById('detalle-arbitraje').style.display='none';
-  }
-}
-
-let _lastArb = null;
-function updateSensibilidad(val, tkM, bM, capital, horizonte, costos){
-  const v = parseFloat(val);
-  document.getElementById('slider-val').textContent = v.toFixed(1)+'%';
-  // Si no se pasan args, usar los últimos
-  if(!bM && _lastArb){ ({tkM,bM,capital,horizonte,costos}=_lastArb); }
-  if(!bM) return;
-  _lastArb={tkM,bM,capital,horizonte,costos};
-
-  const broker = parseFloat(document.getElementById('c-broker').value)||0.6;
-  const byma   = parseFloat(document.getElementById('c-byma').value)||0.045;
-  const ivaBr  = parseFloat(document.getElementById('c-iva-broker').value)||21;
-  const ivaDM  = parseFloat(document.getElementById('c-iva-dm').value)||21;
-  const plazo  = parseInt(document.getElementById('c-plazo').value)||1;
-  const c = calcCFT(0, plazo, broker, byma, ivaBr, ivaDM);
-
-  const cft = v + c.costoTNAAnual;
-  const spread = bM.tir - cft;
-  const ganancia = capital * (spread/100) * (horizonte/365);
-  const conviene = spread > 0;
-
-  document.getElementById('cards-sensibilidad').innerHTML=`
-    <div class="card ${conviene?'highlight':'highlight-red'}"><div class="cl">Con tasa caución ${v.toFixed(1)}%</div><div class="cv ${conviene?'pos':'neg'}">${fP(spread)}</div><div class="cs">spread neto anual</div></div>
-    <div class="card"><div class="cl">CFT total caución</div><div class="cv" style="color:var(--red)">${fP(cft)}</div><div class="cs">tasa + costos operativos</div></div>
-    <div class="card ${conviene?'highlight':'highlight-red'}"><div class="cl">Ganancia / pérdida</div><div class="cv ${conviene?'pos':'neg'}">U$S${Math.round(Math.abs(ganancia)).toLocaleString('es-AR')}</div><div class="cs">${conviene?'ganancia':'pérdida'} estimada</div></div>
-  `;
-}
-
-// ===================== TAB 3: SPREAD APALANCADO =====================
-function calcSpread(){
-  const tasaARS = parseFloat(document.getElementById('s-tasa-ars').value)||28;
-  const tasaUSD = parseFloat(document.getElementById('s-tasa-usd').value)||1.5;
-  const broker  = parseFloat(document.getElementById('s-broker').value)||0.6;
-  const byma    = parseFloat(document.getElementById('s-byma').value)||0.045;
-  const ivaBr   = parseFloat(document.getElementById('s-iva-broker').value)||21;
-  const ivaDM   = parseFloat(document.getElementById('s-iva-dm').value)||0;
-  const plazo   = parseInt(document.getElementById('s-plazo').value)||1;
-
-  const costos  = calcCFT(0, plazo, broker, byma, ivaBr, ivaDM);
-  const cftARS  = tasaARS + costos.costoTNAAnual;
-  const cftUSD  = tasaUSD + costos.costoTNAAnual;
-
-  // Tabla ARS
-  document.getElementById('titulo-tabla-ars').textContent =
-    `Instrumentos en PESOS — spread vs caución ARS (CFT: ${fP(cftARS)})`;
-  document.getElementById('tbody-spread-ars').innerHTML = Object.entries(TIRS_ARS)
-    .sort((a,b)=>{
-      const tirA = a[1].tirTotal||a[1].tir;
-      const tirB = b[1].tirTotal||b[1].tir;
-      return tirB - tirA;
-    })
-    .map(([tk,b])=>{
-      const tirEfectiva = b.tirTotal || b.tir;
-      const spread = tirEfectiva - cftARS;
-      const breakeven = tirEfectiva - costos.costoTNAAnual;
-      const conviene = spread > 0;
-      return `<tr class="${conviene?'best':''}">
-        <td class="tk">${tk}</td>
-        <td style="font-size:9px">${b.tipo}</td>
-        <td style="color:${b.tirTotal?'var(--violet)':'var(--tasa)'}">${fP(tirEfectiva)}${b.tirTotal?'<span style="font-size:8px;color:var(--text3)"> (total)</span>':''}</td>
-        <td style="color:var(--red)">${fP(cftARS)}</td>
-        <td style="color:${conviene?'var(--green)':'var(--red)'};font-weight:500">${fP(spread)}</td>
-        <td style="color:var(--accent)">${fP(breakeven)}</td>
-        <td>${f2(b.dur)}</td>
-        <td><span class="badge ${conviene?'green':'red'}">${conviene?'▲ SPREAD +':'▼ NEGATIVO'}</span></td>
-      </tr>`;
-    }).join('');
-
-  // Tabla USD
-  document.getElementById('titulo-tabla-usd').textContent =
-    `Instrumentos en USD — spread vs caución USD (CFT: ${fP(cftUSD)})`;
-  document.getElementById('tbody-spread-usd').innerHTML = Object.entries(TIRS_USD)
-    .sort((a,b)=>b[1].tir-a[1].tir)
-    .map(([tk,b])=>{
-      const spread = b.tir - cftUSD;
-      const breakeven = b.tir - costos.costoTNAAnual;
-      const conviene = spread > 0;
-      return `<tr class="${conviene?'best':''}">
-        <td class="tk">${tk}</td>
-        <td style="font-size:9px">${b.tipo}</td>
-        <td style="color:var(--amber)">${fP(b.tir)}</td>
-        <td style="color:var(--red)">${fP(cftUSD)}</td>
-        <td style="color:${conviene?'var(--green)':'var(--red)'};font-weight:500">${fP(spread)}</td>
-        <td style="color:var(--accent)">${fP(breakeven)}</td>
-        <td>${f2(b.dur)}</td>
-        <td><span class="badge ${conviene?'green':'red'}">${conviene?'▲ SPREAD +':'▼ NEGATIVO'}</span></td>
-      </tr>`;
-    }).join('');
-}
-
-// Toggle manual TIR
-document.getElementById('a-tipo').addEventListener('change', function(){
-  document.getElementById('manual-tir-row').style.display = this.value==='manual'?'grid':'none';
-});
-
-// Init
-
-
-
-window.addEventListener('DOMContentLoaded',()=>{loadAll();calcRenovaciones();calcArbitraje();calcSpread();document.getElementById('ts').textContent=new Date().toLocaleTimeString('es-AR');});
+window.addEventListener('DOMContentLoaded',()=>loadAll());
 </script>
 </body>
 </html>
