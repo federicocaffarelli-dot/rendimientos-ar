@@ -295,6 +295,13 @@ const remMonthly=REM.reduce((s,r)=>s+r.v,0)/REM.length;
 const remAnual=(Math.pow(1+remMonthly/100,12)-1)*100;
 
 // ==================== STATE ====================
+// Cache de resultados calculados — se llena en render* y se lee en cauciones
+const calcCache = {
+  usd: [],   // [{ticker, tir, dur, nombre, tipo}]
+  ons: [],   // [{ticker, tir, dur, nombre, tipo}]
+  ars: [],   // [{ticker, tir, tirTotal, dur, tipo}]
+  tasa: [],  // [{ticker, tir, tna, dur, tipo}]
+};
 const TODAY=new Date('2026-06-04');
 let cerIndex=null,cerFecha=null,cerSrc='Fallback';
 let cerUltimo=null,cerUltimoFecha=null;
@@ -422,28 +429,50 @@ async function fetchCER(){
 
 async function fetchD912Prices(){
   const base=(document.getElementById('d912Url').value||'').trim();
-  const isProxy=base&&!base.includes('data912.com');
-  const urls={
-    bonds:isProxy?`${base}/live/arg_bonds`:'https://data912.com/live/arg_bonds',
-    notes:isProxy?`${base}/live/arg_notes`:'https://data912.com/live/arg_notes',
-    corp: isProxy?`${base}/live/arg_corp` :'https://data912.com/live/arg_corp',
-  };
-  try{
-    const [bondsRes,notesRes,corpRes]=await Promise.allSettled([
-      fetch(urls.bonds,{signal:AbortSignal.timeout(6000),headers:{'User-Agent':'Mozilla/5.0'}}),
-      fetch(urls.notes,{signal:AbortSignal.timeout(6000),headers:{'User-Agent':'Mozilla/5.0'}}),
-      fetch(urls.corp, {signal:AbortSignal.timeout(6000),headers:{'User-Agent':'Mozilla/5.0'}}),
-    ]);
-    let count=0;
-    for(const res of [bondsRes,notesRes,corpRes]){
-      if(res.status==='fulfilled'&&res.value.ok){
-        const data=await res.value.json();
-        if(Array.isArray(data)){for(const b of data){const p=parseFloat(b.c||b.price||0);if(p>0){priceMap[b.symbol]=p;count++;}}}
+  if(!base){setStatus('d912',false,'data912: sin URL');return;}
+
+  // El repo de Vercel expone endpoints específicos con formatos distintos:
+  // /api/soberanos  → {data:[{symbol,price_usd,...}]}  (sin sufijo D)
+  // /api/cer-precios → {data:[{symbol,c,...}]}          (tickers CER directo)
+  // /api/ons        → {data:[{symbol,c,...}]}           (con sufijo D)
+  // /api/lecaps     → {data:[{symbol,price,...}]}       (LECAP/BONCAP)
+
+  const endpoints=[
+    {url:`${base}/api/soberanos`,  tipo:'soberanos'},
+    {url:`${base}/api/cer-precios`,tipo:'cer'},
+    {url:`${base}/api/ons`,        tipo:'ons'},
+    {url:`${base}/api/lecaps`,     tipo:'lecaps'},
+  ];
+
+  let count=0;
+  const results=await Promise.allSettled(
+    endpoints.map(e=>fetch(e.url,{signal:AbortSignal.timeout(8000)}).then(r=>r.ok?r.json():null).then(d=>({d,tipo:e.tipo})))
+  );
+
+  for(const res of results){
+    if(res.status!=='fulfilled'||!res.value||!res.value.d)continue;
+    const {d,tipo}=res.value;
+    const arr=d.data||d;
+    if(!Array.isArray(arr))continue;
+    for(const b of arr){
+      const sym=b.symbol||b.ticker||'';
+      if(!sym)continue;
+      let price=0;
+      if(tipo==='soberanos') price=parseFloat(b.price_usd||b.price||0);
+      else if(tipo==='lecaps') price=parseFloat(b.price||b.c||0);
+      else price=parseFloat(b.c||b.price||0);
+      if(price>0){
+        // Guardar con y sin sufijo D para cubrir ambos casos
+        priceMap[sym]=price;
+        if(sym.endsWith('D'))priceMap[sym.slice(0,-1)]=price;
+        else priceMap[sym+'D']=price;
+        count++;
       }
     }
-    if(count>0){d912Ok=true;setStatus('d912',true,`data912: ${count} precios`);}
-    else{d912Ok=false;setStatus('d912',false,'data912: sin datos (CORS?)');}
-  }catch{d912Ok=false;setStatus('d912',false,'data912: error');}
+  }
+
+  if(count>0){d912Ok=true;setStatus('d912',true,`data912: ${count} precios`);}
+  else{d912Ok=false;setStatus('d912',false,'data912: 0 precios — verificar proxy');}
 }
 
 function getPrice(ticker){
@@ -522,6 +551,8 @@ function renderCER(){
   const avgSp=rows.reduce((s,r)=>s+r.spreadReal,0)/rows.length;
   const avgTt=rows.reduce((s,r)=>s+r.tirTotal,0)/rows.length;
   const avgD=rows.reduce((s,r)=>s+r.dur,0)/rows.length;
+  // Guardar en cache para cauciones
+  calcCache.ars=rows.map(r=>({ticker:r.ticker,tir:r.tir,tirTotal:r.tirTotal,dur:r.dur,tipo:CFG.bonos_cer[r.ticker]?.flujos?.some(f=>f.tasa_interes>0)?'CER CPN':'CER ZC'}));
   mkCards('cards-cer',[['Instrumentos',rows.length,'bonos CER','var(--cer)'],['Spread real prom',fP(avgSp),'+CER','var(--cer)'],['TIR total prom',fP(avgTt),'nominal anual','var(--tir-total)'],['Duration prom',f2(avgD),'años mod.','var(--text)']]);
   mkChart('chart-cer',[
     {label:'Spread real (+CER)',data:spread,backgroundColor:'rgba(29,158,117,.8)',borderColor:'#1D9E75',pointRadius:6,pointHoverRadius:8},
@@ -570,6 +601,8 @@ function renderTASA(){
   if(!rows.length)return;
   const avgTir=rows.reduce((s,r)=>s+(r.tna||r.tir),0)/rows.length;
   const avgD=rows.reduce((s,r)=>s+r.dur,0)/rows.length;
+  // Guardar en cache para cauciones
+  calcCache.tasa=rows.map(r=>({ticker:r.ticker,tir:r.tna||r.tir,tirTotal:null,dur:r.dur,tipo:r.isLec?'Lecap':'Boncap'}));
   mkCards('cards-tasa',[['Lecap',rows.filter(r=>r.isLec).length,'letras ZC','var(--tasa)'],['Boncap',rows.filter(r=>!r.isLec).length,'con cupón','var(--tasa)'],['TNA/TIR prom',fP(avgTir),'efectiva','var(--tasa)'],['Duration prom',f2(avgD),'años mod.']]);
   mkChart('chart-tasa',[
     {label:'Lecap (TNA)',data:dataLec,backgroundColor:'rgba(55,138,221,.85)',borderColor:'#378ADD',pointRadius:7,pointHoverRadius:9},
@@ -612,6 +645,8 @@ function renderUSD(){
   if(!rows.length)return;
   const avgTir=rows.reduce((s,r)=>s+r.tir,0)/rows.length;
   const avgD=rows.reduce((s,r)=>s+r.dur,0)/rows.length;
+  // Guardar en cache para cauciones
+  calcCache.usd=rows.map(r=>({ticker:r.ticker,tir:r.tir,dur:r.dur,nombre:r.ticker,tipo:r.ley==='NY'?'Soberano NY':'Soberano ARG'}));
   mkCards('cards-usd',[['Ley NY',rows.filter(r=>r.ley==='NY').length,'globales','var(--usd)'],['Ley ARG',rows.filter(r=>r.ley!=='NY').length,'locales','var(--usd)'],['TIR USD prom',fP(avgTir),'anual','var(--usd)'],['Duration prom',f2(avgD),'años mod.']]);
   mkChart('chart-usd',[
     {label:'Ley NY',data:dataNY,backgroundColor:'rgba(186,117,23,.9)',borderColor:'#BA7517',pointRadius:7,pointHoverRadius:9},
@@ -650,6 +685,8 @@ function renderONS(){
   }
   if(!rows.length)return;
   rows.sort((a,b)=>b.tir-a.tir);
+  // Guardar en cache para cauciones
+  calcCache.ons=rows.map(r=>({ticker:r.ticker,tir:r.tir,dur:r.dur,nombre:r.nombre||r.ticker,tipo:'ON Corp'}));
   const avgTir=rows.reduce((s,r)=>s+r.tir,0)/rows.length;
   const avgD=rows.reduce((s,r)=>s+r.dur,0)/rows.length;
   const best=rows[0];
@@ -744,23 +781,23 @@ function calcArbitraje(){
   const plazo=parseInt(document.getElementById('a-plazo').value)||1;
   const cft=calcCFT(tasaCauc,plazo,broker,byma,ivaBr,ivaDM);
   const cftTotal=tasaCauc+cft.costoTNA;
-  document.getElementById('tbody-arb').innerHTML=Object.entries(TIRS_ARB).map(([tk,b])=>{
-    // Intentar usar precio real si está disponible
-    const {price:pReal}=getPrice(tk);
-    if(pReal&&!isNaN(pReal)){
-      // recalcular TIR desde precio real
-    }
+  // Usar calcCache (precios reales calculados) con fallback a TIRS_ARB hardcodeados
+  const instrUSD = calcCache.usd.length || calcCache.ons.length
+    ? [...calcCache.usd, ...calcCache.ons]
+    : Object.entries(TIRS_ARB).map(([tk,b])=>({ticker:tk,tir:b.tir,dur:b.dur,nombre:b.nombre,tipo:b.tipo}));
+
+  document.getElementById('tbody-arb').innerHTML=instrUSD.map(b=>{
     const spread=b.tir-cftTotal;
     const breakeven=b.tir-cft.costoTNA;
     const conviene=spread>0;
     const ganancia=capital*(spread/100)*(horizonte/365);
     return `<tr class="${conviene?'best':''}">
-      <td class="tk">${tk}</td>
-      <td style="font-size:9px">${b.nombre}</td>
-      <td class="v-text3" style="font-size:9px">${b.tipo}</td>
+      <td class="tk">${b.ticker}</td>
+      <td style="font-size:9px">${b.nombre||b.ticker}</td>
+      <td class="v-text3" style="font-size:9px">${b.tipo||''}</td>
       <td class="v-usd">${fP(b.tir)}</td>
       <td>${f2(b.dur)}</td>
-      <td class="v-red" style="color:var(--red)">${fP(cftTotal)}</td>
+      <td style="color:var(--red)">${fP(cftTotal)}</td>
       <td style="color:${conviene?'var(--green)':'var(--red)'};font-weight:500">${fP(spread)}</td>
       <td class="v-acc">${fP(breakeven)}</td>
       <td style="color:${conviene?'var(--green)':'var(--red)'}">U$S${Math.round(Math.abs(ganancia)).toLocaleString('es-AR')}</td>
@@ -825,16 +862,22 @@ function calcSpread(){
   const cftTotalUSD=tasaUSD+cftUSD.costoTNA;
   document.getElementById('titulo-ars').textContent=`Instrumentos en PESOS — spread vs caución ARS (CFT: ${fP(cftTotalARS)})`;
   document.getElementById('titulo-usd').textContent=`Instrumentos en USD — spread vs caución USD (CFT: ${fP(cftTotalUSD)})`;
-  document.getElementById('tbody-sp-ars').innerHTML=Object.entries(TIRS_ARS_REF).sort((a,b)=>{
-    const ta=a[1].tirTotal||a[1].tir,tb=b[1].tirTotal||b[1].tir;return tb-ta;
-  }).map(([tk,b])=>{
+  // Usar calcCache para ARS (CER + Tasa fija) con fallback a TIRS_ARS_REF
+  const instrARS = (calcCache.ars.length || calcCache.tasa.length)
+    ? [...calcCache.ars, ...calcCache.tasa]
+    : Object.entries(TIRS_ARS_REF).map(([tk,b])=>({ticker:tk,tir:b.tir,tirTotal:b.tirTotal||null,dur:b.dur,tipo:b.tipo}));
+
+  document.getElementById('tbody-sp-ars').innerHTML=instrARS.slice().sort((a,b)=>{
+    const ta=a.tirTotal||a.tir,tb=b.tirTotal||b.tir;return tb-ta;
+  }).map(b=>{
+    const tk=b.ticker;
     const tir=b.tirTotal||b.tir;
     const spread=tir-cftTotalARS;
     const breakeven=tir-cftARS.costoTNA;
     const conviene=spread>0;
     return `<tr class="${conviene?'best':''}">
       <td class="tk">${tk}</td>
-      <td style="font-size:9px">${b.tipo}</td>
+      <td style="font-size:9px">${b.tipo||''}</td>
       <td style="color:${b.tirTotal?'var(--tir-total)':'var(--tasa)'}">${fP(tir)}${b.tirTotal?'<span style="font-size:8px;color:var(--text3)"> (total)</span>':''}</td>
       <td style="color:var(--red)">${fP(cftTotalARS)}</td>
       <td style="color:${conviene?'var(--green)':'var(--red)'};font-weight:500">${fP(spread)}</td>
@@ -843,13 +886,17 @@ function calcSpread(){
       <td><span class="badge ${conviene?'bg':'br'}">${conviene?'▲ SPREAD +':'▼ NEGATIVO'}</span></td>
     </tr>`;
   }).join('');
-  document.getElementById('tbody-sp-usd').innerHTML=Object.entries(TIRS_ARB).sort((a,b)=>b[1].tir-a[1].tir).map(([tk,b])=>{
+  const instrUSD2 = (calcCache.usd.length||calcCache.ons.length)
+    ? [...calcCache.usd,...calcCache.ons]
+    : Object.entries(TIRS_ARB).map(([tk,b])=>({ticker:tk,tir:b.tir,dur:b.dur,tipo:b.tipo}));
+  document.getElementById('tbody-sp-usd').innerHTML=instrUSD2.slice().sort((a,b)=>b.tir-a.tir).map(b=>{
+    const tk=b.ticker;
     const spread=b.tir-cftTotalUSD;
     const breakeven=b.tir-cftUSD.costoTNA;
     const conviene=spread>0;
     return `<tr class="${conviene?'best':''}">
       <td class="tk">${tk}</td>
-      <td style="font-size:9px">${b.tipo}</td>
+      <td style="font-size:9px">${b.tipo||''}</td>
       <td class="v-usd">${fP(b.tir)}</td>
       <td style="color:var(--red)">${fP(cftTotalUSD)}</td>
       <td style="color:${conviene?'var(--green)':'var(--red)'};font-weight:500">${fP(spread)}</td>
