@@ -319,9 +319,15 @@ table.mx td.dg{background:rgba(255,255,255,0.02);color:var(--text3)}
 <div class="panel" id="panel-ons-rank">
   <div class="cards c4" id="cards-onsrank"></div>
 
-  <!-- FILTRO EMISORES -->
-  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
-    <span style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.05em">Emisores:</span>
+  <!-- FILTROS -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
+    <!-- Ley -->
+    <span style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;text-transform:uppercase">Ley:</span>
+    <label class="ons-chk" data-ley="local"><input type="checkbox" checked onchange="renderONSRank()"> Local</label>
+    <label class="ons-chk" data-ley="NY"><input type="checkbox" checked onchange="renderONSRank()"> NY</label>
+    <div style="width:1px;height:16px;background:var(--border);margin:0 4px"></div>
+    <!-- Emisores -->
+    <span style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;text-transform:uppercase">Emisor:</span>
     <label class="ons-chk" data-em="YPF"><input type="checkbox" checked onchange="renderONSRank()"> YPF</label>
     <label class="ons-chk" data-em="Pampa"><input type="checkbox" checked onchange="renderONSRank()"> Pampa</label>
     <label class="ons-chk" data-em="TGS"><input type="checkbox" checked onchange="renderONSRank()"> TGS</label>
@@ -333,10 +339,18 @@ table.mx td.dg{background:rgba(255,255,255,0.02);color:var(--text3)}
     <label class="ons-chk" data-em="Tecpetrol"><input type="checkbox" onchange="renderONSRank()"> Tecpetrol</label>
     <label class="ons-chk" data-em="Loma Negra"><input type="checkbox" onchange="renderONSRank()"> Loma Negra</label>
     <label class="ons-chk" data-em="Genneia"><input type="checkbox" onchange="renderONSRank()"> Genneia</label>
-    <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
-      <span style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace">MD máx:</span>
-      <input type="number" id="onsrank-md-max" value="5" step="0.5" min="0.5" max="15" style="width:55px;font-family:'DM Mono',monospace;font-size:11px;background:var(--card-bg);border:1px solid var(--border);color:var(--text1);padding:3px 6px;border-radius:4px" oninput="renderONSRank()">
-    </div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+    <!-- Año vencimiento -->
+    <span style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;text-transform:uppercase">Vto año:</span>
+    <label class="ons-chk" data-yr="2026"><input type="checkbox" checked onchange="renderONSRank()"> 2026</label>
+    <label class="ons-chk" data-yr="2027"><input type="checkbox" checked onchange="renderONSRank()"> 2027</label>
+    <label class="ons-chk" data-yr="2028"><input type="checkbox" checked onchange="renderONSRank()"> 2028</label>
+    <label class="ons-chk" data-yr="2029"><input type="checkbox" checked onchange="renderONSRank()"> 2029</label>
+    <label class="ons-chk" data-yr="2030+"><input type="checkbox" checked onchange="renderONSRank()"> 2030+</label>
+    <div style="width:1px;height:16px;background:var(--border);margin:0 4px"></div>
+    <span style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace">MD máx:</span>
+    <input type="number" id="onsrank-md-max" value="5" step="0.5" min="0.5" max="15" style="width:55px;font-family:'DM Mono',monospace;font-size:11px;background:var(--card-bg);border:1px solid var(--border);color:var(--text1);padding:3px 6px;border-radius:4px" oninput="renderONSRank()">
   </div>
 
   <!-- TABLA RANKING -->
@@ -346,18 +360,19 @@ table.mx td.dg{background:rgba(255,255,255,0.02);color:var(--text3)}
       <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">
         Ranking por Carry/MD (TIR ÷ Duration) — mayor = más rendimiento por año de riesgo
       </div>
-      <div class="table-wrap" style="max-height:calc(100vh - 320px)">
+      <div class="table-wrap" style="max-height:calc(100vh - 360px)">
         <table id="tbl-onsrank"><thead><tr>
           <th style="text-align:left">#</th>
           <th style="text-align:left">Ticker</th>
           <th style="text-align:left">Emisor</th>
           <th>Rating</th>
+          <th>Ley</th>
           <th>Vto</th>
+          <th>Cupón</th>
           <th>P.Limpio</th>
           <th>TIR USD</th>
           <th>MD</th>
           <th>Carry/MD</th>
-          <th>TEM</th>
         </tr></thead><tbody id="tbody-onsrank"></tbody></table>
       </div>
     </div>
@@ -365,9 +380,9 @@ table.mx td.dg{background:rgba(255,255,255,0.02);color:var(--text3)}
 
   <!-- MATRIZ DE ARBITRAJE -->
   <div class="arb-box">
-    <div class="arb-box-title">🔀 Matriz de Arbitraje — Spread TIR (COL gana sobre FILA)</div>
+    <div class="arb-box-title">🔀 Matriz de Arbitraje — Spread TIR % (COL − FILA)</div>
     <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:8px">
-      Cada celda = TIR(col) − TIR(fila) en puntos básicos. <span style="color:var(--green)">Verde</span> = ventaja de pasar a la columna. Orden: MD corta → larga. Solo primera línea filtrada.
+      Cada celda = TIR(col) − TIR(fila) en %. <span style="color:var(--green)">Verde</span> = conviene rotar a la columna. Orden: MD corta → larga.
     </div>
     <div class="matrix-wrap" id="mxrank-ons"></div>
   </div>
@@ -925,19 +940,49 @@ const ON_EMISOR_MAP = {
 };
 
 // ==================== RENDER ONs RANKING ====================
+function calcCupon(ticker){
+  // Calcula cupón anual aproximado desde los flujos intermedios del CFG
+  const b=CFG.ons[ticker];
+  if(!b||!b.flujos||b.flujos.length<2)return null;
+  // Flujos intermedios (sin el último que incluye amortización)
+  const intermedios=b.flujos.slice(0,-1).map(f=>f.monto).filter(m=>m<0.5);
+  if(!intermedios.length)return null;
+  // Promedio de cupones intermedios × frecuencia anual estimada
+  const avgCupon=intermedios.reduce((s,v)=>s+v,0)/intermedios.length;
+  // Estimar frecuencia: si hay >8 flujos → trimestral(4), entre 4-8 → semestral(2), ≤3 → anual(1)
+  const freq=intermedios.length>8?4:intermedios.length>3?2:1;
+  return avgCupon*freq*100; // en porcentaje anual
+}
+
 function renderONSRank(){
-  // Qué emisores están tildados
-  const checked=new Set([...document.querySelectorAll('.ons-chk input:checked')]
+  // Filtros activos
+  const checkedEm=new Set([...document.querySelectorAll('.ons-chk[data-em] input:checked')]
     .map(i=>i.closest('[data-em]').dataset.em));
+  const checkedLey=new Set([...document.querySelectorAll('.ons-chk[data-ley] input:checked')]
+    .map(i=>i.closest('[data-ley]').dataset.ley));
+  const checkedYr=new Set([...document.querySelectorAll('.ons-chk[data-yr] input:checked')]
+    .map(i=>i.closest('[data-yr]').dataset.yr));
   const mdMax=parseFloat(document.getElementById('onsrank-md-max').value)||5;
 
-  // Filtrar calcCache.ons (ya calculado con precios reales)
+  function matchYr(vto){
+    const y=parseInt((vto||'').substring(0,4));
+    if(checkedYr.has(String(y)))return true;
+    if(y>=2030&&checkedYr.has('2030+'))return true;
+    return false;
+  }
+
+  // Enriquecer con ley y vto desde CFG
   const rows=calcCache.ons
     .filter(r=>{
+      const b=CFG.ons[r.ticker];
       const grp=ON_EMISOR_MAP[r.nombre]||r.nombre;
-      return checked.has(grp) && r.dur<=mdMax && r.dur>0 && !isNaN(r.tir);
+      const ley=(b&&b.ley)||'local';
+      return checkedEm.has(grp) && checkedLey.has(ley) && matchYr(b&&b.vencimiento) && r.dur<=mdMax && r.dur>0 && !isNaN(r.tir);
     })
-    .map(r=>({...r, rating:ON_RATINGS[r.ticker]||'—', carry:r.tir/r.dur}))
+    .map(r=>{
+      const b=CFG.ons[r.ticker]||{};
+      return {...r, rating:ON_RATINGS[r.ticker]||'—', carry:r.tir/r.dur, ley:b.ley||'local', vto:b.vencimiento||'', cupon:calcCupon(r.ticker)};
+    })
     .sort((a,b)=>b.carry-a.carry); // ranking por carry/MD desc
 
   if(!rows.length){
@@ -972,49 +1017,46 @@ function renderONSRank(){
     <td class="tk">${r.ticker}</td>
     <td style="font-size:9px;color:var(--text2)">${r.nombre}</td>
     <td style="text-align:center;font-size:9px;color:var(--green)">${r.rating}</td>
-    <td style="text-align:right;font-size:9px;color:var(--text3)">${(calcCache.ons.find(x=>x.ticker===r.ticker)||{}).dur?r.ticker:''}</td>
+    <td style="text-align:center;font-size:9px;color:${r.ley==='NY'?'var(--usd)':'var(--text3)'}">${r.ley==='NY'?'NY':'ARG'}</td>
+    <td style="text-align:right;font-size:9px;color:var(--text3)">${r.vto?r.vto.substring(0,7):'—'}</td>
+    <td style="text-align:right;color:var(--text2)">${r.cupon!=null?fP(r.cupon):'—'}</td>
     <td style="text-align:right;color:var(--accent)">${f2(r.pLimpio||0)}</td>
     <td style="text-align:right;color:var(--ons)">${fP(r.tir)}</td>
     <td style="text-align:right">${f2(r.dur)}</td>
     <td style="text-align:right;color:var(--accent);font-weight:500">${f2(r.carry)}</td>
-    <td style="text-align:right;color:var(--text3)">${fP(((Math.pow(1+r.tir/100,1/12)-1)*100))}</td>
   </tr>`).join('');
 
-  // Matriz de arbitraje — ordenada por MD asc
+  // Matriz de arbitraje — ordenada por MD asc, spread en %
   const sorted=[...rows].sort((a,b)=>a.dur-b.dur);
   let mx=`<div style="overflow:auto"><table style="border-collapse:collapse;font-family:'DM Mono',monospace;font-size:9.5px;min-width:max-content">`;
-  // Header
   mx+=`<thead><tr><th style="padding:5px 8px;background:#171b24;color:var(--text3);border:1px solid var(--border);white-space:nowrap">FILA \\ COL</th>`;
-  sorted.forEach(c=>mx+=`<th style="padding:5px 8px;background:#171b24;color:var(--ons);border:1px solid var(--border);white-space:nowrap">${c.ticker}<br><span style="color:var(--text3);font-size:8px">${f2(c.dur)}y</span></th>`);
+  sorted.forEach(c=>mx+=`<th style="padding:5px 8px;background:#171b24;color:var(--ons);border:1px solid var(--border);white-space:nowrap">${c.ticker}<br><span style="color:var(--text3);font-size:8px">${f2(c.dur)}y · ${c.ley==='NY'?'NY':'ARG'}</span></th>`);
   mx+=`</tr></thead><tbody>`;
-  // Rows
   sorted.forEach(row=>{
-    mx+=`<tr><td style="padding:5px 8px;background:#171b24;color:var(--ons);border:1px solid var(--border);white-space:nowrap;font-weight:500">${row.ticker}<br><span style="color:var(--text3);font-size:8px">${fP(row.tir)}</span></td>`;
+    mx+=`<tr><td style="padding:5px 8px;background:#171b24;color:var(--ons);border:1px solid var(--border);white-space:nowrap;font-weight:500">${row.ticker}<br><span style="color:var(--text3);font-size:8px">${fP(row.tir)} · ${row.vto?row.vto.substring(0,7):'—'}</span></td>`;
     sorted.forEach(col=>{
       if(col.ticker===row.ticker){
         mx+=`<td style="padding:5px 8px;border:1px solid var(--border);background:rgba(255,255,255,.03);text-align:center;color:var(--text3)">—</td>`;
         return;
       }
-      const diff=(col.tir-row.tir); // col gana sobre fila
-      const bps=Math.round(diff*100); // en bps
+      const diff=col.tir-row.tir; // en %
+      const sign=diff>=0?'+':'';
       if(diff>0){
-        const intensity=Math.min(diff/3,1); // normaliza hasta 3%
+        const intensity=Math.min(diff/3,1);
         const bg=`rgba(39,174,96,${0.08+intensity*0.25})`;
-        mx+=`<td style="padding:5px 8px;border:1px solid var(--border);text-align:right;background:${bg};color:var(--green);font-weight:500">+${bps}bps</td>`;
+        mx+=`<td style="padding:5px 8px;border:1px solid var(--border);text-align:right;background:${bg};color:var(--green);font-weight:500">${sign}${f2(diff)}%</td>`;
       } else {
-        mx+=`<td style="padding:5px 8px;border:1px solid var(--border);text-align:right;color:var(--text3)">${bps}bps</td>`;
+        mx+=`<td style="padding:5px 8px;border:1px solid var(--border);text-align:right;color:var(--text3)">${sign}${f2(diff)}%</td>`;
       }
     });
     mx+=`</tr>`;
   });
   mx+=`</tbody></table></div>`;
-  // Leyenda carry
   mx+=`<div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:8px">
-    Carry/MD ranking: ${sorted.sort((a,b)=>b.carry-a.carry).slice(0,3).map((r,i)=>`<span style="color:var(--${i===0?'accent':i===1?'green':'text2'})">${i+1}°${r.ticker} (${f2(r.carry)})</span>`).join(' · ')}
+    Carry/MD: ${[...rows].sort((a,b)=>b.carry-a.carry).slice(0,3).map((r,i)=>`<span style="color:var(--${i===0?'accent':i===1?'green':'text2'})">${i+1}° ${r.ticker} (${f2(r.carry)})</span>`).join(' · ')}
   </div>`;
   document.getElementById('mxrank-ons').innerHTML=mx;
 }
-
 
 function calcCFT(tasaTNA,plazo,broker90d,bymaAnual,ivaBr,ivaDM){
   const costoBr=(broker90d/100)*(plazo/90)*(1+ivaBr/100);
@@ -1449,3 +1491,4 @@ window.addEventListener('DOMContentLoaded',()=>loadAll());
 </script>
 </body>
 </html>
+      
