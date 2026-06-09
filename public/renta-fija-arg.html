@@ -126,6 +126,8 @@ table.mx td.dg{background:rgba(255,255,255,0.02);color:var(--text3)}
 .hx1{background:rgba(255,255,255,0.03)}.hxn{background:rgba(224,80,80,0.07)}
 .arb-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;margin-top:14px}
 .arb-box-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.ons-chk{display:inline-flex;align-items:center;gap:4px;font-family:'DM Mono',monospace;font-size:10px;color:var(--text2);cursor:pointer;padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--card-bg)}
+.ons-chk:has(input:checked){border-color:var(--ons);color:var(--ons)}
 .search-box{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .search-box input{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:5px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:10px;outline:none;width:200px}
 .search-box input:focus{border-color:var(--border2)}
@@ -159,7 +161,7 @@ table.mx td.dg{background:rgba(255,255,255,0.02);color:var(--text3)}
   <span>Fuentes:</span>
   <span class="pill"><span class="dot ref" id="dotCER"></span><span id="lblCER">CER: —</span></span>
   <span class="pill"><span class="dot ref" id="dotD912"></span><span id="lblD912">data912: —</span></span>
-  <span class="pill"><span class="dot ok"></span><span>REM abr-2026</span></span>
+  <span class="pill"><span class="dot ok"></span><span>REM may-2026</span></span>
 </div>
 
 <!-- TABS -->
@@ -168,6 +170,7 @@ table.mx td.dg{background:rgba(255,255,255,0.02);color:var(--text3)}
   <div class="tab tasa" onclick="switchTab('tasa',this)">TASA FIJA</div>
   <div class="tab usd" onclick="switchTab('usd',this)">USD</div>
   <div class="tab ons" onclick="switchTab('ons',this)">ONs CORP</div>
+  <div class="tab ons" onclick="switchTab('ons-rank',this)">ONs RANKING</div>
   <div class="tab cau" onclick="switchTab('renovaciones',this)">Renovaciones</div>
   <div class="tab cau" onclick="switchTab('arbitraje',this)">Arbitraje USD</div>
   <div class="tab cau" onclick="switchTab('spread',this)">Spread Apalancado</div>
@@ -177,7 +180,7 @@ table.mx td.dg{background:rgba(255,255,255,0.02);color:var(--text3)}
 
 <!-- PANEL CER -->
 <div class="panel cer active" id="panel-cer">
-  <div class="rem-banner"><span class="lbl">REM abr-2026:</span><span id="remTxt">—</span><span style="margin-left:auto" id="cerTxt">CER: —</span></div>
+  <div class="rem-banner"><span class="lbl">REM may-2026:</span><span id="remTxt">—</span><span style="margin-left:auto" id="cerTxt">CER: —</span></div>
   <div class="cards c4" id="cards-cer"></div>
   <div class="viz-row">
     <div class="chart-box"><div class="chart-title">Duration Mod. vs Spread / TIR total</div><canvas id="chart-cer"></canvas></div>
@@ -281,10 +284,12 @@ table.mx td.dg{background:rgba(255,255,255,0.02);color:var(--text3)}
 <!-- PANEL ONs -->
 <div class="panel ons" id="panel-ons">
   <div class="cards c4" id="cards-ons"></div>
-  <div class="viz-row">
+  <div style="display:grid;grid-template-columns:340px 1fr;gap:10px;margin-bottom:12px;align-items:start">
     <div class="chart-box"><div class="chart-title">Duration Mod. vs TIR USD</div><canvas id="chart-ons"></canvas></div>
-    <div class="search-box"><input type="text" placeholder="Buscar ONs..." oninput="ftbl('tbl-ons',this.value)"/></div>
-    <div class="table-wrap"><table id="tbl-ons"><thead></thead><tbody></tbody></table></div>
+    <div>
+      <div class="search-box" style="margin-bottom:6px"><input type="text" placeholder="Buscar ONs..." oninput="ftbl('tbl-ons',this.value)" style="width:100%;box-sizing:border-box"/></div>
+      <div class="table-wrap" style="max-height:calc(100vh - 280px)"><table id="tbl-ons"><thead></thead><tbody></tbody></table></div>
+    </div>
   </div>
 
   <div class="arb-box">
@@ -308,6 +313,64 @@ table.mx td.dg{background:rgba(255,255,255,0.02);color:var(--text3)}
     <div class="matrix-wrap" id="mxmat-ao"></div>
   </div>
 
+</div>
+
+<!-- PANEL ONs RANKING -->
+<div class="panel" id="panel-ons-rank">
+  <div class="cards c4" id="cards-onsrank"></div>
+
+  <!-- FILTRO EMISORES -->
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+    <span style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.05em">Emisores:</span>
+    <label class="ons-chk" data-em="YPF"><input type="checkbox" checked onchange="renderONSRank()"> YPF</label>
+    <label class="ons-chk" data-em="Pampa"><input type="checkbox" checked onchange="renderONSRank()"> Pampa</label>
+    <label class="ons-chk" data-em="TGS"><input type="checkbox" checked onchange="renderONSRank()"> TGS</label>
+    <label class="ons-chk" data-em="Telecom"><input type="checkbox" checked onchange="renderONSRank()"> Telecom</label>
+    <label class="ons-chk" data-em="Galicia"><input type="checkbox" checked onchange="renderONSRank()"> Galicia</label>
+    <label class="ons-chk" data-em="Macro"><input type="checkbox" checked onchange="renderONSRank()"> Macro</label>
+    <label class="ons-chk" data-em="Vista"><input type="checkbox" onchange="renderONSRank()"> Vista</label>
+    <label class="ons-chk" data-em="Pan American"><input type="checkbox" onchange="renderONSRank()"> PAE</label>
+    <label class="ons-chk" data-em="Tecpetrol"><input type="checkbox" onchange="renderONSRank()"> Tecpetrol</label>
+    <label class="ons-chk" data-em="Loma Negra"><input type="checkbox" onchange="renderONSRank()"> Loma Negra</label>
+    <label class="ons-chk" data-em="Genneia"><input type="checkbox" onchange="renderONSRank()"> Genneia</label>
+    <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+      <span style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace">MD máx:</span>
+      <input type="number" id="onsrank-md-max" value="5" step="0.5" min="0.5" max="15" style="width:55px;font-family:'DM Mono',monospace;font-size:11px;background:var(--card-bg);border:1px solid var(--border);color:var(--text1);padding:3px 6px;border-radius:4px" oninput="renderONSRank()">
+    </div>
+  </div>
+
+  <!-- TABLA RANKING -->
+  <div style="display:grid;grid-template-columns:300px 1fr;gap:10px;margin-bottom:14px;align-items:start">
+    <div class="chart-box"><div class="chart-title">MD vs TIR — 1ª Línea</div><canvas id="chart-onsrank"></canvas></div>
+    <div>
+      <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">
+        Ranking por Carry/MD (TIR ÷ Duration) — mayor = más rendimiento por año de riesgo
+      </div>
+      <div class="table-wrap" style="max-height:calc(100vh - 320px)">
+        <table id="tbl-onsrank"><thead><tr>
+          <th style="text-align:left">#</th>
+          <th style="text-align:left">Ticker</th>
+          <th style="text-align:left">Emisor</th>
+          <th>Rating</th>
+          <th>Vto</th>
+          <th>P.Limpio</th>
+          <th>TIR USD</th>
+          <th>MD</th>
+          <th>Carry/MD</th>
+          <th>TEM</th>
+        </tr></thead><tbody id="tbody-onsrank"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATRIZ DE ARBITRAJE -->
+  <div class="arb-box">
+    <div class="arb-box-title">🔀 Matriz de Arbitraje — Spread TIR (COL gana sobre FILA)</div>
+    <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:8px">
+      Cada celda = TIR(col) − TIR(fila) en puntos básicos. <span style="color:var(--green)">Verde</span> = ventaja de pasar a la columna. Orden: MD corta → larga. Solo primera línea filtrada.
+    </div>
+    <div class="matrix-wrap" id="mxrank-ons"></div>
+  </div>
 </div>
 
 <!-- PANEL RENOVACIONES -->
@@ -778,8 +841,8 @@ function renderONS(){
     const t=yrs(b.vencimiento);if(t<=0)continue;
     const flows=buildFlowsON(tk);if(!flows)continue;
     const {price:pRaw,src}=getPrice(b.ticker_d912);
-    const pLimpio=pRaw||npv(flows,0.07);
-    if(!pLimpio)continue;
+    if(!pRaw)continue; // sin precio real no calculamos TIR (evita TIR=7% falsa)
+    const pLimpio=pRaw;
     const r=calcInstr(tk,flows,pLimpio,0);if(!r)continue;
     r.vto=b.vencimiento;r.src=src;r.nombre=b.nombre;
     rows.push(r);
@@ -787,7 +850,7 @@ function renderONS(){
   }
   if(!rows.length)return;
   rows.sort((a,b)=>b.tir-a.tir);
-  calcCache.ons=rows.map(r=>({ticker:r.ticker,tir:r.tir,dur:r.dur,nombre:r.nombre||r.ticker,tipo:'ON Corp'}));
+  calcCache.ons=rows.map(r=>({ticker:r.ticker,tir:r.tir,dur:r.dur,nombre:r.nombre||r.ticker,tipo:'ON Corp',pLimpio:r.pLimpio}));
   const avgTir=rows.reduce((s,r)=>s+r.tir,0)/rows.length;
   const avgD=rows.reduce((s,r)=>s+r.dur,0)/rows.length;
   const best=rows[0];
@@ -810,7 +873,138 @@ function renderONS(){
   );
 }
 
-// ==================== CAUCIONES UTILS ====================
+// ==================== RATINGS MAP ====================
+const ON_RATINGS = {
+  // YPF
+  'YM34':'B+','YM37':'B+','YM38':'B+','YM40':'B+','YMCX':'B+','YMCY':'B+','YMCZ':'B+',
+  // Pampa Energía
+  'MGCN':'BB-','MGCO':'BB-','MGCR':'BB-',
+  // TGS
+  'TSC4':'BB-',
+  // Telecom (no está en CFG, se agrega si se suman tickers)
+  // Banco Galicia
+  'BYCH':'B+','BYCV':'B+','BYCW':'B+',
+  // Banco Macro
+  'BACG':'B+','BACH':'B+',
+  // Vista Energy
+  'VSCO':'BB-','VSCP':'BB-','VSCT':'BB-','VSCW':'BB-',
+  // Pan American Energy
+  'PN35':'BB','PN36':'BB',
+  // Tecpetrol
+  'TTC8':'BB-','TTCB':'BB-','TTC':'BB-',
+  // Loma Negra
+  'LOC5':'BB-',
+  // Genneia
+  'GN47':'B+','GN49':'B+',
+};
+
+// Mapa emisor → grupo para filtros
+const ON_EMISOR_MAP = {
+  'YPF':'YPF',
+  'Pampa Energía':'Pampa','Pampa':'Pampa',
+  'TGS':'TGS',
+  'Telecom':'Telecom',
+  'Banco Galicia':'Galicia','Galicia':'Galicia',
+  'Banco Macro':'Macro','Macro':'Macro',
+  'Vista Energy':'Vista','Vista':'Vista',
+  'Pan American Energy':'Pan American','Pan American':'Pan American',
+  'Tecpetrol':'Tecpetrol',
+  'Loma Negra':'Loma Negra',
+  'Genneia':'Genneia',
+};
+
+// ==================== RENDER ONs RANKING ====================
+function renderONSRank(){
+  // Qué emisores están tildados
+  const checked=new Set([...document.querySelectorAll('.ons-chk input:checked')]
+    .map(i=>i.closest('[data-em]').dataset.em));
+  const mdMax=parseFloat(document.getElementById('onsrank-md-max').value)||5;
+
+  // Filtrar calcCache.ons (ya calculado con precios reales)
+  const rows=calcCache.ons
+    .filter(r=>{
+      const grp=ON_EMISOR_MAP[r.nombre]||r.nombre;
+      return checked.has(grp) && r.dur<=mdMax && r.dur>0 && !isNaN(r.tir);
+    })
+    .map(r=>({...r, rating:ON_RATINGS[r.ticker]||'—', carry:r.tir/r.dur}))
+    .sort((a,b)=>b.carry-a.carry); // ranking por carry/MD desc
+
+  if(!rows.length){
+    document.getElementById('tbody-onsrank').innerHTML=
+      '<tr><td colspan="10" style="text-align:center;color:var(--text3);padding:20px">Sin datos — cargá precios primero (botón Actualizar)</td></tr>';
+    mkCards('cards-onsrank',[['ONs filtradas','0','—','var(--ons)'],['—','—','—'],['—','—','—'],['—','—','—']]);
+    return;
+  }
+
+  // Cards resumen
+  const best=rows[0];
+  const avgTir=rows.reduce((s,r)=>s+r.tir,0)/rows.length;
+  const avgMD=rows.reduce((s,r)=>s+r.dur,0)/rows.length;
+  mkCards('cards-onsrank',[
+    ['ONs 1ª línea',rows.length,'instrumentos filtrados','var(--ons)'],
+    ['Mayor carry/MD',f2(best.carry),best.ticker,'var(--accent)'],
+    ['TIR promedio',fP(avgTir),'anual USD','var(--ons)'],
+    ['MD promedio',f2(avgMD),'años mod.','var(--text3)'],
+  ]);
+
+  // Gráfico scatter MD vs TIR
+  const scatterData=rows.map(r=>({x:+f2(r.dur),y:+f2(r.tir),lbl:r.ticker}));
+  mkChart('chart-onsrank',[{
+    label:'ONs 1ª línea',data:scatterData,
+    backgroundColor:'rgba(155,89,182,.85)',borderColor:'#9B59B6',
+    pointRadius:5,pointHoverRadius:7
+  }],'Duration Mod.','TIR USD (%)');
+
+  // Tabla ranking
+  document.getElementById('tbody-onsrank').innerHTML=rows.map((r,i)=>`<tr>
+    <td style="color:var(--text3);text-align:right">${i+1}</td>
+    <td class="tk">${r.ticker}</td>
+    <td style="font-size:9px;color:var(--text2)">${r.nombre}</td>
+    <td style="text-align:center;font-size:9px;color:var(--green)">${r.rating}</td>
+    <td style="text-align:right;font-size:9px;color:var(--text3)">${(calcCache.ons.find(x=>x.ticker===r.ticker)||{}).dur?r.ticker:''}</td>
+    <td style="text-align:right;color:var(--accent)">${f2(r.pLimpio||0)}</td>
+    <td style="text-align:right;color:var(--ons)">${fP(r.tir)}</td>
+    <td style="text-align:right">${f2(r.dur)}</td>
+    <td style="text-align:right;color:var(--accent);font-weight:500">${f2(r.carry)}</td>
+    <td style="text-align:right;color:var(--text3)">${fP(((Math.pow(1+r.tir/100,1/12)-1)*100))}</td>
+  </tr>`).join('');
+
+  // Matriz de arbitraje — ordenada por MD asc
+  const sorted=[...rows].sort((a,b)=>a.dur-b.dur);
+  let mx=`<div style="overflow:auto"><table style="border-collapse:collapse;font-family:'DM Mono',monospace;font-size:9.5px;min-width:max-content">`;
+  // Header
+  mx+=`<thead><tr><th style="padding:5px 8px;background:#171b24;color:var(--text3);border:1px solid var(--border);white-space:nowrap">FILA \\ COL</th>`;
+  sorted.forEach(c=>mx+=`<th style="padding:5px 8px;background:#171b24;color:var(--ons);border:1px solid var(--border);white-space:nowrap">${c.ticker}<br><span style="color:var(--text3);font-size:8px">${f2(c.dur)}y</span></th>`);
+  mx+=`</tr></thead><tbody>`;
+  // Rows
+  sorted.forEach(row=>{
+    mx+=`<tr><td style="padding:5px 8px;background:#171b24;color:var(--ons);border:1px solid var(--border);white-space:nowrap;font-weight:500">${row.ticker}<br><span style="color:var(--text3);font-size:8px">${fP(row.tir)}</span></td>`;
+    sorted.forEach(col=>{
+      if(col.ticker===row.ticker){
+        mx+=`<td style="padding:5px 8px;border:1px solid var(--border);background:rgba(255,255,255,.03);text-align:center;color:var(--text3)">—</td>`;
+        return;
+      }
+      const diff=(col.tir-row.tir); // col gana sobre fila
+      const bps=Math.round(diff*100); // en bps
+      if(diff>0){
+        const intensity=Math.min(diff/3,1); // normaliza hasta 3%
+        const bg=`rgba(39,174,96,${0.08+intensity*0.25})`;
+        mx+=`<td style="padding:5px 8px;border:1px solid var(--border);text-align:right;background:${bg};color:var(--green);font-weight:500">+${bps}bps</td>`;
+      } else {
+        mx+=`<td style="padding:5px 8px;border:1px solid var(--border);text-align:right;color:var(--text3)">${bps}bps</td>`;
+      }
+    });
+    mx+=`</tr>`;
+  });
+  mx+=`</tbody></table></div>`;
+  // Leyenda carry
+  mx+=`<div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:8px">
+    Carry/MD ranking: ${sorted.sort((a,b)=>b.carry-a.carry).slice(0,3).map((r,i)=>`<span style="color:var(--${i===0?'accent':i===1?'green':'text2'})">${i+1}°${r.ticker} (${f2(r.carry)})</span>`).join(' · ')}
+  </div>`;
+  document.getElementById('mxrank-ons').innerHTML=mx;
+}
+
+
 function calcCFT(tasaTNA,plazo,broker90d,bymaAnual,ivaBr,ivaDM){
   const costoBr=(broker90d/100)*(plazo/90)*(1+ivaBr/100);
   const costoByma=(bymaAnual/100)*(plazo/365)*(1+ivaDM/100);
@@ -1229,7 +1423,7 @@ async function loadAll(){
     msg.textContent='Calculando CER…';renderCER();
     msg.textContent='Calculando tasa fija…';renderTASA();
     msg.textContent='Calculando soberanos USD…';renderUSD();
-    msg.textContent='Calculando ONs corporativas…';renderONS();
+    msg.textContent='Calculando ONs corporativas…';renderONS();renderONSRank();
     // Secciones nuevas
     renderArb('ac');renderArb('at');renderArb('au');renderArb('ao');
     initCartera('arb',true);initCartera('spread',false);
