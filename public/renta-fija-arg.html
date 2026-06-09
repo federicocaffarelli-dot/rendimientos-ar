@@ -42,7 +42,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .tab{padding:7px 14px;border-radius:6px 6px 0 0;cursor:pointer;font-size:10px;font-weight:500;font-family:'DM Mono',monospace;letter-spacing:.04em;border:1px solid transparent;border-bottom:none;transition:all .15s;color:var(--text3)}
 .tab:hover{color:var(--text2);background:var(--bg2)}
 .tab.active{background:var(--bg2);border-color:var(--border);border-bottom-color:var(--bg2);color:var(--text)}
-.tab.cer.active{color:var(--cer)}.tab.tasa.active{color:var(--tasa)}.tab.usd.active{color:var(--usd)}.tab.ons.active{color:var(--ons)}.tab.cau.active{color:var(--accent)}.tab.mat.active{color:var(--tir-total)}
+.tab.cer.active{color:var(--cer)}.tab.tasa.active{color:var(--tasa)}.tab.usd.active{color:var(--usd)}.tab.ons.active{color:var(--ons)}.tab.cau.active{color:var(--accent)}
 /* CONTENT */
 .content{padding:14px 18px}
 .panel{display:none}.panel.active{display:block}
@@ -113,21 +113,25 @@ tr.best td{background:rgba(29,158,117,.05)}
 .overlay-msg{font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)}
 @media(max-width:860px){.viz-row{grid-template-columns:1fr}.cards.c4{grid-template-columns:repeat(2,1fr)}.ig.g4,.ig.g5{grid-template-columns:repeat(2,1fr)}}
 
-/* === MATRICES === */
-.matrix-wrap{overflow:auto;margin-bottom:16px}
-table.matrix{border-collapse:collapse;font-family:'DM Mono',monospace;font-size:10px;white-space:nowrap}
-table.matrix th{background:#171b24;color:var(--text3);font-size:8.5px;padding:6px 9px;text-align:center;border:1px solid rgba(255,255,255,0.07)}
-table.matrix th.rh{text-align:left;min-width:110px}
-table.matrix td{padding:5px 8px;text-align:center;border:1px solid rgba(255,255,255,0.04);font-size:9.5px}
-table.matrix td.rl{text-align:left;font-weight:500;color:var(--text);background:var(--card-bg);border-right:1px solid rgba(255,255,255,0.1);white-space:nowrap}
-table.matrix td.diag{background:rgba(255,255,255,0.02);color:var(--text3)}
-.h5{background:rgba(29,158,117,0.40)}.h4{background:rgba(29,158,117,0.25)}
-.h3{background:rgba(29,158,117,0.14)}.h2{background:rgba(29,158,117,0.07)}
-.h1{background:rgba(255,255,255,0.03)}
-.hn{background:rgba(224,80,80,0.07)}
-.mat-section{margin-bottom:24px}
-.mat-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--border)}
-.mat-sub{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:10px;line-height:1.5}
+/* === NUEVOS COMPONENTES === */
+.matrix-wrap{overflow:auto;margin-bottom:12px}
+table.mx{border-collapse:collapse;font-family:'DM Mono',monospace;font-size:10px;white-space:nowrap}
+table.mx th{background:#171b24;color:var(--text3);font-size:8px;padding:5px 8px;text-align:center;border:1px solid rgba(255,255,255,0.07)}
+table.mx th.rh{text-align:left;min-width:100px;position:sticky;left:0;z-index:2}
+table.mx td{padding:4px 7px;text-align:center;border:1px solid rgba(255,255,255,0.04);font-size:9px}
+table.mx td.rl{text-align:left;font-weight:500;color:var(--text);background:var(--card-bg);border-right:1px solid rgba(255,255,255,0.1);position:sticky;left:0}
+table.mx td.dg{background:rgba(255,255,255,0.02);color:var(--text3)}
+.hx5{background:rgba(29,158,117,0.40)}.hx4{background:rgba(29,158,117,0.25)}
+.hx3{background:rgba(29,158,117,0.14)}.hx2{background:rgba(29,158,117,0.07)}
+.hx1{background:rgba(255,255,255,0.03)}.hxn{background:rgba(224,80,80,0.07)}
+.arb-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;margin-top:14px}
+.arb-box-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.search-box{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.search-box input{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:5px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:10px;outline:none;width:200px}
+.search-box input:focus{border-color:var(--border2)}
+.search-box input::placeholder{color:var(--text3)}
+.crow{display:grid;grid-template-columns:180px 1fr 90px;gap:8px;align-items:center;margin-bottom:5px}
+.crow select,.crow input{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:5px 8px;color:var(--text);font-family:'DM Mono',monospace;font-size:10px;outline:none;width:100%}
 
 </style>
 </head>
@@ -164,7 +168,6 @@ table.matrix td.diag{background:rgba(255,255,255,0.02);color:var(--text3)}
   <div class="tab tasa" onclick="switchTab('tasa',this)">TASA FIJA</div>
   <div class="tab usd" onclick="switchTab('usd',this)">USD</div>
   <div class="tab ons" onclick="switchTab('ons',this)">ONs CORP</div>
-  <div class="tab mat" onclick="switchTab('matrices',this)">Matrices</div>
   <div class="tab cau" onclick="switchTab('renovaciones',this)">Renovaciones</div>
   <div class="tab cau" onclick="switchTab('arbitraje',this)">Arbitraje USD</div>
   <div class="tab cau" onclick="switchTab('spread',this)">Spread Apalancado</div>
@@ -178,8 +181,37 @@ table.matrix td.diag{background:rgba(255,255,255,0.02);color:var(--text3)}
   <div class="cards c4" id="cards-cer"></div>
   <div class="viz-row">
     <div class="chart-box"><div class="chart-title">Duration Mod. vs Spread / TIR total</div><canvas id="chart-cer"></canvas></div>
+    <div class="search-box"><input type="text" placeholder="Buscar CER..." oninput="ftbl('tbl-cer',this.value)"/></div>
     <div class="table-wrap"><table id="tbl-cer"><thead></thead><tbody></tbody></table></div>
   </div>
+
+  <div class="arb-box">
+    <div class="arb-box-title">⚡ Arbitraje — Caución ARS vs instrumentos</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+      <div class="ifield"><label>Tasa caución ARS TNA %</label><input type="number" id="ac-tasa" value="28" step="0.5" oninput="renderArb('ac')"/></div>
+      <div class="ifield"><label>Broker % c/90d</label><input type="number" id="ac-broker" value="0.6" step="0.01" oninput="renderArb('ac')"/></div>
+      <div class="ifield"><label>BYMA % anual</label><input type="number" id="ac-byma" value="0.045" step="0.001" oninput="renderArb('ac')"/></div>
+      <div class="ifield"><label>Plazo días</label><input type="number" id="ac-plazo" value="1" step="1" oninput="renderArb('ac')"/></div>
+    </div>
+    <div class="search-box"><input type="text" placeholder="Buscar..." oninput="ftbl('tarb-ac',this.value)"/></div>
+    <div class="table-wrap"><table id="tarb-ac"><thead><tr>
+      <th style="text-align:left">Ticker</th><th style="text-align:left">Tipo</th>
+      <th>TIR  total</th>
+      <th>CFT caución</th><th>Spread neto</th><th>Breakeven</th><th>MD</th><th>Estado</th>
+    </tr></thead><tbody id="tbody-arb-ac"></tbody></table></div>
+  </div>
+  <div class="arb-box">
+    <div class="arb-box-title">📊 Matriz — rendimiento acumulado a vencimiento propio</div>
+    <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:8px">Celda = cuánto más rinde la columna vs la fila (COL − FILA). En blanco si la columna no supera. Orden: corto → largo.</div>
+    <div class="matrix-wrap" id="mxmat-ac"></div>
+  </div>
+
+  <div class="arb-box">
+    <div class="arb-box-title">📐 Breakeven inflacionario — CER vs Tasa Fija</div>
+    <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:8px">Inflación mensual promedio que hace indiferente cada par. Verde = CER gana con inflación del REM actual.</div>
+    <div class="matrix-wrap" id="mxbe"></div>
+  </div>
+
 </div>
 
 <!-- PANEL TASA -->
@@ -187,8 +219,31 @@ table.matrix td.diag{background:rgba(255,255,255,0.02);color:var(--text3)}
   <div class="cards c4" id="cards-tasa"></div>
   <div class="viz-row">
     <div class="chart-box"><div class="chart-title">Duration Mod. vs TNA / TIR</div><canvas id="chart-tasa"></canvas></div>
+    <div class="search-box"><input type="text" placeholder="Buscar TASA..." oninput="ftbl('tbl-tasa',this.value)"/></div>
     <div class="table-wrap"><table id="tbl-tasa"><thead></thead><tbody></tbody></table></div>
   </div>
+
+  <div class="arb-box">
+    <div class="arb-box-title">⚡ Arbitraje — Caución ARS vs instrumentos</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+      <div class="ifield"><label>Tasa caución ARS TNA %</label><input type="number" id="at-tasa" value="28" step="0.5" oninput="renderArb('at')"/></div>
+      <div class="ifield"><label>Broker % c/90d</label><input type="number" id="at-broker" value="0.6" step="0.01" oninput="renderArb('at')"/></div>
+      <div class="ifield"><label>BYMA % anual</label><input type="number" id="at-byma" value="0.045" step="0.001" oninput="renderArb('at')"/></div>
+      <div class="ifield"><label>Plazo días</label><input type="number" id="at-plazo" value="1" step="1" oninput="renderArb('at')"/></div>
+    </div>
+    <div class="search-box"><input type="text" placeholder="Buscar..." oninput="ftbl('tarb-at',this.value)"/></div>
+    <div class="table-wrap"><table id="tarb-at"><thead><tr>
+      <th style="text-align:left">Ticker</th><th style="text-align:left">Tipo</th>
+      <th>TIR</th>
+      <th>CFT caución</th><th>Spread neto</th><th>Breakeven</th><th>MD</th><th>Estado</th>
+    </tr></thead><tbody id="tbody-arb-at"></tbody></table></div>
+  </div>
+  <div class="arb-box">
+    <div class="arb-box-title">📊 Matriz — rendimiento acumulado a vencimiento propio</div>
+    <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:8px">Celda = cuánto más rinde la columna vs la fila (COL − FILA). En blanco si la columna no supera. Orden: corto → largo.</div>
+    <div class="matrix-wrap" id="mxmat-at"></div>
+  </div>
+
 </div>
 
 <!-- PANEL USD -->
@@ -196,8 +251,31 @@ table.matrix td.diag{background:rgba(255,255,255,0.02);color:var(--text3)}
   <div class="cards c4" id="cards-usd"></div>
   <div class="viz-row">
     <div class="chart-box"><div class="chart-title">Duration Mod. vs TIR USD</div><canvas id="chart-usd"></canvas></div>
+    <div class="search-box"><input type="text" placeholder="Buscar USD..." oninput="ftbl('tbl-usd',this.value)"/></div>
     <div class="table-wrap"><table id="tbl-usd"><thead></thead><tbody></tbody></table></div>
   </div>
+
+  <div class="arb-box">
+    <div class="arb-box-title">⚡ Arbitraje — Caución USD vs instrumentos</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+      <div class="ifield"><label>Tasa caución USD TNA %</label><input type="number" id="au-tasa" value="1.5" step="0.1" oninput="renderArb('au')"/></div>
+      <div class="ifield"><label>Broker % c/90d</label><input type="number" id="au-broker" value="0.6" step="0.01" oninput="renderArb('au')"/></div>
+      <div class="ifield"><label>BYMA % anual</label><input type="number" id="au-byma" value="0.045" step="0.001" oninput="renderArb('au')"/></div>
+      <div class="ifield"><label>Plazo días</label><input type="number" id="au-plazo" value="1" step="1" oninput="renderArb('au')"/></div>
+    </div>
+    <div class="search-box"><input type="text" placeholder="Buscar..." oninput="ftbl('tarb-au',this.value)"/></div>
+    <div class="table-wrap"><table id="tarb-au"><thead><tr>
+      <th style="text-align:left">Ticker</th><th style="text-align:left">Ley</th>
+      <th>TIR</th>
+      <th>CFT caución</th><th>Spread neto</th><th>Breakeven</th><th>MD</th><th>Estado</th>
+    </tr></thead><tbody id="tbody-arb-au"></tbody></table></div>
+  </div>
+  <div class="arb-box">
+    <div class="arb-box-title">📊 Matriz — rendimiento acumulado a vencimiento propio</div>
+    <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:8px">Celda = cuánto más rinde la columna vs la fila (COL − FILA). En blanco si la columna no supera. Orden: corto → largo.</div>
+    <div class="matrix-wrap" id="mxmat-au"></div>
+  </div>
+
 </div>
 
 <!-- PANEL ONs -->
@@ -205,18 +283,51 @@ table.matrix td.diag{background:rgba(255,255,255,0.02);color:var(--text3)}
   <div class="cards c4" id="cards-ons"></div>
   <div class="viz-row">
     <div class="chart-box"><div class="chart-title">Duration Mod. vs TIR USD</div><canvas id="chart-ons"></canvas></div>
+    <div class="search-box"><input type="text" placeholder="Buscar ONs..." oninput="ftbl('tbl-ons',this.value)"/></div>
     <div class="table-wrap"><table id="tbl-ons"><thead></thead><tbody></tbody></table></div>
   </div>
+
+  <div class="arb-box">
+    <div class="arb-box-title">⚡ Arbitraje — Caución USD vs instrumentos</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+      <div class="ifield"><label>Tasa caución USD TNA %</label><input type="number" id="ao-tasa" value="1.5" step="0.1" oninput="renderArb('ao')"/></div>
+      <div class="ifield"><label>Broker % c/90d</label><input type="number" id="ao-broker" value="0.6" step="0.01" oninput="renderArb('ao')"/></div>
+      <div class="ifield"><label>BYMA % anual</label><input type="number" id="ao-byma" value="0.045" step="0.001" oninput="renderArb('ao')"/></div>
+      <div class="ifield"><label>Plazo días</label><input type="number" id="ao-plazo" value="1" step="1" oninput="renderArb('ao')"/></div>
+    </div>
+    <div class="search-box"><input type="text" placeholder="Buscar..." oninput="ftbl('tarb-ao',this.value)"/></div>
+    <div class="table-wrap"><table id="tarb-ao"><thead><tr>
+      <th style="text-align:left">Ticker</th><th style="text-align:left">Empresa</th>
+      <th>TIR</th>
+      <th>CFT caución</th><th>Spread neto</th><th>Breakeven</th><th>MD</th><th>Estado</th>
+    </tr></thead><tbody id="tbody-arb-ao"></tbody></table></div>
+  </div>
+  <div class="arb-box">
+    <div class="arb-box-title">📊 Matriz — rendimiento acumulado a vencimiento propio</div>
+    <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:8px">Celda = cuánto más rinde la columna vs la fila (COL − FILA). En blanco si la columna no supera. Orden: corto → largo.</div>
+    <div class="matrix-wrap" id="mxmat-ao"></div>
+  </div>
+
 </div>
 
 <!-- PANEL RENOVACIONES -->
 <div class="panel" id="panel-renovaciones">
   <div class="sec-title">Parámetros de la caución</div>
   <div class="ig g4">
-    <div class="ifield"><label>Capital ($)</label><input type="number" id="r-capital" value="10000000" step="100000"/><span class="hint">Monto tomado en caución</span></div>
+    <div class="ifield"><label>Deuda tomada ($)</label><input type="number" id="r-capital" value="10000000" step="100000"/><span class="hint">Capital tomado en caución</span></div>
     <div class="ifield"><label>Tasa diaria (TNA %)</label><input type="number" id="r-tasa-diaria" value="28" step="0.1"/></div>
     <div class="ifield"><label>Tasa semanal (TNA %)</label><input type="number" id="r-tasa-semanal" value="27" step="0.1"/></div>
     <div class="ifield"><label>Horizonte (días)</label><input type="number" id="r-horizonte" value="30" step="1" min="7" max="365"/></div>
+  </div>
+  <div class="costos-box" style="margin-bottom:12px">
+    <div class="costos-title">Costos operativos</div>
+    <div class="ig g5">
+      <div class="ifield"><label>Broker % c/90d</label><input type="number" id="r-broker" value="0.6" step="0.01"/></div>
+      <div class="ifield"><label>BYMA % anual</label><input type="number" id="r-byma" value="0.045" step="0.001"/></div>
+      <div class="ifield"><label>IVA broker %</label><input type="number" id="r-iva-br" value="21" step="1"/></div>
+      <div class="ifield"><label>IVA mercado %</label><input type="number" id="r-iva-dm" value="0" step="1"/></div>
+      <div class="ifield"><label>Plazo renovación</label><input type="number" id="r-plazo" value="1" step="1" min="1"/></div>
+    </div>
   </div>
   <button class="btn" onclick="calcRenovaciones()">Calcular</button>
   <div class="cards c4" id="cards-ren" style="display:none"></div>
@@ -224,9 +335,9 @@ table.matrix td.diag{background:rgba(255,255,255,0.02);color:var(--text3)}
     <div class="sec-title" style="margin-top:8px">Día a día — diario vs semanal</div>
     <div class="table-wrap"><table id="tbl-ren"><thead><tr>
       <th style="text-align:left">Período</th>
-      <th>Cap. Diario ($)</th><th>Ganancia Diario</th>
-      <th>Cap. Semanal ($)</th><th>Ganancia Semanal</th>
-      <th>Diferencia ($)</th><th>Dif. %</th>
+      <th>Deuda Diario ($)</th><th>Intereses Diario</th>
+      <th>Deuda Semanal ($)</th><th>Intereses Semanal</th>
+      <th>Ahorro ($)</th><th>Ahorro %</th>
     </tr></thead><tbody id="tbody-ren"></tbody></table></div>
   </div>
 </div>
@@ -257,6 +368,8 @@ table.matrix td.diag{background:rgba(255,255,255,0.02);color:var(--text3)}
       <th>TIR USD</th><th>Dur.</th><th>CFT caución</th><th>Spread neto</th><th>Breakeven</th><th>Ganancia est.</th><th>Estado</th>
     </tr></thead><tbody id="tbody-arb"></tbody></table>
   </div>
+  <div class="arb-box" id="cartera-wrap-arb" style="margin-top:14px"></div>
+
   <div id="wrap-arb-detalle" style="display:none">
     <div class="divider"></div>
     <div class="sec-title">Sensibilidad: spread vs tasa caución USD</div>
@@ -285,6 +398,8 @@ table.matrix td.diag{background:rgba(255,255,255,0.02);color:var(--text3)}
     <div class="ifield"><label>Tasa caución USD (TNA %)</label><input type="number" id="s-tasa-usd" value="1.5" step="0.1" oninput="document.getElementById('sl-usd').value=this.value;document.getElementById('sv-usd').textContent=this.value+'%';calcSpread()"/></div>
   </div>
   <button class="btn" onclick="calcSpread()">Calcular</button>
+  <div class="arb-box" id="cartera-wrap-spread" style="margin-top:14px;margin-bottom:14px"></div>
+
   <div class="sec-title" id="titulo-ars">Instrumentos en PESOS — spread vs caución ARS</div>
   <div class="table-wrap" style="margin-bottom:14px">
     <table id="tbl-sp-ars"><thead><tr>
@@ -301,88 +416,6 @@ table.matrix td.diag{background:rgba(255,255,255,0.02);color:var(--text3)}
   </div>
 </div>
 
-<!-- PANEL MATRICES -->
-<div class="panel" id="panel-matrices">
-
-  <!-- SELECTOR TIPO -->
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-    <span style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Tasa caución para arbitraje:</span>
-    <div class="field"><label>ARS TNA %</label><input type="number" id="mat-tasa-ars" value="28" step="0.5" style="width:70px" oninput="renderMatrices()"/></div>
-    <div class="field"><label>USD TNA %</label><input type="number" id="mat-tasa-usd" value="1.5" step="0.1" style="width:70px" oninput="renderMatrices()"/></div>
-    <div class="field"><label>Broker % c/90d</label><input type="number" id="mat-broker" value="0.6" step="0.01" style="width:70px" oninput="renderMatrices()"/></div>
-    <div class="field"><label>Plazo días</label><input type="number" id="mat-plazo" value="1" step="1" style="width:55px" oninput="renderMatrices()"/></div>
-    <button class="btn" onclick="renderMatrices()" style="margin-bottom:0">↺ Recalcular</button>
-  </div>
-
-  <!-- MATRIZ CER vs CER -->
-  <div class="mat-section">
-    <div class="mat-title">📊 Matriz CER — rendimiento acumulado real a vencimiento propio</div>
-    <div class="mat-sub">Celda = cuánto más rinde la columna vs la fila en términos reales (sobre inflación). En blanco si la columna no supera a la fila. Orden: corto → largo.</div>
-    <div class="matrix-wrap" id="mat-cer-cer"></div>
-  </div>
-
-  <!-- ARBITRAJE CER vs CAUCION ARS -->
-  <div class="mat-section">
-    <div class="mat-title">⚡ Arbitraje CER — spread neto vs caución ARS</div>
-    <div class="mat-sub">Verde = TIR total CER supera el CFT de caución ARS. Celda = spread neto anual.</div>
-    <div class="matrix-wrap" id="mat-cer-arb"></div>
-  </div>
-
-  <!-- MATRIZ TASA vs TASA -->
-  <div class="mat-section">
-    <div class="mat-title">📊 Matriz Tasa Fija — rendimiento acumulado TEA a vencimiento propio</div>
-    <div class="mat-sub">Celda = cuánto más rinde la columna vs la fila en términos nominales. En blanco si la columna no supera. Orden: corto → largo.</div>
-    <div class="matrix-wrap" id="mat-tasa-tasa"></div>
-  </div>
-
-  <!-- ARBITRAJE TASA vs CAUCION ARS -->
-  <div class="mat-section">
-    <div class="mat-title">⚡ Arbitraje Tasa Fija — spread neto vs caución ARS</div>
-    <div class="mat-sub">Verde = TNA del instrumento supera el CFT de caución ARS.</div>
-    <div class="matrix-wrap" id="mat-tasa-arb"></div>
-  </div>
-
-  <!-- BREAKEVEN INFLACIONARIO -->
-  <div class="mat-section">
-    <div class="mat-title">📐 Breakeven inflacionario — CER vs Tasa Fija</div>
-    <div class="mat-sub">Inflación mensual promedio que hace indiferente cada par. <span style="color:var(--green)">Verde = CER conviene con inflación del REM actual</span>. <span style="color:var(--red)">Rojo = Tasa Fija conviene</span>.</div>
-    <div class="matrix-wrap" id="mat-breakeven"></div>
-  </div>
-
-  <!-- MATRIZ USD vs USD -->
-  <div class="mat-section">
-    <div class="mat-title">📊 Matriz USD Soberanos — rendimiento acumulado a vencimiento propio</div>
-    <div class="mat-sub">Celda = cuánto más rinde la columna vs la fila. En blanco si la columna no supera. Orden: corto → largo.</div>
-    <div class="matrix-wrap" id="mat-usd-usd"></div>
-  </div>
-
-  <!-- ARBITRAJE USD vs CAUCION USD -->
-  <div class="mat-section">
-    <div class="mat-title">⚡ Arbitraje USD — spread neto vs caución USD</div>
-    <div class="mat-sub">Verde = TIR USD supera el CFT de caución USD.</div>
-    <div class="matrix-wrap" id="mat-usd-arb"></div>
-  </div>
-
-  <!-- MATRIZ ONs vs ONs -->
-  <div class="mat-section">
-    <div class="mat-title">📊 Matriz ONs Corporativas — rendimiento acumulado a vencimiento propio</div>
-    <div class="mat-sub">Celda = cuánto más rinde la columna vs la fila. En blanco si la columna no supera. Orden: corto → largo.</div>
-    <div class="matrix-wrap" id="mat-ons-ons"></div>
-  </div>
-
-  <!-- ARBITRAJE ONs vs CAUCION USD -->
-  <div class="mat-section">
-    <div class="mat-title">⚡ Arbitraje ONs Corporativas — spread neto vs caución USD</div>
-    <div class="mat-sub">Verde = TIR USD supera el CFT de caución USD.</div>
-    <div class="matrix-wrap" id="mat-ons-arb"></div>
-  </div>
-
-  <div id="mat-empty" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);text-align:center;padding:40px">
-    Presioná <strong style="color:var(--accent)">▶ Actualizar</strong> en el header para cargar los datos primero.
-  </div>
-
-</div>
-
 </div><!-- end content -->
 
 <script>
@@ -390,11 +423,12 @@ table.matrix td.diag{background:rgba(255,255,255,0.02);color:var(--text3)}
 const CFG = {"soberanos":{"AL29":{"ley":"local","par":"GD29","vencimiento":"2029-07-09","flujos":[{"fecha":"2026-07-09","monto":10.35},{"fecha":"2027-01-09","monto":10.3},{"fecha":"2027-07-09","monto":10.25},{"fecha":"2028-01-09","monto":10.2},{"fecha":"2028-07-09","monto":10.15},{"fecha":"2029-01-09","monto":10.1},{"fecha":"2029-07-09","monto":10.05}]},"GD29":{"ley":"NY","par":"AL29","vencimiento":"2029-07-09","flujos":[{"fecha":"2026-07-09","monto":10.35},{"fecha":"2027-01-09","monto":10.3},{"fecha":"2027-07-09","monto":10.25},{"fecha":"2028-01-09","monto":10.2},{"fecha":"2028-07-09","monto":10.15},{"fecha":"2029-01-09","monto":10.1},{"fecha":"2029-07-09","monto":10.05}]},"AO28":{"ley":"local","vencimiento":"2028-10-31","flujos":[{"fecha":"2026-04-30","monto":0.5},{"fecha":"2026-05-29","monto":0.48},{"fecha":"2026-06-30","monto":0.52},{"fecha":"2026-07-31","monto":0.5},{"fecha":"2026-08-31","monto":0.5},{"fecha":"2026-09-30","monto":0.5},{"fecha":"2026-10-30","monto":0.5},{"fecha":"2026-11-30","monto":0.5},{"fecha":"2026-12-30","monto":0.5},{"fecha":"2027-01-29","monto":0.48},{"fecha":"2027-02-26","monto":0.45},{"fecha":"2027-03-31","monto":0.58},{"fecha":"2027-04-30","monto":0.5},{"fecha":"2027-05-31","monto":0.5},{"fecha":"2027-06-30","monto":0.5},{"fecha":"2027-07-30","monto":0.5},{"fecha":"2027-08-31","monto":0.5},{"fecha":"2027-09-30","monto":0.5},{"fecha":"2027-10-29","monto":0.48},{"fecha":"2027-11-30","monto":0.52},{"fecha":"2027-12-30","monto":0.5},{"fecha":"2028-01-31","monto":0.5},{"fecha":"2028-02-29","monto":0.48},{"fecha":"2028-03-31","monto":0.5},{"fecha":"2028-04-28","monto":0.47},{"fecha":"2028-05-31","monto":0.55},{"fecha":"2028-06-30","monto":0.5},{"fecha":"2028-07-31","monto":0.5},{"fecha":"2028-08-31","monto":0.5},{"fecha":"2028-09-29","monto":0.48},{"fecha":"2028-10-31","monto":100.53}]},"AL30":{"ley":"local","par":"GD30","vencimiento":"2030-07-09","flujos":[{"fecha":"2026-07-09","monto":8.27},{"fecha":"2027-01-09","monto":8.24},{"fecha":"2027-07-09","monto":8.21},{"fecha":"2028-01-09","monto":8.42},{"fecha":"2028-07-09","monto":8.35},{"fecha":"2029-01-09","monto":8.28},{"fecha":"2029-07-09","monto":8.21},{"fecha":"2030-01-09","monto":8.14},{"fecha":"2030-07-09","monto":8.07}]},"GD30":{"ley":"NY","par":"AL30","vencimiento":"2030-07-09","flujos":[{"fecha":"2026-07-09","monto":8.27},{"fecha":"2027-01-09","monto":8.24},{"fecha":"2027-07-09","monto":8.21},{"fecha":"2028-01-09","monto":8.42},{"fecha":"2028-07-09","monto":8.35},{"fecha":"2029-01-09","monto":8.28},{"fecha":"2029-07-09","monto":8.21},{"fecha":"2030-01-09","monto":8.14},{"fecha":"2030-07-09","monto":8.07}]},"AL35":{"ley":"local","par":"GD35","vencimiento":"2035-07-09","flujos":[{"fecha":"2026-07-09","monto":2.0625},{"fecha":"2027-01-09","monto":2.0625},{"fecha":"2027-07-09","monto":2.0625},{"fecha":"2028-01-09","monto":2.375},{"fecha":"2028-07-09","monto":2.375},{"fecha":"2029-01-09","monto":2.5},{"fecha":"2029-07-09","monto":2.5},{"fecha":"2030-01-09","monto":2.5},{"fecha":"2030-07-09","monto":2.5},{"fecha":"2031-01-09","monto":12.5},{"fecha":"2031-07-09","monto":12.25},{"fecha":"2032-01-09","monto":12},{"fecha":"2032-07-09","monto":11.75},{"fecha":"2033-01-09","monto":11.5},{"fecha":"2033-07-09","monto":11.25},{"fecha":"2034-01-09","monto":11},{"fecha":"2034-07-09","monto":10.75},{"fecha":"2035-01-09","monto":10.5},{"fecha":"2035-07-09","monto":10.25}]},"GD35":{"ley":"NY","par":"AL35","vencimiento":"2035-07-09","flujos":[{"fecha":"2026-07-09","monto":2.0625},{"fecha":"2027-01-09","monto":2.0625},{"fecha":"2027-07-09","monto":2.0625},{"fecha":"2028-01-09","monto":2.375},{"fecha":"2028-07-09","monto":2.375},{"fecha":"2029-01-09","monto":2.5},{"fecha":"2029-07-09","monto":2.5},{"fecha":"2030-01-09","monto":2.5},{"fecha":"2030-07-09","monto":2.5},{"fecha":"2031-01-09","monto":12.5},{"fecha":"2031-07-09","monto":12.25},{"fecha":"2032-01-09","monto":12},{"fecha":"2032-07-09","monto":11.75},{"fecha":"2033-01-09","monto":11.5},{"fecha":"2033-07-09","monto":11.25},{"fecha":"2034-01-09","monto":11},{"fecha":"2034-07-09","monto":10.75},{"fecha":"2035-01-09","monto":10.5},{"fecha":"2035-07-09","monto":10.25}]},"AE38":{"ley":"local","par":"GD38","vencimiento":"2038-01-09","flujos":[{"fecha":"2026-07-09","monto":2.5},{"fecha":"2027-01-09","monto":2.5},{"fecha":"2027-07-09","monto":7.0455},{"fecha":"2028-01-09","monto":6.9318},{"fecha":"2028-07-09","monto":6.8182},{"fecha":"2029-01-09","monto":6.7045},{"fecha":"2029-07-09","monto":6.5909},{"fecha":"2030-01-09","monto":6.4773},{"fecha":"2030-07-09","monto":6.3636},{"fecha":"2031-01-09","monto":6.25},{"fecha":"2031-07-09","monto":6.1364},{"fecha":"2032-01-09","monto":6.0227},{"fecha":"2032-07-09","monto":5.9091},{"fecha":"2033-01-09","monto":5.7955},{"fecha":"2033-07-09","monto":5.6818},{"fecha":"2034-01-09","monto":5.5682},{"fecha":"2034-07-09","monto":5.4545},{"fecha":"2035-01-09","monto":5.3409},{"fecha":"2035-07-09","monto":5.2273},{"fecha":"2036-01-09","monto":5.1136},{"fecha":"2036-07-09","monto":5},{"fecha":"2037-01-09","monto":4.8864},{"fecha":"2037-07-09","monto":4.7727},{"fecha":"2038-01-09","monto":4.6591}]},"GD38":{"ley":"NY","par":"AE38","vencimiento":"2038-01-09","flujos":[{"fecha":"2026-07-09","monto":2.5},{"fecha":"2027-01-09","monto":2.5},{"fecha":"2027-07-09","monto":7.0455},{"fecha":"2028-01-09","monto":6.9318},{"fecha":"2028-07-09","monto":6.8182},{"fecha":"2029-01-09","monto":6.7045},{"fecha":"2029-07-09","monto":6.5909},{"fecha":"2030-01-09","monto":6.4773},{"fecha":"2030-07-09","monto":6.3636},{"fecha":"2031-01-09","monto":6.25},{"fecha":"2031-07-09","monto":6.1364},{"fecha":"2032-01-09","monto":6.0227},{"fecha":"2032-07-09","monto":5.9091},{"fecha":"2033-01-09","monto":5.7955},{"fecha":"2033-07-09","monto":5.6818},{"fecha":"2034-01-09","monto":5.5682},{"fecha":"2034-07-09","monto":5.4545},{"fecha":"2035-01-09","monto":5.3409},{"fecha":"2035-07-09","monto":5.2273},{"fecha":"2036-01-09","monto":5.1136},{"fecha":"2036-07-09","monto":5},{"fecha":"2037-01-09","monto":4.8864},{"fecha":"2037-07-09","monto":4.7727},{"fecha":"2038-01-09","monto":4.6591}]},"AL41":{"ley":"local","par":"GD41","vencimiento":"2041-07-09","flujos":[{"fecha":"2026-07-09","monto":1.5625},{"fecha":"2027-01-09","monto":1.5625},{"fecha":"2027-07-09","monto":1.5625},{"fecha":"2028-01-09","monto":5.1339},{"fecha":"2028-07-09","monto":5.0714},{"fecha":"2029-01-09","monto":5.0089},{"fecha":"2029-07-09","monto":4.9464},{"fecha":"2030-01-09","monto":5.3996},{"fecha":"2030-07-09","monto":5.3125},{"fecha":"2031-01-09","monto":5.2254},{"fecha":"2031-07-09","monto":5.1384},{"fecha":"2032-01-09","monto":5.0513},{"fecha":"2032-07-09","monto":4.9643},{"fecha":"2033-01-09","monto":4.8772},{"fecha":"2033-07-09","monto":4.7902},{"fecha":"2034-01-09","monto":4.7031},{"fecha":"2034-07-09","monto":4.6161},{"fecha":"2035-01-09","monto":4.529},{"fecha":"2035-07-09","monto":4.442},{"fecha":"2036-01-09","monto":4.3549},{"fecha":"2036-07-09","monto":4.2679},{"fecha":"2037-01-09","monto":4.1808},{"fecha":"2037-07-09","monto":4.0938},{"fecha":"2038-01-09","monto":4.0067},{"fecha":"2038-07-09","monto":3.9196},{"fecha":"2039-01-09","monto":3.8326},{"fecha":"2039-07-09","monto":3.7455},{"fecha":"2040-01-09","monto":3.6585},{"fecha":"2040-07-09","monto":3.7455},{"fecha":"2041-01-09","monto":3.8326},{"fecha":"2041-07-09","monto":3.9196}]},"GD41":{"ley":"NY","par":"AL41","vencimiento":"2041-07-09","flujos":[{"fecha":"2026-07-09","monto":1.5625},{"fecha":"2027-01-09","monto":1.5625},{"fecha":"2027-07-09","monto":1.5625},{"fecha":"2028-01-09","monto":5.1339},{"fecha":"2028-07-09","monto":5.0714},{"fecha":"2029-01-09","monto":5.0089},{"fecha":"2029-07-09","monto":4.9464},{"fecha":"2030-01-09","monto":5.3996},{"fecha":"2030-07-09","monto":5.3125},{"fecha":"2031-01-09","monto":5.2254},{"fecha":"2031-07-09","monto":5.1384},{"fecha":"2032-01-09","monto":5.0513},{"fecha":"2032-07-09","monto":4.9643},{"fecha":"2033-01-09","monto":4.8772},{"fecha":"2033-07-09","monto":4.7902},{"fecha":"2034-01-09","monto":4.7031},{"fecha":"2034-07-09","monto":4.6161},{"fecha":"2035-01-09","monto":4.529},{"fecha":"2035-07-09","monto":4.442},{"fecha":"2036-01-09","monto":4.3549},{"fecha":"2036-07-09","monto":4.2679},{"fecha":"2037-01-09","monto":4.1808},{"fecha":"2037-07-09","monto":4.0938},{"fecha":"2038-01-09","monto":4.0067},{"fecha":"2038-07-09","monto":3.9196},{"fecha":"2039-01-09","monto":3.8326},{"fecha":"2039-07-09","monto":3.7455},{"fecha":"2040-01-09","monto":3.6585},{"fecha":"2040-07-09","monto":3.7455},{"fecha":"2041-01-09","monto":3.8326},{"fecha":"2041-07-09","monto":3.9196}]},"AO27":{"ley":"local","par":null,"vencimiento":"2027-10-30","flujos":[{"fecha":"2026-03-31","monto":0.5667},{"fecha":"2026-04-30","monto":0.5},{"fecha":"2026-05-29","monto":0.4833},{"fecha":"2026-06-30","monto":0.5167},{"fecha":"2026-07-31","monto":0.5},{"fecha":"2026-08-31","monto":0.5},{"fecha":"2026-09-30","monto":0.5},{"fecha":"2026-10-30","monto":0.5},{"fecha":"2026-11-30","monto":0.5},{"fecha":"2026-12-31","monto":0.5},{"fecha":"2027-01-29","monto":0.5},{"fecha":"2027-02-26","monto":0.5},{"fecha":"2027-03-31","monto":0.5},{"fecha":"2027-04-30","monto":0.5},{"fecha":"2027-05-31","monto":0.5},{"fecha":"2027-06-30","monto":0.5},{"fecha":"2027-07-30","monto":0.5},{"fecha":"2027-08-31","monto":0.5},{"fecha":"2027-09-30","monto":0.5},{"fecha":"2027-10-30","monto":100.5}]},"AN29":{"ley":"local","par":null,"vencimiento":"2029-11-30","flujos":[{"fecha":"2026-06-01","monto":3.0333},{"fecha":"2026-11-30","monto":3.25},{"fecha":"2027-05-31","monto":3.25},{"fecha":"2027-11-30","monto":3.25},{"fecha":"2028-05-30","monto":3.25},{"fecha":"2028-11-30","monto":3.25},{"fecha":"2029-05-30","monto":3.25},{"fecha":"2029-11-30","monto":103.25}]},"BPD7":{"ley":"local","par":null,"vencimiento":"2027-11-01","flujos":[{"fecha":"2026-04-30","monto":2.5},{"fecha":"2026-11-02","monto":2.5},{"fecha":"2027-04-30","monto":52.5},{"fecha":"2027-11-01","monto":51.25}]}},"bonos_cer":{"TZX26":{"tipo":"CER","vencimiento":"2026-06-30","cer_emision":200.388,"flujos":[{"fecha":"2026-06-30","amortizacion":1.0,"tasa_interes":0.0,"base":0.5}]},"TZXO6":{"tipo":"CER","vencimiento":"2026-10-30","cer_emision":480.1526,"flujos":[{"fecha":"2026-10-30","amortizacion":1.0,"tasa_interes":0.0,"base":0.5}]},"TX26":{"tipo":"CER","vencimiento":"2026-11-09","cer_emision":22.544,"flujos":[{"fecha":"2021-05-10","amortizacion":0.0,"tasa_interes":0.02,"base":0.5},{"fecha":"2021-11-09","amortizacion":0.0,"tasa_interes":0.02,"base":0.5},{"fecha":"2022-05-09","amortizacion":0.0,"tasa_interes":0.02,"base":0.5},{"fecha":"2022-11-09","amortizacion":0.0,"tasa_interes":0.02,"base":0.5},{"fecha":"2023-05-09","amortizacion":0.0,"tasa_interes":0.02,"base":0.5},{"fecha":"2023-11-09","amortizacion":0.0,"tasa_interes":0.02,"base":0.5},{"fecha":"2024-05-09","amortizacion":0.0,"tasa_interes":0.02,"base":0.5},{"fecha":"2024-11-11","amortizacion":0.2,"tasa_interes":0.02,"base":0.5},{"fecha":"2025-05-09","amortizacion":0.2,"tasa_interes":0.02,"base":0.5},{"fecha":"2025-11-10","amortizacion":0.2,"tasa_interes":0.02,"base":0.5},{"fecha":"2026-05-11","amortizacion":0.2,"tasa_interes":0.02,"base":0.5},{"fecha":"2026-11-09","amortizacion":0.2,"tasa_interes":0.02,"base":0.5}]},"TZXD6":{"tipo":"CER","vencimiento":"2026-12-15","cer_emision":271.0476,"flujos":[{"fecha":"2026-12-15","amortizacion":1.0,"tasa_interes":0.0,"base":0.5}]},"TZXM7":{"tipo":"CER","vencimiento":"2027-03-31","cer_emision":361.3176,"flujos":[{"fecha":"2027-03-31","amortizacion":1.0,"tasa_interes":0.0,"base":0.5}]},"TZX27":{"tipo":"CER","vencimiento":"2027-06-30","cer_emision":200.388,"flujos":[{"fecha":"2027-06-30","amortizacion":1.0,"tasa_interes":0.0,"base":0.5}]},"TZXD7":{"tipo":"CER","vencimiento":"2027-12-15","cer_emision":271.0476,"flujos":[{"fecha":"2027-12-15","amortizacion":1.0,"tasa_interes":0.0,"base":0.5}]},"TZX28":{"tipo":"CER","vencimiento":"2028-06-30","cer_emision":200.388,"flujos":[{"fecha":"2028-06-30","amortizacion":1.0,"tasa_interes":0.0,"base":0.5}]},"TX28":{"tipo":"CER","vencimiento":"2028-11-09","cer_emision":22.544,"flujos":[{"fecha":"2021-05-10","amortizacion":0.0,"tasa_interes":0.0225,"base":0.5},{"fecha":"2021-11-09","amortizacion":0.0,"tasa_interes":0.0225,"base":0.5},{"fecha":"2022-05-09","amortizacion":0.0,"tasa_interes":0.0225,"base":0.5},{"fecha":"2022-11-09","amortizacion":0.0,"tasa_interes":0.0225,"base":0.5},{"fecha":"2023-05-09","amortizacion":0.0,"tasa_interes":0.0225,"base":0.5},{"fecha":"2023-11-09","amortizacion":0.0,"tasa_interes":0.0225,"base":0.5},{"fecha":"2024-05-09","amortizacion":0.1,"tasa_interes":0.0225,"base":0.5},{"fecha":"2024-11-11","amortizacion":0.1,"tasa_interes":0.0225,"base":0.5},{"fecha":"2025-05-09","amortizacion":0.1,"tasa_interes":0.0225,"base":0.5},{"fecha":"2025-11-10","amortizacion":0.1,"tasa_interes":0.0225,"base":0.5},{"fecha":"2026-05-11","amortizacion":0.1,"tasa_interes":0.0225,"base":0.5},{"fecha":"2026-11-09","amortizacion":0.1,"tasa_interes":0.0225,"base":0.5},{"fecha":"2027-05-10","amortizacion":0.1,"tasa_interes":0.0225,"base":0.5},{"fecha":"2027-11-09","amortizacion":0.1,"tasa_interes":0.0225,"base":0.5},{"fecha":"2028-05-09","amortizacion":0.1,"tasa_interes":0.0225,"base":0.5},{"fecha":"2028-11-09","amortizacion":0.1,"tasa_interes":0.0225,"base":0.5}]},"DICP":{"tipo":"CER","vencimiento":"2034-01-02","cer_emision":1.4551,"flujos":[{"fecha":"2004-06-30","amortizacion":0.0,"tasa_interes":0.0279,"base":0.5},{"fecha":"2004-12-31","amortizacion":0.0,"tasa_interes":0.0279,"base":0.5},{"fecha":"2005-06-30","amortizacion":0.0,"tasa_interes":0.0279,"base":0.5},{"fecha":"2006-01-02","amortizacion":0.0,"tasa_interes":0.0279,"base":0.5},{"fecha":"2006-06-30","amortizacion":0.0,"tasa_interes":0.0279,"base":0.5},{"fecha":"2007-01-02","amortizacion":0.0,"tasa_interes":0.0279,"base":0.5},{"fecha":"2007-07-02","amortizacion":0.0,"tasa_interes":0.0279,"base":0.5},{"fecha":"2008-01-02","amortizacion":0.0,"tasa_interes":0.0279,"base":0.5},{"fecha":"2008-06-30","amortizacion":0.0,"tasa_interes":0.0279,"base":0.5},{"fecha":"2008-12-31","amortizacion":0.0,"tasa_interes":0.0279,"base":0.5},{"fecha":"2009-06-30","amortizacion":0.0,"tasa_interes":0.0406,"base":0.5},{"fecha":"2009-12-31","amortizacion":0.0,"tasa_interes":0.0406,"base":0.5},{"fecha":"2010-06-30","amortizacion":0.0,"tasa_interes":0.0406,"base":0.5},{"fecha":"2011-01-03","amortizacion":0.0,"tasa_interes":0.0406,"base":0.5},{"fecha":"2011-06-30","amortizacion":0.0,"tasa_interes":0.0406,"base":0.5},{"fecha":"2012-01-03","amortizacion":0.0,"tasa_interes":0.0406,"base":0.5},{"fecha":"2012-07-02","amortizacion":0.0,"tasa_interes":0.0406,"base":0.5},{"fecha":"2012-12-31","amortizacion":0.0,"tasa_interes":0.0406,"base":0.5},{"fecha":"2013-07-01","amortizacion":0.0,"tasa_interes":0.0406,"base":0.5},{"fecha":"2014-01-02","amortizacion":0.0,"tasa_interes":0.0406,"base":0.5},{"fecha":"2014-06-30","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2015-01-02","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2015-06-30","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2015-12-31","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2016-06-30","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2017-01-02","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2017-06-30","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2018-01-02","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2018-07-02","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2019-01-02","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2019-07-01","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2020-01-02","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2020-06-30","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2021-01-04","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2021-06-30","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2022-01-03","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2022-06-30","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2023-01-02","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2023-06-30","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2024-01-02","amortizacion":0.0,"tasa_interes":0.0583,"base":0.5},{"fecha":"2024-07-01","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2025-01-02","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2025-06-30","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2026-01-02","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2026-06-30","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2026-12-31","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2027-06-30","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2027-12-31","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2028-06-30","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2029-01-02","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2029-07-02","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2029-12-31","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2030-07-01","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2030-12-31","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2031-06-30","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2031-12-31","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2032-06-30","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2032-12-31","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2033-06-30","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5},{"fecha":"2034-01-02","amortizacion":0.05,"tasa_interes":0.0583,"base":0.5}]},"PARP":{"tipo":"CER","vencimiento":"2038-12-31","cer_emision":1.4551,"flujos":[{"fecha":"2004-09-30","amortizacion":0.0,"tasa_interes":0.0063,"base":0.5},{"fecha":"2005-03-31","amortizacion":0.0,"tasa_interes":0.0063,"base":0.5},{"fecha":"2005-09-30","amortizacion":0.0,"tasa_interes":0.0063,"base":0.5},{"fecha":"2006-03-31","amortizacion":0.0,"tasa_interes":0.0063,"base":0.5},{"fecha":"2006-10-02","amortizacion":0.0,"tasa_interes":0.0063,"base":0.5},{"fecha":"2007-04-03","amortizacion":0.0,"tasa_interes":0.0063,"base":0.5},{"fecha":"2007-10-01","amortizacion":0.0,"tasa_interes":0.0063,"base":0.5},{"fecha":"2008-03-31","amortizacion":0.0,"tasa_interes":0.0063,"base":0.5},{"fecha":"2008-09-30","amortizacion":0.0,"tasa_interes":0.0063,"base":0.5},{"fecha":"2009-03-31","amortizacion":0.0,"tasa_interes":0.0063,"base":0.5},{"fecha":"2009-09-30","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2010-03-31","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2010-09-30","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2011-03-31","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2011-09-30","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2012-04-03","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2012-10-01","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2013-04-03","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2013-09-30","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2014-03-31","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2014-09-30","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2015-03-31","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2015-09-30","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2016-03-31","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2016-09-30","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2017-03-31","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2017-10-02","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2018-04-03","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2018-10-01","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2019-04-01","amortizacion":0.0,"tasa_interes":0.0118,"base":0.5},{"fecha":"2019-09-30","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2020-04-01","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2020-09-30","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2021-03-31","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2021-09-30","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2022-03-31","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2022-09-30","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2023-03-31","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2023-10-02","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2024-04-03","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2024-09-30","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2025-03-31","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2025-09-30","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2026-03-31","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2026-09-30","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2027-03-31","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2027-09-30","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2028-03-31","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2028-10-02","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2029-04-03","amortizacion":0.0,"tasa_interes":0.0177,"base":0.5},{"fecha":"2029-10-01","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2030-04-01","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2030-09-30","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2031-03-31","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2031-09-30","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2032-03-31","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2032-09-30","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2033-03-31","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2033-09-30","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2034-03-31","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2034-10-02","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2035-04-02","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2035-10-01","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2036-03-31","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2036-09-30","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2037-03-31","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2037-09-30","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2038-03-31","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2038-09-30","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5},{"fecha":"2038-12-31","amortizacion":0.05,"tasa_interes":0.0248,"base":0.5}]},"X15Y6":{"tipo":"CER","vencimiento":"2026-05-15","cer_emision":701.614,"flujos":[{"fecha":"2026-05-15","amortizacion":1.0,"tasa_interes":0.0,"base":0.5}]},"X29Y6":{"tipo":"CER","vencimiento":"2026-05-29","cer_emision":651.8981,"flujos":[{"fecha":"2026-05-29","amortizacion":1.0,"tasa_interes":0.0,"base":0.5}]},"X31L6":{"tipo":"CER","vencimiento":"2026-07-31","cer_emision":685.5506,"flujos":[{"fecha":"2026-07-31","amortizacion":1.0,"tasa_interes":0.0,"base":0.5}]},"X30S6":{"tipo":"CER","vencimiento":"2026-09-30","cer_emision":714.9849,"flujos":[{"fecha":"2026-09-30","amortizacion":1.0,"tasa_interes":0.0,"base":0.5}]},"X30N6":{"tipo":"CER","vencimiento":"2026-11-30","cer_emision":659.6789,"flujos":[{"fecha":"2026-11-30","amortizacion":1.0,"tasa_interes":0.0,"base":0.5}]},"TX31":{"tipo":"CER","vencimiento":"2031-12-01","cer_emision":46.913,"flujos":[{"fecha":"2022-11-30","amortizacion":0.0,"tasa_interes":0.025,"base":0.5},{"fecha":"2023-05-30","amortizacion":0.0,"tasa_interes":0.025,"base":0.5},{"fecha":"2023-11-30","amortizacion":0.0,"tasa_interes":0.025,"base":0.5},{"fecha":"2024-05-30","amortizacion":0.0,"tasa_interes":0.025,"base":0.5},{"fecha":"2024-12-02","amortizacion":0.0,"tasa_interes":0.025,"base":0.5},{"fecha":"2025-05-30","amortizacion":0.0,"tasa_interes":0.025,"base":0.5},{"fecha":"2025-12-01","amortizacion":0.0,"tasa_interes":0.025,"base":0.5},{"fecha":"2026-06-01","amortizacion":0.0,"tasa_interes":0.025,"base":0.5},{"fecha":"2026-11-30","amortizacion":0.0,"tasa_interes":0.025,"base":0.5},{"fecha":"2027-05-31","amortizacion":0.1,"tasa_interes":0.025,"base":0.5},{"fecha":"2027-11-30","amortizacion":0.1,"tasa_interes":0.025,"base":0.5},{"fecha":"2028-05-30","amortizacion":0.1,"tasa_interes":0.025,"base":0.5},{"fecha":"2028-11-30","amortizacion":0.1,"tasa_interes":0.025,"base":0.5},{"fecha":"2029-05-30","amortizacion":0.1,"tasa_interes":0.025,"base":0.5},{"fecha":"2029-11-30","amortizacion":0.1,"tasa_interes":0.025,"base":0.5},{"fecha":"2030-05-30","amortizacion":0.1,"tasa_interes":0.025,"base":0.5},{"fecha":"2030-12-02","amortizacion":0.1,"tasa_interes":0.025,"base":0.5},{"fecha":"2031-05-30","amortizacion":0.1,"tasa_interes":0.025,"base":0.5},{"fecha":"2031-12-01","amortizacion":0.1,"tasa_interes":0.025,"base":0.5}]}},"lecaps":{"letras":[{"ticker":"S12J6","nombre":"LECAP Junio 12","pago_final":102.95,"precio":100.495,"fecha_vencimiento":"2026-06-12","activo":true},{"ticker":"T30J6","nombre":"BONCAP Junio 30","pago_final":144.896,"precio":134.85,"fecha_vencimiento":"2026-06-30","activo":true},{"ticker":"S31L6","nombre":"LECAP Julio 31","pago_final":117.677,"precio":107.279,"fecha_vencimiento":"2026-07-31","activo":true},{"ticker":"S14G6","nombre":"LECAP Agosto 14","pago_final":108.03,"precio":null,"fecha_vencimiento":"2026-08-14","activo":true},{"ticker":"S31G6","nombre":"LECAP Agosto 31","pago_final":127.064,"precio":113.3,"fecha_vencimiento":"2026-08-31","activo":true},{"ticker":"S15S6","nombre":"LECAP Sept 15","pago_final":107.21,"precio":null,"fecha_vencimiento":"2026-09-15","activo":true},{"ticker":"S30S6","nombre":"LECAP Sept 30","pago_final":117.536,"precio":101.9,"fecha_vencimiento":"2026-09-30","activo":true},{"ticker":"S30O6","nombre":"LECAP Oct 30","pago_final":135.278,"precio":114.865,"fecha_vencimiento":"2026-10-30","activo":true},{"ticker":"S30N6","nombre":"LECAP Nov 30","pago_final":129.888,"precio":107.4,"fecha_vencimiento":"2026-11-30","activo":true},{"ticker":"T15E7","nombre":"BONCAP Ene 15/27","pago_final":161.104,"precio":128.25,"fecha_vencimiento":"2027-01-15","activo":true},{"ticker":"T30A7","nombre":"BONCAP Abr 30/27","pago_final":157.341,"precio":116.25,"fecha_vencimiento":"2027-04-30","activo":true},{"ticker":"T31Y7","nombre":"BONCAP May 31/27","pago_final":151.563,"precio":109.2,"fecha_vencimiento":"2027-05-31","activo":true},{"ticker":"T30J7","nombre":"BONCAP Jun 30/27","pago_final":156.037,"precio":110.5,"fecha_vencimiento":"2027-06-30","activo":true},{"ticker":"S17L6","nombre":"LECAP Julio 17","pago_final":107.92,"precio":null,"fecha_vencimiento":"2026-07-17","activo":true}]},"ons":{"AERB":{"ticker_d912":"AERBD","vencimiento":"2026-12-15","flujos":[{"fecha":"2026-06-23","monto":0.027425},{"fecha":"2026-12-15","monto":1.02637}],"nombre":"AA2000"},"ARC1":{"ticker_d912":"ARC1D","vencimiento":"2031-08-01","flujos":[{"fecha":"2026-05-04","monto":0.0214},{"fecha":"2026-08-03","monto":0.0296},{"fecha":"2026-11-02","monto":0.0205},{"fecha":"2027-02-01","monto":0.0683},{"fecha":"2027-05-03","monto":0.0475},{"fecha":"2027-08-02","monto":0.0612},{"fecha":"2027-11-01","monto":0.0509},{"fecha":"2028-02-01","monto":0.0739},{"fecha":"2028-05-02","monto":0.0515},{"fecha":"2028-08-01","monto":0.0154},{"fecha":"2028-11-01","monto":0.0662},{"fecha":"2029-02-01","monto":0.0856},{"fecha":"2029-05-02","monto":0.0627},{"fecha":"2029-08-01","monto":0.0777},{"fecha":"2029-11-01","monto":0.0665},{"fecha":"2030-02-01","monto":0.0832},{"fecha":"2030-05-02","monto":0.0605},{"fecha":"2030-08-01","monto":0.0755},{"fecha":"2030-11-01","monto":0.0643},{"fecha":"2031-02-03","monto":0.0851},{"fecha":"2031-05-01","monto":0.0621},{"fecha":"2031-08-01","monto":0.0466}],"nombre":"AA2000"},"AFCI":{"ticker_d912":"AFCID","vencimiento":"2026-11-09","flujos":[{"fecha":"2026-05-07","monto":0.0322},{"fecha":"2026-11-09","monto":1.0331}],"nombre":"Banco Comafi"},"BACG":{"ticker_d912":"BACGD","vencimiento":"2029-06-25","flujos":[{"fecha":"2026-06-23","monto":0.04},{"fecha":"2026-12-23","monto":0.04},{"fecha":"2027-06-23","monto":0.04},{"fecha":"2027-12-23","monto":0.04},{"fecha":"2028-06-23","monto":0.04},{"fecha":"2028-12-26","monto":0.04},{"fecha":"2029-06-25","monto":1.04}],"nombre":"Banco Macro"},"BACH":{"ticker_d912":"BACHD","vencimiento":"2031-01-28","flujos":[{"fecha":"2026-07-28","monto":0.04},{"fecha":"2027-01-28","monto":0.04},{"fecha":"2027-07-28","monto":0.04},{"fecha":"2028-01-28","monto":0.04},{"fecha":"2028-07-28","monto":0.04},{"fecha":"2029-01-29","monto":0.04},{"fecha":"2029-07-30","monto":0.04},{"fecha":"2030-01-28","monto":0.04},{"fecha":"2030-07-29","monto":0.04},{"fecha":"2031-01-28","monto":1.04}],"nombre":"Banco Macro"},"BF37":{"ticker_d912":"BF37D","vencimiento":"2026-08-24","flujos":[{"fecha":"2026-08-24","monto":1.030082}],"nombre":"Banco BBVA"},"BF40":{"ticker_d912":"BF40D","vencimiento":"2027-08-27","flujos":[{"fecha":"2026-08-27","monto":0.024795},{"fecha":"2027-03-01","monto":0.025205},{"fecha":"2027-08-27","monto":1.024795}],"nombre":"Banco BBVA"},"BYCH":{"ticker_d912":"BYCHD","vencimiento":"2028-10-10","flujos":[{"fecha":"2026-04-10","monto":0.0388},{"fecha":"2026-10-13","monto":0.0388},{"fecha":"2027-04-12","monto":0.0388},{"fecha":"2027-10-11","monto":0.0388},{"fecha":"2028-04-10","monto":0.0388},{"fecha":"2028-10-10","monto":1.0388}],"nombre":"Banco Galicia"},"BYCV":{"ticker_d912":"BYCVD","vencimiento":"2026-08-31","flujos":[{"fecha":"2026-08-31","monto":1.033904}],"nombre":"Banco Galicia"},"BYCW":{"ticker_d912":"BYCWD","vencimiento":"2026-11-30","flujos":[{"fecha":"2026-05-14","monto":0.0298},{"fecha":"2026-11-30","monto":1.0329}],"nombre":"Banco Galicia"},"CP36O":{"ticker_d912":"CP36D","vencimiento":"2027-10-11","flujos":[{"fecha":"2026-04-10","monto":0.0324},{"fecha":"2026-10-13","monto":0.0326},{"fecha":"2027-04-12","monto":0.0324},{"fecha":"2027-10-11","monto":1.0328}],"nombre":"CGC"},"CP37":{"ticker_d912":"CP37D","vencimiento":"2027-03-10","flujos":[{"fecha":"2026-06-10","monto":0.0176},{"fecha":"2026-09-10","monto":0.0176},{"fecha":"2026-12-10","monto":0.0175},{"fecha":"2027-03-10","monto":1.0173}],"nombre":"CGC"},"CS44":{"ticker_d912":"CS44D","vencimiento":"2027-01-18","flujos":[{"fecha":"2026-07-17","monto":0.029753},{"fecha":"2027-01-18","monto":1.030247}],"nombre":"Cresud"},"CS47":{"ticker_d912":"CS47D","vencimiento":"2028-11-15","flujos":[{"fecha":"2026-05-15","monto":0.0347},{"fecha":"2026-11-16","monto":0.0353},{"fecha":"2027-05-17","monto":0.0347},{"fecha":"2027-11-15","monto":0.0353},{"fecha":"2028-05-15","monto":0.0349},{"fecha":"2028-11-15","monto":1.0353}],"nombre":"Cresud"},"CS50":{"ticker_d912":"CS50D","vencimiento":"2029-03-12","flujos":[{"fecha":"2026-09-10","monto":0.0544},{"fecha":"2027-03-10","monto":0.036},{"fecha":"2027-09-10","monto":0.0365},{"fecha":"2028-03-10","monto":0.0362},{"fecha":"2028-09-11","monto":0.0365},{"fecha":"2029-03-12","monto":1.036}],"nombre":"Cresud"},"CS51":{"ticker_d912":"CS51D","vencimiento":"2027-01-20","flujos":[{"fecha":"2026-07-20","monto":0.0285},{"fecha":"2027-01-20","monto":1.029}],"nombre":"Cresud"},"FO4A":{"ticker_d912":"FO4AD","vencimiento":"2027-07-20","flujos":[{"fecha":"2026-04-20","monto":0.019479},{"fecha":"2026-07-20","monto":0.019696},{"fecha":"2026-10-20","monto":0.019912},{"fecha":"2027-01-20","monto":0.019912},{"fecha":"2027-04-20","monto":0.019479},{"fecha":"2027-07-20","monto":1.019696}],"nombre":"FyO"},"GN47":{"ticker_d912":"GN47D","vencimiento":"2028-10-17","flujos":[{"fecha":"2026-04-17","monto":0.0299},{"fecha":"2026-10-19","monto":0.0301},{"fecha":"2027-04-19","monto":0.0299},{"fecha":"2027-10-18","monto":0.0301},{"fecha":"2028-04-17","monto":0.0301},{"fecha":"2028-10-17","monto":1.0301}],"nombre":"Genneia"},"GN49":{"ticker_d912":"GN49D","vencimiento":"2033-12-02","flujos":[{"fecha":"2026-06-02","monto":0.03875},{"fecha":"2026-12-02","monto":0.03875},{"fecha":"2027-06-02","monto":0.03875},{"fecha":"2027-12-02","monto":0.03875},{"fecha":"2028-06-02","monto":0.03875},{"fecha":"2028-12-04","monto":0.03875},{"fecha":"2029-06-04","monto":0.03875},{"fecha":"2029-12-03","monto":0.03875},{"fecha":"2030-06-03","monto":0.03875},{"fecha":"2030-12-02","monto":0.03875},{"fecha":"2031-06-02","monto":0.03875},{"fecha":"2031-12-02","monto":0.36875},{"fecha":"2032-06-02","monto":0.025962},{"fecha":"2032-12-02","monto":0.355962},{"fecha":"2033-06-02","monto":0.013175},{"fecha":"2033-12-02","monto":0.353175}],"nombre":"Genneia"},"HBCA":{"ticker_d912":"HBCAD","vencimiento":"2026-08-24","flujos":[{"fecha":"2026-08-24","monto":1.0351}],"nombre":"Banco Hipotecario"},"HBC":{"ticker_d912":"HBCDD","vencimiento":"2026-11-23","flujos":[{"fecha":"2026-05-20","monto":0.029753},{"fecha":"2026-11-23","monto":1.03074}],"nombre":"Banco Hipotecario"},"HJCF":{"ticker_d912":"HJCFD","vencimiento":"2026-10-21","flujos":[{"fecha":"2026-04-21","monto":0.0249},{"fecha":"2026-10-21","monto":1.0251}],"nombre":"John Deere"},"IRCL":{"ticker_d912":"IRCLD","vencimiento":"2026-06-10","flujos":[{"fecha":"2026-06-10","monto":1.0299}],"nombre":"IRSA"},"IRCN":{"ticker_d912":"IRCND","vencimiento":"2027-10-25","flujos":[{"fecha":"2026-07-23","monto":0.0285},{"fecha":"2027-01-25","monto":0.029},{"fecha":"2027-07-23","monto":0.0285},{"fecha":"2027-10-25","monto":1.0145}],"nombre":"IRSA"},"IRCO":{"ticker_d912":"IRCOD","vencimiento":"2029-10-23","flujos":[{"fecha":"2026-07-23","monto":0.036},{"fecha":"2027-01-25","monto":0.0365},{"fecha":"2027-07-23","monto":0.036},{"fecha":"2028-01-24","monto":0.0365},{"fecha":"2028-07-24","monto":0.0362},{"fecha":"2029-01-23","monto":0.0365},{"fecha":"2029-07-23","monto":0.036},{"fecha":"2029-10-23","monto":1.0183}],"nombre":"IRSA"},"LDCG":{"ticker_d912":"LDCGD","vencimiento":"2027-10-04","flujos":[{"fecha":"2026-05-04","monto":0.0171},{"fecha":"2026-08-04","monto":0.0176},{"fecha":"2026-11-04","monto":0.0176},{"fecha":"2027-02-04","monto":0.0176},{"fecha":"2027-05-04","monto":0.0171},{"fecha":"2027-08-04","monto":0.0176},{"fecha":"2027-10-04","monto":1.0117}],"nombre":"Ledesma"},"LMS7":{"ticker_d912":"LMS7D","vencimiento":"2028-10-13","flujos":[{"fecha":"2026-04-13","monto":0.0993},{"fecha":"2026-07-13","monto":0.098},{"fecha":"2026-10-13","monto":0.0967},{"fecha":"2027-01-12","monto":0.0952},{"fecha":"2027-04-12","monto":0.0935},{"fecha":"2027-07-12","monto":0.0922},{"fecha":"2027-10-13","monto":0.0908},{"fecha":"2028-01-12","monto":0.0893},{"fecha":"2028-04-12","monto":0.0877},{"fecha":"2028-07-12","monto":0.0863},{"fecha":"2028-10-13","monto":0.0852}],"nombre":"Aluar"},"LMS8":{"ticker_d912":"LMS8D","vencimiento":"2027-03-22","flujos":[{"fecha":"2026-06-22","monto":0.265972},{"fecha":"2026-09-21","monto":0.261979},{"fecha":"2026-12-21","monto":0.257899},{"fecha":"2027-03-22","monto":0.25395}],"nombre":"Aluar"},"LOC5":{"ticker_d912":"LOC5D","vencimiento":"2027-07-26","flujos":[{"fecha":"2026-07-24","monto":0.039671},{"fecha":"2027-01-25","monto":0.040329},{"fecha":"2027-07-26","monto":1.04011}],"nombre":"Loma Negra"},"MGCN":{"ticker_d912":"MGCND","vencimiento":"2028-10-04","flujos":[{"fecha":"2026-04-06","monto":0.0287},{"fecha":"2026-10-05","monto":0.0288},{"fecha":"2027-04-05","monto":0.0287},{"fecha":"2027-10-04","monto":0.0288},{"fecha":"2028-04-04","monto":0.0288},{"fecha":"2028-10-04","monto":1.0288}],"nombre":"Pampa Energ\u00eda"},"MGCO":{"ticker_d912":"MGCOD","vencimiento":"2034-12-18","flujos":[{"fecha":"2026-06-16","monto":0.039375},{"fecha":"2026-12-16","monto":0.039375},{"fecha":"2027-06-16","monto":0.039375},{"fecha":"2027-12-16","monto":0.039375},{"fecha":"2028-06-16","monto":0.039375},{"fecha":"2028-12-18","monto":0.039375},{"fecha":"2029-06-18","monto":0.039375},{"fecha":"2029-12-17","monto":0.039375},{"fecha":"2030-06-18","monto":0.039375},{"fecha":"2030-12-16","monto":0.039375},{"fecha":"2031-06-16","monto":0.039375},{"fecha":"2031-12-16","monto":0.039375},{"fecha":"2032-06-16","monto":0.039375},{"fecha":"2032-12-16","monto":0.039375},{"fecha":"2033-06-16","monto":0.039375},{"fecha":"2033-12-16","monto":0.039375},{"fecha":"2034-06-16","monto":0.039375},{"fecha":"2034-12-18","monto":1.039375}],"nombre":"Pampa Energ\u00eda"},"MGCR":{"ticker_d912":"MGCRD","vencimiento":"2037-11-16","flujos":[{"fecha":"2026-05-14","monto":0.03875},{"fecha":"2026-11-16","monto":0.03875},{"fecha":"2027-05-14","monto":0.03875},{"fecha":"2027-11-15","monto":0.03875},{"fecha":"2028-05-15","monto":0.03875},{"fecha":"2028-11-14","monto":0.03875},{"fecha":"2029-05-14","monto":0.03875},{"fecha":"2029-11-14","monto":0.03875},{"fecha":"2030-05-14","monto":0.03875},{"fecha":"2030-11-14","monto":0.03875},{"fecha":"2031-05-14","monto":0.03875},{"fecha":"2031-11-14","monto":0.03875},{"fecha":"2032-05-14","monto":0.03875},{"fecha":"2032-11-15","monto":0.03875},{"fecha":"2033-05-16","monto":0.03875},{"fecha":"2033-11-14","monto":0.03875},{"fecha":"2034-05-15","monto":0.03875},{"fecha":"2034-11-14","monto":0.03875},{"fecha":"2035-05-14","monto":0.03875},{"fecha":"2035-11-14","monto":0.03875},{"fecha":"2036-05-14","monto":0.03875},{"fecha":"2036-11-14","monto":0.03875},{"fecha":"2037-05-14","monto":0.03875},{"fecha":"2037-11-16","monto":1.03875}],"nombre":"Pampa Energ\u00eda"},"OLC6":{"ticker_d912":"OLC6D","vencimiento":"2029-06-05","flujos":[{"fecha":"2026-06-05","monto":0.037397},{"fecha":"2026-12-09","monto":0.037603},{"fecha":"2027-06-07","monto":0.037397},{"fecha":"2027-12-06","monto":0.037603},{"fecha":"2028-06-05","monto":0.037603},{"fecha":"2028-12-05","monto":0.037603},{"fecha":"2029-06-05","monto":1.037397}],"nombre":"Oldelval"},"PLC1":{"ticker_d912":"PLC1D","vencimiento":"2028-01-27","flujos":[{"fecha":"2026-04-27","monto":0.0299},{"fecha":"2026-10-27","monto":0.0301},{"fecha":"2027-04-27","monto":0.0299},{"fecha":"2027-10-27","monto":0.0301},{"fecha":"2028-01-27","monto":1.0151}],"nombre":"Pluspetrol"},"PN35":{"ticker_d912":"PN35D","vencimiento":"2029-09-27","flujos":[{"fecha":"2026-03-27","monto":0.0347},{"fecha":"2026-09-28","monto":0.0353},{"fecha":"2027-03-29","monto":0.0347},{"fecha":"2027-09-27","monto":0.0353},{"fecha":"2028-03-27","monto":0.0349},{"fecha":"2028-09-27","monto":0.0353},{"fecha":"2029-03-27","monto":0.0347},{"fecha":"2029-09-27","monto":1.0353}],"nombre":"Pan American Energy"},"PN36":{"ticker_d912":"PN36D","vencimiento":"2031-11-13","flujos":[{"fecha":"2026-05-13","monto":0.036},{"fecha":"2026-11-13","monto":0.0365},{"fecha":"2027-05-13","monto":0.036},{"fecha":"2027-11-15","monto":0.0365},{"fecha":"2028-05-15","monto":0.0362},{"fecha":"2028-11-13","monto":0.0365},{"fecha":"2029-05-14","monto":0.036},{"fecha":"2029-11-13","monto":0.0365},{"fecha":"2030-05-13","monto":0.036},{"fecha":"2030-11-13","monto":0.0365},{"fecha":"2031-05-13","monto":0.036},{"fecha":"2031-11-13","monto":1.0365}],"nombre":"Pan American Energy"},"RC2C":{"ticker_d912":"RC2CD","vencimiento":"2026-10-06","flujos":[{"fecha":"2026-04-06","monto":0.029419},{"fecha":"2026-10-06","monto":1.029581}],"nombre":"Arcor"},"T662":{"ticker_d912":"T662D","vencimiento":"2026-08-31","flujos":[{"fecha":"2026-05-26","monto":0.015849},{"fecha":"2026-08-31","monto":1.017274}],"nombre":"Tarjeta Naranja"},"TSC4":{"ticker_d912":"TSC4D","vencimiento":"2035-11-20","flujos":[{"fecha":"2026-05-20","monto":0.03875},{"fecha":"2026-11-23","monto":0.03875},{"fecha":"2027-05-20","monto":0.03875},{"fecha":"2027-11-22","monto":0.03875},{"fecha":"2028-05-22","monto":0.03875},{"fecha":"2028-11-21","monto":0.03875},{"fecha":"2029-05-21","monto":0.03875},{"fecha":"2029-11-21","monto":0.03875},{"fecha":"2030-05-20","monto":0.03875},{"fecha":"2030-11-21","monto":0.03875},{"fecha":"2031-05-20","monto":0.03875},{"fecha":"2031-11-20","monto":0.03875},{"fecha":"2032-05-20","monto":0.03875},{"fecha":"2032-11-22","monto":0.03875},{"fecha":"2033-05-20","monto":0.03875},{"fecha":"2033-11-21","monto":0.03875},{"fecha":"2034-05-22","monto":0.03875},{"fecha":"2034-11-20","monto":0.03875},{"fecha":"2035-05-21","monto":0.03875},{"fecha":"2035-11-20","monto":1.03875}],"nombre":"TGS"},"TTC8":{"ticker_d912":"TTC8D","vencimiento":"2027-10-25","flujos":[{"fecha":"2026-04-24","monto":0.024932},{"fecha":"2026-10-26","monto":0.025068},{"fecha":"2027-04-26","monto":0.024932},{"fecha":"2027-10-25","monto":1.025205}],"nombre":"Tecpetrol"},"TTCB":{"ticker_d912":"TTCBD","vencimiento":"2027-10-18","flujos":[{"fecha":"2026-04-16","monto":0.032411},{"fecha":"2026-10-16","monto":0.032589},{"fecha":"2027-04-16","monto":0.032411},{"fecha":"2027-10-18","monto":1.032945}],"nombre":"Tecpetrol"},"TTC":{"ticker_d912":"TTCDD","vencimiento":"2030-11-04","flujos":[{"fecha":"2026-05-04","monto":0.038125},{"fecha":"2026-11-03","monto":0.038125},{"fecha":"2027-05-03","monto":0.038125},{"fecha":"2027-11-03","monto":0.038125},{"fecha":"2028-05-03","monto":0.038125},{"fecha":"2028-11-03","monto":0.038125},{"fecha":"2029-05-03","monto":0.038125},{"fecha":"2029-11-05","monto":0.038125},{"fecha":"2030-05-03","monto":0.038125},{"fecha":"2030-11-04","monto":1.038125}],"nombre":"Tecpetrol"},"VBC1":{"ticker_d912":"VBC1D","vencimiento":"2027-03-11","flujos":[{"fecha":"2026-09-11","monto":0.037808},{"fecha":"2027-03-11","monto":1.037192}],"nombre":"Banco de Valores"},"VSCO":{"ticker_d912":"VSCOD","vencimiento":"2027-03-08","flujos":[{"fecha":"2026-09-07","monto":0.032767},{"fecha":"2027-03-08","monto":1.032589}],"nombre":"Vista Energy"},"VSCP":{"ticker_d912":"VSCPD","vencimiento":"2029-05-03","flujos":[{"fecha":"2026-05-04","monto":0.039671},{"fecha":"2026-11-03","monto":0.040329},{"fecha":"2027-05-03","monto":0.039671},{"fecha":"2027-11-03","monto":0.290329},{"fecha":"2028-05-03","monto":0.279918},{"fecha":"2028-11-03","monto":0.270164},{"fecha":"2029-05-03","monto":0.259918}],"nombre":"Vista Energy"},"VSCT":{"ticker_d912":"VSCTD","vencimiento":"2035-12-10","flujos":[{"fecha":"2026-06-10","monto":0.038125},{"fecha":"2026-12-10","monto":0.038125},{"fecha":"2027-06-10","monto":0.038125},{"fecha":"2027-12-10","monto":0.038125},{"fecha":"2028-06-12","monto":0.038125},{"fecha":"2028-12-11","monto":0.038125},{"fecha":"2029-06-11","monto":0.038125},{"fecha":"2029-12-10","monto":0.038125},{"fecha":"2030-06-10","monto":0.038125},{"fecha":"2030-12-10","monto":0.038125},{"fecha":"2031-06-10","monto":0.038125},{"fecha":"2031-12-10","monto":0.038125},{"fecha":"2032-06-10","monto":0.038125},{"fecha":"2032-12-10","monto":0.038125},{"fecha":"2033-06-10","monto":0.038125},{"fecha":"2033-12-12","monto":0.368125},{"fecha":"2034-06-12","monto":0.025544},{"fecha":"2034-12-11","monto":0.355544},{"fecha":"2035-06-11","monto":0.012962},{"fecha":"2035-12-10","monto":0.352963}],"nombre":"Vista Energy"},"VSCW":{"ticker_d912":"VSCWD","vencimiento":"2027-04-15","flujos":[{"fecha":"2026-04-15","monto":0.014795},{"fecha":"2026-07-15","monto":0.014959},{"fecha":"2026-10-15","monto":0.015123},{"fecha":"2027-01-15","monto":0.015123},{"fecha":"2027-04-15","monto":1.014795}],"nombre":"Vista Energy"},"YM34":{"ticker_d912":"YM34D","vencimiento":"2034-01-17","flujos":[{"fecha":"2026-07-17","monto":0.04125},{"fecha":"2027-01-18","monto":0.04125},{"fecha":"2027-07-19","monto":0.04125},{"fecha":"2028-01-17","monto":0.04125},{"fecha":"2028-07-17","monto":0.04125},{"fecha":"2029-01-17","monto":0.04125},{"fecha":"2029-07-17","monto":0.04125},{"fecha":"2030-01-17","monto":0.04125},{"fecha":"2030-07-17","monto":0.04125},{"fecha":"2031-01-17","monto":0.04125},{"fecha":"2031-07-17","monto":0.04125},{"fecha":"2032-01-19","monto":0.34125},{"fecha":"2032-07-19","monto":0.028875},{"fecha":"2033-01-17","monto":0.328875},{"fecha":"2033-07-18","monto":0.0165},{"fecha":"2034-01-17","monto":0.4165}],"nombre":"YPF"},"YM37":{"ticker_d912":"YM37D","vencimiento":"2027-05-07","flujos":[{"fecha":"2026-05-07","monto":0.017068},{"fecha":"2026-08-07","monto":0.017644},{"fecha":"2026-11-09","monto":0.017644},{"fecha":"2027-02-08","monto":0.017644},{"fecha":"2027-05-07","monto":1.017068}],"nombre":"YPF"},"YM38":{"ticker_d912":"YM38D","vencimiento":"2027-07-22","flujos":[{"fecha":"2026-04-22","monto":0.018493},{"fecha":"2026-07-22","monto":0.018699},{"fecha":"2026-10-22","monto":0.018904},{"fecha":"2027-01-22","monto":0.018904},{"fecha":"2027-04-22","monto":0.018493},{"fecha":"2027-07-22","monto":1.018699}],"nombre":"YPF"},"YM40":{"ticker_d912":"YM40D","vencimiento":"2028-08-28","flujos":[{"fecha":"2026-05-28","monto":0.0183},{"fecha":"2026-08-28","monto":0.0189},{"fecha":"2026-11-30","monto":0.0189},{"fecha":"2027-02-26","monto":0.0189},{"fecha":"2027-05-28","monto":0.0183},{"fecha":"2027-08-30","monto":0.0189},{"fecha":"2027-11-29","monto":0.0189},{"fecha":"2028-02-28","monto":0.0189},{"fecha":"2028-05-29","monto":0.0185},{"fecha":"2028-08-28","monto":1.0189}],"nombre":"YPF"},"YMCX":{"ticker_d912":"YMCXD","vencimiento":"2031-09-11","flujos":[{"fecha":"2026-09-11","monto":0.04375},{"fecha":"2027-03-11","monto":0.04375},{"fecha":"2027-09-13","monto":0.04375},{"fecha":"2028-03-13","monto":0.04375},{"fecha":"2028-09-11","monto":0.04375},{"fecha":"2029-03-12","monto":0.04375},{"fecha":"2029-09-11","monto":0.24375},{"fecha":"2030-03-11","monto":0.035},{"fecha":"2030-09-11","monto":0.235},{"fecha":"2031-03-11","monto":0.02625},{"fecha":"2031-09-11","monto":0.62625}],"nombre":"YPF"},"YMCY":{"ticker_d912":"YMCYD","vencimiento":"2028-10-10","flujos":[{"fecha":"2026-04-10","monto":0.016027},{"fecha":"2026-07-13","monto":0.016205},{"fecha":"2026-10-13","monto":0.016384},{"fecha":"2027-01-11","monto":0.016384},{"fecha":"2027-04-12","monto":0.016027},{"fecha":"2027-07-12","monto":0.016205},{"fecha":"2027-10-11","monto":0.016384},{"fecha":"2028-01-10","monto":0.016384},{"fecha":"2028-04-10","monto":0.016205},{"fecha":"2028-07-10","monto":0.016205},{"fecha":"2028-10-10","monto":1.016384}],"nombre":"YPF"},"YMCZ":{"ticker_d912":"YMCZD","vencimiento":"2028-10-10","flujos":[{"fecha":"2026-04-10","monto":0.034904},{"fecha":"2026-10-13","monto":0.035096},{"fecha":"2027-04-12","monto":0.034904},{"fecha":"2027-10-11","monto":0.035096},{"fecha":"2028-04-10","monto":0.035096},{"fecha":"2028-10-10","monto":1.035096}],"nombre":"YPF"}}};
 
 // ==================== REM ====================
-const REM=[{m:'Jun-26',v:2.0},{m:'Jul-26',v:2.0},{m:'Ago-26',v:1.8},{m:'Sep-26',v:1.8},{m:'Oct-26',v:1.7},{m:'Nov-26',v:1.7},{m:'Dic-26',v:1.6},{m:'Ene-27',v:1.6},{m:'Feb-27',v:1.5},{m:'Mar-27',v:1.5},{m:'Abr-27',v:1.5},{m:'May-27',v:1.5}];
+const REM=[{m:'Jun-26',v:2.1},{m:'Jul-26',v:2.0},{m:'Ago-26',v:1.8},{m:'Sep-26',v:1.9},{m:'Oct-26',v:1.8},{m:'Nov-26',v:1.7},{m:'Dic-26',v:1.6},{m:'Ene-27',v:1.6},{m:'Feb-27',v:1.5},{m:'Mar-27',v:1.5},{m:'Abr-27',v:1.5},{m:'May-27',v:1.5}]; // REM mayo-2026 publicado 4-jun-2026
 const remMonthly=REM.reduce((s,r)=>s+r.v,0)/REM.length;
 const remAnual=(Math.pow(1+remMonthly/100,12)-1)*100;
 
 // ==================== STATE ====================
+const calcCache={ars:[],tasa:[],usd:[],ons:[]};
 const TODAY=new Date('2026-06-04');
 let cerIndex=null,cerFecha=null,cerSrc='Fallback';
 let cerUltimo=null,cerUltimoFecha=null;
@@ -619,6 +653,7 @@ function renderCER(){
     if(!isNaN(r.dur)&&!isNaN(r.tirTotal))tirTot.push({x:+r.dur.toFixed(2),y:+r.tirTotal.toFixed(2),lbl:tk});
   }
   if(!rows.length)return;
+  calcCache.ars=rows.map(r=>({ticker:r.ticker,tir:r.tir,tirTotal:r.tirTotal,dur:r.dur,tipo:r.accrued>0?'CER CPN':'CER ZC'}));
   const avgSp=rows.reduce((s,r)=>s+r.spreadReal,0)/rows.length;
   const avgTt=rows.reduce((s,r)=>s+r.tirTotal,0)/rows.length;
   const avgD=rows.reduce((s,r)=>s+r.dur,0)/rows.length;
@@ -670,6 +705,7 @@ function renderTASA(){
   if(!rows.length)return;
   const avgTir=rows.reduce((s,r)=>s+(r.tna||r.tir),0)/rows.length;
   const avgD=rows.reduce((s,r)=>s+r.dur,0)/rows.length;
+  calcCache.tasa=rows.map(r=>({ticker:r.ticker,tir:r.tna||r.tir,tirTotal:null,dur:r.dur,tipo:r.isLec?'Lecap':'Boncap'}));
   mkCards('cards-tasa',[['Lecap',rows.filter(r=>r.isLec).length,'letras ZC','var(--tasa)'],['Boncap',rows.filter(r=>!r.isLec).length,'con cupón','var(--tasa)'],['TNA/TIR prom',fP(avgTir),'efectiva','var(--tasa)'],['Duration prom',f2(avgD),'años mod.']]);
   mkChart('chart-tasa',[
     {label:'Lecap (TNA)',data:dataLec,backgroundColor:'rgba(55,138,221,.85)',borderColor:'#378ADD',pointRadius:7,pointHoverRadius:9},
@@ -710,6 +746,7 @@ function renderUSD(){
     if(b.ley==='NY')dataNY.push(pt);else dataARG.push(pt);
   }
   if(!rows.length)return;
+  calcCache.usd=rows.map(r=>({ticker:r.ticker,tir:r.tir,dur:r.dur,tipo:r.ley==='NY'?'Soberano NY':'Soberano ARG'}));
   const avgTir=rows.reduce((s,r)=>s+r.tir,0)/rows.length;
   const avgD=rows.reduce((s,r)=>s+r.dur,0)/rows.length;
   mkCards('cards-usd',[['Ley NY',rows.filter(r=>r.ley==='NY').length,'globales','var(--usd)'],['Ley ARG',rows.filter(r=>r.ley!=='NY').length,'locales','var(--usd)'],['TIR USD prom',fP(avgTir),'anual','var(--usd)'],['Duration prom',f2(avgD),'años mod.']]);
@@ -750,6 +787,7 @@ function renderONS(){
   }
   if(!rows.length)return;
   rows.sort((a,b)=>b.tir-a.tir);
+  calcCache.ons=rows.map(r=>({ticker:r.ticker,tir:r.tir,dur:r.dur,nombre:r.nombre||r.ticker,tipo:'ON Corp'}));
   const avgTir=rows.reduce((s,r)=>s+r.tir,0)/rows.length;
   const avgD=rows.reduce((s,r)=>s+r.dur,0)/rows.length;
   const best=rows[0];
@@ -822,6 +860,10 @@ function calcRenovaciones(){
 
 // ==================== ARBITRAJE USD ====================
 const TIRS_ARB={
+  AO27:{tir:14.5,dur:0.6,nombre:'Bono 2027',tipo:'Soberano ARG'},
+  AO28:{tir:13.5,dur:1.2,nombre:'Bono 2028',tipo:'Soberano ARG'},
+  AN29:{tir:13.0,dur:2.1,nombre:'Bono 2029',tipo:'Soberano ARG'},
+  BPD7:{tir:14.0,dur:0.8,nombre:'Bono PD 2027',tipo:'Soberano ARG'},
   GD29:{tir:12.3,dur:0.9,nombre:'Global 2029',tipo:'Soberano NY'},AL29:{tir:12.8,dur:0.9,nombre:'Bono 2029',tipo:'Soberano ARG'},
   GD30:{tir:13.8,dur:1.6,nombre:'Global 2030',tipo:'Soberano NY'},AL30:{tir:14.1,dur:1.6,nombre:'Bono 2030',tipo:'Soberano ARG'},
   GD35:{tir:13.0,dur:4.1,nombre:'Global 2035',tipo:'Soberano NY'},AL35:{tir:13.5,dur:4.1,nombre:'Bono 2035',tipo:'Soberano ARG'},
@@ -960,6 +1002,214 @@ function calcSpread(){
   }).join('');
 }
 
+
+// ==================== FILTER TABLE ====================
+window.ftbl=function(id,q){
+  q=q.toLowerCase().trim();
+  const t=document.getElementById(id);if(!t)return;
+  Array.from(t.querySelector('tbody').querySelectorAll('tr')).forEach(tr=>{
+    tr.style.display=!q||tr.textContent.toLowerCase().includes(q)?'':'none';
+  });
+};
+
+// ==================== CFT UTIL ====================
+function getCFT(prefix){
+  const tna=parseFloat(document.getElementById(prefix+'-tasa')?.value)||0;
+  const br=parseFloat(document.getElementById(prefix+'-broker')?.value)||0.6;
+  const byma=parseFloat(document.getElementById(prefix+'-byma')?.value)||0.045;
+  const pl=parseInt(document.getElementById(prefix+'-plazo')?.value)||1;
+  const costoBr=(br/100)*(pl/90)*(1.21);
+  const costoByma=(byma/100)*(pl/365);
+  const costoTNA=(costoBr+costoByma)*(365/pl)*100;
+  return{tna,costoTNA,total:tna+costoTNA};
+}
+
+// ==================== MATRIZ ====================
+function buildMX(id,items,valFn,lblFn,subFn){
+  const el=document.getElementById(id);if(!el||!items.length)return;
+  const s=[...items].sort((a,b)=>(a.dur||99)-(b.dur||99));
+  let h='<table class="mx"><thead><tr><th class="rh">↓ Fila \ Col →</th>';
+  s.forEach(b=>{h+=`<th>${lblFn(b)}<br><span style="font-size:7px">${f2(b.dur)}a</span></th>`;});
+  h+='</tr></thead><tbody>';
+  s.forEach(row=>{
+    const rv=valFn(row);
+    h+=`<tr><td class="rl">${lblFn(row)}<br><span style="color:var(--text3);font-size:8px">${subFn(row)}</span></td>`;
+    s.forEach(col=>{
+      if(row===col){h+=`<td class="dg">—</td>`;return;}
+      const diff=valFn(col)-rv;
+      if(diff<=0){h+=`<td class="dg">—</td>`;return;}
+      const cl=diff>10?'hx5':diff>5?'hx4':diff>2?'hx3':diff>1?'hx2':'hx1';
+      h+=`<td class="${cl}" style="color:var(--green)">+${f2(diff)}%</td>`;
+    });
+    h+='</tr>';
+  });
+  h+='</tbody></table>';
+  el.innerHTML=h;
+}
+
+// ==================== BREAKEVEN ====================
+function buildBE(){
+  const el=document.getElementById('mxbe');if(!el)return;
+  const cer=[...calcCache.ars].sort((a,b)=>(a.dur||99)-(b.dur||99));
+  const tasa=[...calcCache.tasa].sort((a,b)=>(a.dur||99)-(b.dur||99));
+  if(!cer.length||!tasa.length){el.innerHTML='<span style="font-size:9px;color:var(--text3);font-family:DM Mono,monospace">Sin datos de tasa fija</span>';return;}
+  let h='<table class="mx"><thead><tr><th class="rh">CER ↓ \ Tasa →</th>';
+  tasa.forEach(t=>{h+=`<th>${t.ticker}<br><span style="font-size:7px;color:var(--tasa)">${fP(t.tir)}</span></th>`;});
+  h+='</tr></thead><tbody>';
+  cer.forEach(cr=>{
+    h+=`<tr><td class="rl">${cr.ticker}<br><span style="color:var(--cer);font-size:8px">+${fP(cr.tir)} real</span></td>`;
+    tasa.forEach(t=>{
+      const ratio=(1+t.tir/100)/(1+cr.tir/100);
+      if(ratio<=0){h+=`<td class="dg">—</td>`;return;}
+      const be=(Math.pow(ratio,1/12)-1)*100;
+      const ok=remMonthly>be;
+      h+=`<td class="${ok?'hx3':'hxn'}">${f2(be)}%<br><span style="font-size:7px;color:${ok?'var(--green)':'var(--red)'}">${ok?'▲CER':'▼Tasa'}</span></td>`;
+    });
+    h+='</tr>';
+  });
+  h+=`</tbody></table><div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:6px">REM: ${f2(remMonthly)}% mensual. Verde = CER gana con inflación del REM.</div>`;
+  el.innerHTML=h;
+}
+
+// ==================== RENDER ARB ====================
+window.renderArb=function(prefix){
+  const cft=getCFT(prefix);
+  let items=[];
+  if(prefix==='ac') items=calcCache.ars;
+  else if(prefix==='at') items=calcCache.tasa;
+  else if(prefix==='au') items=calcCache.usd;
+  else if(prefix==='ao') items=calcCache.ons;
+  if(!items.length) return;
+
+  const tbody=document.getElementById('tbody-arb-'+prefix);
+  if(!tbody) return;
+  tbody.innerHTML=items.slice().sort((a,b)=>(b.tirTotal||b.tir)-(a.tirTotal||a.tir)).map(b=>{
+    const tir=b.tirTotal||b.tir;
+    const spread=tir-cft.total;
+    const be=tir-cft.costoTNA;
+    const ok=spread>0;
+    const col2=prefix==='ao'?b.nombre||'':b.tipo||'';
+    return `<tr class="${ok?'best':''}">
+      <td class="tk">${b.ticker}</td>
+      <td style="font-size:9px;color:var(--text3)">${col2}</td>
+      <td style="color:${prefix==='ac'?'var(--tir-total)':prefix==='at'?'var(--tasa)':'var(--usd)'}">${fP(tir)}${b.tirTotal?'<span style="font-size:8px;color:var(--text3)"> total</span>':''}</td>
+      <td style="color:var(--red)">${fP(cft.total)}</td>
+      <td style="color:${ok?'var(--green)':'var(--red)'};font-weight:500">${fP(spread)}</td>
+      <td class="v-acc">${fP(be)}</td>
+      <td>${f2(b.dur)}</td>
+      <td><span class="badge ${ok?'bg':'br'}">${ok?'▲':'▼'}</span></td>
+    </tr>`;
+  }).join('');
+
+  // Matriz
+  const mxId='mxmat-'+prefix;
+  buildMX(mxId,items,b=>(Math.pow(1+(b.tirTotal||b.tir)/100,b.dur)-1)*100,b=>b.ticker,b=>fP(b.tirTotal||b.tir));
+  if(prefix==='ac') buildBE();
+};
+
+// ==================== RENOVACIONES CON COSTOS ====================
+window.calcRenovaciones=function(){
+  const capital=parseFloat(document.getElementById('r-capital').value)||10000000;
+  const tnaDiaria=parseFloat(document.getElementById('r-tasa-diaria').value)||28;
+  const tnaSemanal=parseFloat(document.getElementById('r-tasa-semanal').value)||27;
+  const horizonte=parseInt(document.getElementById('r-horizonte').value)||30;
+  const broker=parseFloat(document.getElementById('r-broker')?.value||0.6);
+  const byma=parseFloat(document.getElementById('r-byma')?.value||0.045);
+  const ivaBr=parseFloat(document.getElementById('r-iva-br')?.value||21);
+  const ivaDM=parseFloat(document.getElementById('r-iva-dm')?.value||0);
+  function costoTNA(tna,plazo){
+    const br=(broker/100)*(plazo/90)*(1+ivaBr/100);
+    const by=(byma/100)*(plazo/365)*(1+ivaDM/100);
+    return (br+by)*(365/plazo)*100;
+  }
+  const tdD=(tnaDiaria+costoTNA(tnaDiaria,1))/100/365;
+  const tdS=(tnaSemanal+costoTNA(tnaSemanal,7))/100/365;
+  const teaD=(Math.pow(1+tdD,365)-1)*100;
+  const teaS=(Math.pow(1+tdS*7,365/7)-1)*100;
+  let capD=capital,capS=capital;
+  const rows=[];
+  for(let dia=1;dia<=horizonte;dia++){
+    capD+=capD*tdD;
+    if(dia%7===0) capS+=capS*tdS*7;
+    if(dia%7===0||dia===horizonte){
+      const ahorro=capD-capS;
+      rows.push({dia,capD,capS,ahorro,ahorroPct:(ahorro/capital)*100});
+    }
+  }
+  const semanal=capS<capD;
+  document.getElementById('cards-ren').style.display='grid';
+  mkCards('cards-ren',[
+    ['TEA costo diario',fP(teaD),`TNA ${fP(tnaDiaria)} + costos`,'var(--red)'],
+    ['TEA costo semanal',fP(teaS),`TNA ${fP(tnaSemanal)} + costos`,'var(--amber)'],
+    ['Conviene renovar',semanal?'SEMANAL':'DIARIA',`Ahorro ${fM(Math.abs(capD-capS))} en ${horizonte}d`,semanal?'var(--green)':'var(--accent)'],
+    ['Deuda final diario',fM(capD),`vs ${fM(capS)} semanal`,'var(--red)'],
+  ],'c4');
+  document.getElementById('wrap-ren').style.display='block';
+  document.getElementById('tbody-ren').innerHTML=rows.map(r=>`<tr>
+    <td class="tk">Día ${r.dia}</td>
+    <td style="color:var(--red)">${fM(r.capD)}</td>
+    <td style="color:var(--text3)">${fM(r.capD-capital)}</td>
+    <td style="color:var(--amber)">${fM(r.capS)}</td>
+    <td style="color:var(--text3)">${fM(r.capS-capital)}</td>
+    <td style="color:${r.ahorro>=0?'var(--green)':'var(--red)'}">${fM(Math.abs(r.ahorro))}</td>
+    <td style="color:${r.ahorro>=0?'var(--green)':'var(--red)'}">${fP(Math.abs(r.ahorroPct),3)}</td>
+  </tr>`).join('');
+};
+
+// ==================== CARTERA PONDERADA ====================
+function initCartera(prefix,isUSD){
+  const wrap=document.getElementById('cartera-wrap-'+prefix);
+  if(!wrap)return;
+  wrap.innerHTML=`<div class="arb-box-title" style="margin-bottom:8px">🧮 Calculadora de cartera ponderada</div>
+  <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:10px">Seleccioná instrumentos y asigná montos para calcular TIR promedio ponderada vs CFT de caución.</div>
+  <div id="crow-wrap-${prefix}"></div>
+  <button class="btn secondary" onclick="addCrow('${prefix}',${isUSD})" style="margin-top:6px;margin-right:8px">+ Instrumento</button>
+  <div class="cards c3" id="cartera-res-${prefix}" style="margin-top:10px"></div>`;
+  for(let i=0;i<3;i++) addCrow(prefix,isUSD);
+}
+window.addCrow=function(prefix,isUSD){
+  const pool=isUSD?[...calcCache.usd,...calcCache.ons]:[...calcCache.ars,...calcCache.tasa];
+  const wrap=document.getElementById('crow-wrap-'+prefix);if(!wrap)return;
+  const n=wrap.querySelectorAll('.crow').length;
+  const d=document.createElement('div');d.className='crow';
+  d.innerHTML=`<select id="csel-${prefix}-${n}" onchange="calcCartera('${prefix}',${isUSD})">
+    <option value="">— instrumento —</option>
+    ${pool.map(b=>`<option value="${b.ticker}">${b.ticker} | ${fP(b.tirTotal||b.tir)} | MD ${f2(b.dur)}</option>`).join('')}
+  </select>
+  <input type="number" id="cmto-${prefix}-${n}" placeholder="${isUSD?'Monto USD':'Monto $'}" step="1000" oninput="calcCartera('${prefix}',${isUSD})"/>
+  <span id="ctir-${prefix}-${n}" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">—</span>`;
+  wrap.appendChild(d);
+};
+window.calcCartera=function(prefix,isUSD){
+  const pool=isUSD?[...calcCache.usd,...calcCache.ons]:[...calcCache.ars,...calcCache.tasa];
+  const wrap=document.getElementById('crow-wrap-'+prefix);if(!wrap)return;
+  const n=wrap.querySelectorAll('.crow').length;
+  let totalM=0,totalTP=0,totalDP=0;
+  for(let i=0;i<n;i++){
+    const tk=document.getElementById(`csel-${prefix}-${i}`)?.value;
+    const m=parseFloat(document.getElementById(`cmto-${prefix}-${i}`)?.value)||0;
+    const ins=pool.find(b=>b.ticker===tk);
+    const te=document.getElementById(`ctir-${prefix}-${i}`);
+    if(!ins||m<=0){if(te)te.textContent='—';continue;}
+    const tir=ins.tirTotal||ins.tir;
+    if(te)te.textContent=fP(tir);
+    totalM+=m;totalTP+=tir*m;totalDP+=ins.dur*m;
+  }
+  if(totalM<=0)return;
+  const tirP=totalTP/totalM,durP=totalDP/totalM;
+  const tnaCauc=parseFloat(document.getElementById(isUSD?'a-tasa':'s-tasa-ars')?.value||(isUSD?1.5:28));
+  const brCauc=parseFloat(document.getElementById(isUSD?'a-broker':'s-broker')?.value||0.6);
+  const plCauc=parseInt(document.getElementById(isUSD?'a-plazo':'s-plazo')?.value||1);
+  const byC=0.045,cos=(brCauc/100)*(plCauc/90)*1.21+(byC/100)*(plCauc/365);
+  const cftT=tnaCauc+cos*(365/plCauc)*100;
+  const sp=tirP-cftT,ok=sp>0;
+  const res=document.getElementById('cartera-res-'+prefix);
+  if(res)res.innerHTML=`
+    <div class="card ${ok?'pos-card':'neg-card'}"><div class="cl">TIR prom. ponderada</div><div class="cv" style="color:${ok?'var(--green)':'var(--red)'}">${fP(tirP)}</div><div class="cs">${isUSD?'U$S':'$'}${Math.round(totalM).toLocaleString('es-AR')}</div></div>
+    <div class="card"><div class="cl">CFT caución</div><div class="cv" style="color:var(--red)">${fP(cftT)}</div><div class="cs">tasa ${fP(tnaCauc)} + costos</div></div>
+    <div class="card ${ok?'pos-card':'neg-card'}"><div class="cl">Spread neto cartera</div><div class="cv ${ok?'v-pos':'v-neg'}">${fP(sp)}</div><div class="cs">MD prom. ${f2(durP)}a</div></div>`;
+};
+
 // ==================== MAIN ====================
 function switchTab(name,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -980,6 +1230,9 @@ async function loadAll(){
     msg.textContent='Calculando tasa fija…';renderTASA();
     msg.textContent='Calculando soberanos USD…';renderUSD();
     msg.textContent='Calculando ONs corporativas…';renderONS();
+    // Secciones nuevas
+    renderArb('ac');renderArb('at');renderArb('au');renderArb('ao');
+    initCartera('arb',true);initCartera('spread',false);
     msg.textContent='Calculando cauciones…';calcRenovaciones();calcArbitraje();calcSpread();
     const now=new Date();
     document.getElementById('ts').textContent=`Act. ${now.toLocaleTimeString('es-AR')} · ${d912Ok?'● data912':'○ Ref'} · CER T-10:${(cerIndex||CER_FB).toFixed(1)} T-0:${(cerUltimo||CER_ULTIMO_FB).toFixed(1)}`;
@@ -987,181 +1240,6 @@ async function loadAll(){
   ov.classList.add('hidden');
 }
 
-
-// ==================== UTILS MATRICES ====================
-function rendAcum(tir, dur) {
-  if(isNaN(tir)||isNaN(dur)||dur<=0) return NaN;
-  return (Math.pow(1+tir/100, dur)-1)*100;
-}
-
-function cftMat(tasaTNA, plazo, broker) {
-  const br = (broker/100)*(plazo/90)*(1+0.21);
-  const byma = (0.045/100)*(plazo/365);
-  return tasaTNA + (br+byma)*(365/plazo)*100;
-}
-
-function buildMat(containerId, items, valueFn, labelFn, subFn) {
-  const el = document.getElementById(containerId);
-  if(!el) return;
-  if(!items||!items.length){el.innerHTML='<span style="color:var(--text3);font-size:10px;font-family:DM Mono,monospace">Sin datos — presioná Actualizar</span>';return;}
-  const sorted = [...items].sort((a,b)=>(a.dur||99)-(b.dur||99));
-  let h = '<table class="matrix"><thead><tr><th class="rh">↓ Fila \ Col →</th>';
-  sorted.forEach(b=>{ h+=`<th>${labelFn(b)}<br><span style="font-size:7px">${f2(b.dur)}a</span></th>`; });
-  h+='</tr></thead><tbody>';
-  sorted.forEach(row=>{
-    const rv = valueFn(row);
-    h+=`<tr><td class="rl">${labelFn(row)}<br><span style="color:var(--text3);font-size:8px">${subFn(row)}</span></td>`;
-    sorted.forEach(col=>{
-      if(row===col){h+=`<td class="diag">—</td>`;return;}
-      const diff = valueFn(col)-rv; // COL - FILA
-      if(diff<=0){h+=`<td class="diag">—</td>`;return;}
-      const cls=diff>10?'h5':diff>5?'h4':diff>2?'h3':diff>1?'h2':'h1';
-      h+=`<td class="${cls}" style="color:var(--green)">+${f2(diff)}%</td>`;
-    });
-    h+='</tr>';
-  });
-  h+='</tbody></table>';
-  el.innerHTML=h;
-}
-
-function buildArbTable(containerId, items, cftTotal, tirFn, labelFn, col2Fn) {
-  const el = document.getElementById(containerId);
-  if(!el) return;
-  if(!items||!items.length){el.innerHTML='<span style="color:var(--text3);font-size:10px;font-family:DM Mono,monospace">Sin datos — presioná Actualizar</span>';return;}
-  const sorted = [...items].sort((a,b)=>(a.dur||99)-(b.dur||99));
-  let h=`<table class="matrix"><thead><tr>
-    <th class="rh">Instrumento</th><th>Tipo</th><th>TIR</th>
-    <th>CFT caución</th><th>Spread neto</th><th>Breakeven</th><th>MD</th><th>Estado</th>
-  </tr></thead><tbody>`;
-  sorted.forEach(b=>{
-    const tir=tirFn(b), spread=tir-cftTotal, be=tir-(cftTotal-tirFn(b)+tir-spread);
-    // be = tir - costos_solo (sin tasa caución)
-    const beClean = tir-(cftTotal-parseFloat(document.getElementById('mat-tasa-ars')?.value||28));
-    const ok=spread>0;
-    h+=`<tr>
-      <td class="rl">${labelFn(b)}</td>
-      <td style="font-size:9px;color:var(--text3)">${col2Fn(b)}</td>
-      <td style="color:var(--amber)">${fP(tir)}</td>
-      <td style="color:var(--red)">${fP(cftTotal)}</td>
-      <td style="color:${ok?'var(--green)':'var(--red)'};font-weight:500">${fP(spread)}</td>
-      <td style="color:var(--accent)">${fP(tir-(cftTotal-parseFloat(document.getElementById(ok?'mat-tasa-ars':'mat-tasa-usd')?.value||28)))}</td>
-      <td>${f2(b.dur)}</td>
-      <td><span class="badge ${ok?'bg':'br'}">${ok?'▲ CONVIENE':'▼ NO'}</span></td>
-    </tr>`;
-  });
-  h+='</tbody></table>';
-  el.innerHTML=h;
-}
-
-function buildBreakeven() {
-  const el = document.getElementById('mat-breakeven');
-  if(!el) return;
-  const cerItems = [...calcCache.ars].sort((a,b)=>(a.dur||99)-(b.dur||99));
-  const tasaItems = [...calcCache.tasa].sort((a,b)=>(a.dur||99)-(b.dur||99));
-  if(!cerItems.length||!tasaItems.length){
-    el.innerHTML='<span style="color:var(--text3);font-size:10px;font-family:DM Mono,monospace">Sin datos — presioná Actualizar</span>';
-    return;
-  }
-  let h=`<table class="matrix"><thead><tr><th class="rh">CER ↓ \ Tasa Fija →</th>`;
-  tasaItems.forEach(t=>{h+=`<th>${t.ticker}<br><span style="font-size:7px;color:var(--tasa)">${fP(t.tir)} TNA</span></th>`;});
-  h+='</tr></thead><tbody>';
-  cerItems.forEach(cer=>{
-    h+=`<tr><td class="rl">${cer.ticker}<br><span style="color:var(--cer);font-size:8px">+${fP(cer.tir)} real</span></td>`;
-    tasaItems.forEach(tasa=>{
-      const ratio=(1+tasa.tir/100)/(1+cer.tir/100);
-      if(ratio<=0){h+=`<td class="diag">—</td>`;return;}
-      const be=(Math.pow(ratio,1/12)-1)*100;
-      const cerGana=remMonthly>be;
-      const cls=cerGana?'h3':'hn';
-      h+=`<td class="${cls}" title="Inflación ${f2(be)}%/mes">${f2(be)}%<br><span style="font-size:7px;color:${cerGana?'var(--green)':'var(--red)'}">${cerGana?'▲CER':'▼Tasa'}</span></td>`;
-    });
-    h+='</tr>';
-  });
-  h+=`</tbody></table>`;
-  h+=`<div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:6px">REM actual: ${f2(remMonthly)}% mensual → ${f2(remAnual)}% anual. Verde = CER gana con inflación del REM.</div>`;
-  el.innerHTML=h;
-}
-
-window.renderMatrices = function() {
-  const tasaARS = parseFloat(document.getElementById('mat-tasa-ars')?.value)||28;
-  const tasaUSD = parseFloat(document.getElementById('mat-tasa-usd')?.value)||1.5;
-  const broker  = parseFloat(document.getElementById('mat-broker')?.value)||0.6;
-  const plazo   = parseInt(document.getElementById('mat-plazo')?.value)||1;
-  const cftARS  = cftMat(tasaARS, plazo, broker);
-  const cftUSD  = cftMat(tasaUSD, plazo, broker);
-
-  const empty = document.getElementById('mat-empty');
-
-  const hasData = calcCache.ars.length||calcCache.tasa.length||calcCache.usd.length||calcCache.ons.length;
-  if(empty) empty.style.display = hasData ? 'none' : 'block';
-  if(!hasData) return;
-
-  // CER vs CER
-  buildMat('mat-cer-cer', calcCache.ars,
-    b => rendAcum(b.tir, b.dur),
-    b => b.ticker,
-    b => `+${fP(b.tir)} real`
-  );
-
-  // Arb CER
-  buildArbTable('mat-cer-arb', calcCache.ars, cftARS,
-    b => b.tirTotal||b.tir,
-    b => b.ticker,
-    b => b.tipo||''
-  );
-
-  // TASA vs TASA
-  buildMat('mat-tasa-tasa', calcCache.tasa,
-    b => rendAcum(b.tir, b.dur),
-    b => b.ticker,
-    b => fP(b.tir)+' TNA'
-  );
-
-  // Arb TASA
-  buildArbTable('mat-tasa-arb', calcCache.tasa, cftARS,
-    b => b.tir,
-    b => b.ticker,
-    b => b.tipo||''
-  );
-
-  // Breakeven
-  buildBreakeven();
-
-  // USD vs USD
-  buildMat('mat-usd-usd', calcCache.usd,
-    b => rendAcum(b.tir, b.dur),
-    b => b.ticker,
-    b => fP(b.tir)+' USD'
-  );
-
-  // Arb USD
-  buildArbTable('mat-usd-arb', calcCache.usd, cftUSD,
-    b => b.tir,
-    b => b.ticker,
-    b => b.tipo||''
-  );
-
-  // ONs vs ONs
-  buildMat('mat-ons-ons', calcCache.ons,
-    b => rendAcum(b.tir, b.dur),
-    b => b.ticker,
-    b => b.nombre||b.ticker
-  );
-
-  // Arb ONs
-  buildArbTable('mat-ons-arb', calcCache.ons, cftUSD,
-    b => b.tir,
-    b => b.ticker,
-    b => b.nombre||''
-  );
-};
-
-// Llamar renderMatrices después de loadAll
-const _origLoadAll = loadAll;
-async function loadAll(){
-  await _origLoadAll();
-  renderMatrices();
-}
 window.addEventListener('DOMContentLoaded',()=>loadAll());
 </script>
 </body>
