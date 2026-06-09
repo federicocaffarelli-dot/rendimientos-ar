@@ -621,21 +621,32 @@ async function fetchD912Prices(){
   const base=(document.getElementById('d912Url').value||'').trim();
   const isProxy=base&&!base.includes('data912.com');
   const urls={
-    bonds:isProxy?`${base}/live/arg_bonds`:'https://data912.com/live/arg_bonds',
-    notes:isProxy?`${base}/live/arg_notes`:'https://data912.com/live/arg_notes',
-    corp: isProxy?`${base}/live/arg_corp` :'https://data912.com/live/arg_corp',
+    bonds:isProxy?`${base}/api/soberanos`:'https://data912.com/live/arg_bonds',
+    notes:isProxy?`${base}/api/ons`      :'https://data912.com/live/arg_notes',
+    corp: isProxy?`${base}/api/corp`     :'https://data912.com/live/arg_corp',
   };
   try{
     const [bondsRes,notesRes,corpRes]=await Promise.allSettled([
-      fetch(urls.bonds,{signal:AbortSignal.timeout(6000),headers:{'User-Agent':'Mozilla/5.0'}}),
-      fetch(urls.notes,{signal:AbortSignal.timeout(6000),headers:{'User-Agent':'Mozilla/5.0'}}),
-      fetch(urls.corp, {signal:AbortSignal.timeout(6000),headers:{'User-Agent':'Mozilla/5.0'}}),
+      fetch(urls.bonds,{signal:AbortSignal.timeout(6000)}),
+      fetch(urls.notes,{signal:AbortSignal.timeout(6000)}),
+      fetch(urls.corp, {signal:AbortSignal.timeout(6000)}),
     ]);
     let count=0;
     for(const res of [bondsRes,notesRes,corpRes]){
       if(res.status==='fulfilled'&&res.value.ok){
-        const data=await res.value.json();
-        if(Array.isArray(data)){for(const b of data){const p=parseFloat(b.c||b.price||0);if(p>0){priceMap[b.symbol]=p;count++;}}}
+        const json=await res.value.json();
+        // Soporta array directo o wrapper {data:[...]}
+        const arr=Array.isArray(json)?json:(json.data&&Array.isArray(json.data)?json.data:[]);
+        for(const b of arr){
+          // Soporta price_usd (soberanos), price (lecaps/ons), c (data912 directo)
+          const p=parseFloat(b.price_usd||b.price||b.c||0);
+          if(p>0){
+            // Guardamos con y sin sufijo D para cubrir todos los lookups
+            priceMap[b.symbol]=p;
+            priceMap[b.symbol+'D']=p;
+            count++;
+          }
+        }
       }
     }
     if(count>0){d912Ok=true;setStatus('d912',true,`data912: ${count} precios`);}
